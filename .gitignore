@@ -1,0 +1,23 @@
+
+# build output
+# dependencies
+# environment variables
+# generated types
+# jetbrains setting folder
+# logs
+# macOS-specific files
+.DS_Store
+.astro/
+.env
+.env.production
+.idea/
+.playwright-mcp/
+dist/
+node_modules/
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+.vercel
+.env*

@@ -1,0 +1,361 @@
+---
+import type { ServiceMenu } from './ServiceMenu.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { childLevel } from '../../lib/section-base';
+import { iconPaths } from '../../lib/icons';
+
+type Props = ServiceMenu;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	nowViewingLabel = 'Now viewing',
+	columns = '4',
+	tabs = [],
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+const cardLevel = childLevel(headingLevel, Boolean(heading));
+
+// Flex rather than grid so a short final row (e.g. 3 cards in a 4-wide layout)
+// centres instead of leaving an empty cell. The basis values reproduce the
+// 2 / 3 / 4 column counts, minus the gap each card shares.
+const cardBasis = {
+	'2': 'sm:basis-[calc(50%-0.75rem)]',
+	'3': 'sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(33.333%-1rem)]',
+	'4': 'sm:basis-[calc(50%-0.75rem)] lg:basis-[calc(25%-1.125rem)]',
+};
+
+// Unique per instance so two menus on one page never share radio state or ids.
+const uid = `svcmenu-${Math.random().toString(36).slice(2, 8)}`;
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mx-auto mb-8 max-w-4xl text-center">
+			{eyebrow && (
+				<DimensionLine
+					label={eyebrow}
+					rule="both"
+					onDark={onDark}
+					class="mx-auto mb-6 max-w-xs justify-center"
+				/>
+			)}
+			{heading && (
+				<Heading
+					level={headingLevel}
+					size="lg"
+					display
+					class="whitespace-normal sm:whitespace-nowrap"
+				>
+					{heading}
+				</Heading>
+			)}
+			{intro && (
+				<Prose html={intro} invert={onDark} class="mx-auto mt-6 max-w-2xl" headingStart={4} />
+			)}
+		</header>
+	)}
+
+	{tabs.length > 0 && (
+		<div class="service-menu" data-service-menu>
+			{/*
+				One radio per tab drives the whole section with no JavaScript: the
+				checked radio's panel is shown by a sibling selector below. The
+				script layer replaces this with buttons + ARIA for screen readers,
+				but the CSS fallback keeps every panel reachable regardless.
+			*/}
+			{tabs.map((_tab, i) => (
+				<input
+					type="radio"
+					name={uid}
+					id={`${uid}-${i}`}
+					class="peer/tab sr-only"
+					checked={i === 0}
+					data-tab-input
+				/>
+			))}
+
+			{/*
+				Tab bar: a drafting-style underline row, no icons. One line that
+				scrolls sideways on narrow screens rather than wrapping, sitting on a
+				hairline baseline rule. The active tab is marked by a brass underline
+				(styled in the block below), matching the dimension-line motif.
+			*/}
+			<div
+				class={`mb-8 flex flex-nowrap justify-start gap-7 overflow-x-auto border-b sm:justify-center [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+					onDark ? 'border-current/15' : 'border-line'
+				}`}
+				role="tablist"
+				data-tablist
+			>
+				{tabs.map((tab, i) => (
+					<label
+						for={`${uid}-${i}`}
+						class={`group relative -mb-px shrink-0 cursor-pointer border-b-2 border-transparent pb-4 font-mono text-[0.6875rem] font-medium whitespace-nowrap uppercase tracking-[0.16em] transition-colors ${
+							onDark ? 'text-current/60 hover:text-current' : 'text-body hover:text-ink'
+						}`}
+						data-tab-label
+						data-index={i}
+					>
+						<span>{tab.label}</span>
+					</label>
+				))}
+			</div>
+
+			{/* Panels: one per tab, revealed by its radio via the peer selectors below. */}
+			{tabs.map((tab, i) => (
+				<div
+					class="service-menu-panel"
+					data-panel
+					data-index={i}
+					role="tabpanel"
+					aria-labelledby={`${uid}-tab-${i}`}
+				>
+					<div class="relative overflow-hidden rounded-(--radius-media)">
+						{tab.image ? (
+							<img
+								src={tab.image.src}
+								alt={tab.image.alt}
+								loading="lazy"
+								class="aspect-[16/9] w-full object-cover sm:aspect-[24/9] lg:aspect-[32/9]"
+							/>
+						) : (
+							<div
+								class="aspect-[16/9] w-full bg-dark sm:aspect-[24/9] lg:aspect-[32/9]"
+								aria-hidden="true"
+							/>
+						)}
+						<div class="absolute inset-0 bg-gradient-to-r from-dark/85 via-dark/45 to-transparent" />
+						{/*
+							The banner title sits on the dark photo overlay, so it needs the
+							light foreground. The Section's per-surface auto-contrast rule
+							targets every descendant heading and would otherwise pull the
+							dark-ink colour here; `[&_:is(...)]:text-current` overrides it so
+							the heading inherits this wrapper's `text-dark-fg`, the same
+							device the Hero uses for its overlaid headings.
+						*/}
+						<div class="absolute inset-0 flex flex-col justify-end p-6 text-dark-fg [&_:is(h1,h2,h3,h4)]:!text-current md:p-10">
+							<span class="mb-2 font-mono text-[0.625rem] uppercase tracking-[0.18em] text-accent">
+								&mdash; {nowViewingLabel}
+							</span>
+							<Heading level={cardLevel} size="lg" display>
+								{tab.bannerTitle ?? tab.label}
+							</Heading>
+						</div>
+					</div>
+
+					{tab.cards.length > 0 && (
+						<ul class="mt-8 flex flex-wrap justify-center gap-6">
+							{tab.cards.map((card, c) => (
+								<li
+									class={`group relative flex basis-full grow-0 flex-col rounded-(--radius-media) border p-6 transition-colors ${cardBasis[columns]} ${
+										onDark
+											? 'border-current/15 hover:border-current/40'
+											: 'border-line hover:border-ink'
+									}`}
+								>
+									<div class="mb-5 flex items-center justify-between">
+										<span
+											class={`inline-flex h-11 w-11 items-center justify-center rounded-(--radius-brand) ${
+												onDark ? 'bg-current/10 text-accent' : 'bg-muted text-accent-ink'
+											}`}
+										>
+											{card.icon ? (
+												<svg
+													viewBox="0 0 24 24"
+													class="h-5 w-5"
+													fill="none"
+													stroke="currentColor"
+													stroke-width="1.75"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													aria-hidden="true"
+												>
+													<path d={iconPaths[card.icon]} />
+												</svg>
+											) : (
+												<span class="font-mono text-xs font-medium tracking-[0.14em]">
+													{String(c + 1).padStart(2, '0')}
+												</span>
+											)}
+										</span>
+										<span
+											class={`font-mono text-2xl font-medium ${onDark ? 'text-current/25' : 'text-line'}`}
+										>
+											{String(c + 1).padStart(2, '0')}
+										</span>
+									</div>
+
+									<Heading level={childLevel(cardLevel, true)} size="sm">
+										{card.link ? (
+											<a href={card.link.href} class="transition-colors hover:text-brand">
+												{/* Stretched so the whole card is the hit target. */}
+												<span class="absolute inset-0" aria-hidden="true" />
+												{card.title}
+											</a>
+										) : (
+											card.title
+										)}
+									</Heading>
+
+									{card.body && <p class="mt-3 text-sm leading-relaxed opacity-80">{card.body}</p>}
+
+									{/*
+										`mt-auto` pins the link to the card's bottom edge so every card in
+										a row lines its "View service" up on one baseline, regardless of how
+										long the body copy runs. `pt-5` keeps a minimum gap when the body
+										is short enough that auto-margin collapses.
+									*/}
+									{card.link && (
+										<p
+											class={`mt-auto pt-5 font-mono text-xs font-medium uppercase tracking-[0.14em] transition-transform group-hover:translate-x-1 ${
+												onDark ? 'text-accent' : 'text-accent-ink'
+											}`}
+										>
+											{card.link.label} &rarr;
+										</p>
+									)}
+								</li>
+							))}
+						</ul>
+					)}
+				</div>
+			))}
+		</div>
+	)}
+</Section>
+
+<style>
+	/*
+	 * CSS-only tab behaviour. Each panel is hidden by default and shown when its
+	 * matching radio is checked, paired by position: the Nth radio reveals the
+	 * Nth panel via the `:nth-of-type(N):checked ~ [data-index='N-1']` rules
+	 * below. No script needed for the fallback.
+	 */
+	.service-menu-panel {
+		display: none;
+	}
+	/* Reveal the panel whose index matches the checked radio, by position. */
+	.service-menu > input[data-tab-input]:nth-of-type(1):checked ~ [data-panel][data-index='0'],
+	.service-menu > input[data-tab-input]:nth-of-type(2):checked ~ [data-panel][data-index='1'],
+	.service-menu > input[data-tab-input]:nth-of-type(3):checked ~ [data-panel][data-index='2'],
+	.service-menu > input[data-tab-input]:nth-of-type(4):checked ~ [data-panel][data-index='3'],
+	.service-menu > input[data-tab-input]:nth-of-type(5):checked ~ [data-panel][data-index='4'],
+	.service-menu > input[data-tab-input]:nth-of-type(6):checked ~ [data-panel][data-index='5'] {
+		display: block;
+	}
+
+	/*
+	 * Active-tab styling: the label bound to the checked radio gets a brass
+	 * underline and full-strength text -- the drafting-line marker, not a filled
+	 * pill. Each rule pairs the Nth radio with the Nth tab so only the active one
+	 * is marked. `accent-ink` is the darkened brass that stays legible on the
+	 * pale page.
+	 */
+	.service-menu > input[data-tab-input]:nth-of-type(1):checked ~ [data-tablist] [data-index='0'],
+	.service-menu > input[data-tab-input]:nth-of-type(2):checked ~ [data-tablist] [data-index='1'],
+	.service-menu > input[data-tab-input]:nth-of-type(3):checked ~ [data-tablist] [data-index='2'],
+	.service-menu > input[data-tab-input]:nth-of-type(4):checked ~ [data-tablist] [data-index='3'],
+	.service-menu > input[data-tab-input]:nth-of-type(5):checked ~ [data-tablist] [data-index='4'],
+	.service-menu > input[data-tab-input]:nth-of-type(6):checked ~ [data-tablist] [data-index='5'] {
+		color: var(--color-ink);
+		border-bottom-color: var(--color-accent-ink);
+	}
+
+	/*
+	 * On dark and brand grounds, ink text and darkened brass both read as mud, so
+	 * the active tab keeps the light foreground colour and gets full-strength
+	 * brass. Same position pairing, higher specificity via the surface prefix.
+	 */
+	:is(.bg-dark, .bg-brand)
+		.service-menu
+		> input[data-tab-input]:nth-of-type(1):checked
+		~ [data-tablist]
+		[data-index='0'],
+	:is(.bg-dark, .bg-brand)
+		.service-menu
+		> input[data-tab-input]:nth-of-type(2):checked
+		~ [data-tablist]
+		[data-index='1'],
+	:is(.bg-dark, .bg-brand)
+		.service-menu
+		> input[data-tab-input]:nth-of-type(3):checked
+		~ [data-tablist]
+		[data-index='2'],
+	:is(.bg-dark, .bg-brand)
+		.service-menu
+		> input[data-tab-input]:nth-of-type(4):checked
+		~ [data-tablist]
+		[data-index='3'],
+	:is(.bg-dark, .bg-brand)
+		.service-menu
+		> input[data-tab-input]:nth-of-type(5):checked
+		~ [data-tablist]
+		[data-index='4'],
+	:is(.bg-dark, .bg-brand)
+		.service-menu
+		> input[data-tab-input]:nth-of-type(6):checked
+		~ [data-tablist]
+		[data-index='5'] {
+		color: currentColor;
+		border-bottom-color: var(--color-accent);
+	}
+
+	/* Keyboard focus on the hidden radio should still ring its label. */
+	.service-menu > input[data-tab-input]:focus-visible + [data-tablist] {
+		outline: 2px solid var(--color-accent);
+		outline-offset: 4px;
+	}
+</style>
+
+<script>
+	// Progressive enhancement over the CSS fallback: the radios keep working on
+	// their own, this adds proper tab semantics and arrow-key navigation.
+	document.querySelectorAll('[data-service-menu]').forEach((root) => {
+		const inputs = Array.from(root.querySelectorAll('[data-tab-input]')) as HTMLInputElement[];
+		const labels = Array.from(root.querySelectorAll('[data-tab-label]')) as HTMLElement[];
+		const panels = Array.from(root.querySelectorAll('[data-panel]')) as HTMLElement[];
+		if (inputs.length === 0) return;
+
+		labels.forEach((label, i) => {
+			label.setAttribute('role', 'tab');
+			label.id = label.id || `${inputs[i].name}-tab-${i}`;
+			label.setAttribute('aria-controls', panels[i]?.id ?? '');
+
+			const sync = () => {
+				labels.forEach((l, j) => {
+					const active = inputs[j].checked;
+					l.setAttribute('aria-selected', String(active));
+					l.tabIndex = active ? 0 : -1;
+				});
+			};
+
+			inputs[i].addEventListener('change', sync);
+			label.addEventListener('keydown', (e) => {
+				const key = (e as KeyboardEvent).key;
+				let next = -1;
+				if (key === 'ArrowRight' || key === 'ArrowDown') next = (i + 1) % labels.length;
+				else if (key === 'ArrowLeft' || key === 'ArrowUp')
+					next = (i - 1 + labels.length) % labels.length;
+				if (next >= 0) {
+					e.preventDefault();
+					inputs[next].checked = true;
+					inputs[next].dispatchEvent(new Event('change'));
+					labels[next].focus();
+				}
+			});
+
+			if (i === 0) sync();
+		});
+	});
+</script>

@@ -1,0 +1,16 @@
+# Normalise line endings in the repo so Windows checkouts stop producing
+# whole-file diffs and CRLF warnings on every commit.
+* text=auto eol=lf
+
+# Binary assets must never be touched.
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.webp binary
+*.avif binary
+*.ico binary
+*.woff binary
+*.woff2 binary
+*.mp4 binary
+*.webm binary

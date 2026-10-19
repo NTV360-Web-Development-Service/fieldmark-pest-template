@@ -1,0 +1,93 @@
+---
+import type { Media } from '../../lib/section-base';
+
+/**
+ * Renders whatever an editor put in a media slot: an uploaded or linked image,
+ * a video, or a third-party embed.
+ *
+ * Every section that shows media goes through here, so aspect ratio, lazy
+ * loading and iframe titling are handled once rather than re-decided per
+ * section.
+ */
+interface Props {
+	media?: Media | null;
+	/** Tailwind aspect utility. Ignored for embeds, which carry their own. */
+	aspect?: string;
+	/** First paint above the fold: skips lazy loading. */
+	priority?: boolean;
+	class?: string;
+}
+
+const { media, aspect = 'aspect-4/3', priority = false, class: className = '' } = Astro.props;
+
+/**
+ * Editors paste the URL from the address bar, which is a watch page, not an
+ * embeddable one. Converting here means nobody has to know the difference.
+ */
+function toEmbedUrl(raw: string): string {
+	try {
+		const url = new URL(raw, 'https://example.com');
+		const host = url.hostname.replace(/^www\./, '');
+
+		if (host === 'youtube.com' || host === 'm.youtube.com') {
+			const id = url.searchParams.get('v');
+			if (id) return `https://www.youtube-nocookie.com/embed/${id}`;
+			// Already an /embed/ or /shorts/ path.
+			const path = url.pathname.replace('/shorts/', '/embed/');
+			return `https://www.youtube-nocookie.com${path}`;
+		}
+		if (host === 'youtu.be') {
+			return `https://www.youtube-nocookie.com/embed${url.pathname}`;
+		}
+		if (host === 'vimeo.com') {
+			return `https://player.vimeo.com/video${url.pathname}`;
+		}
+		return raw;
+	} catch {
+		return raw;
+	}
+}
+
+const ratios: Record<string, string> = {
+	'16/9': 'aspect-video',
+	'4/3': 'aspect-4/3',
+	'1/1': 'aspect-square',
+	'21/9': 'aspect-[21/9]',
+};
+---
+
+{media?.kind === 'image' && (
+	<img
+		src={media.src}
+		alt={media.alt}
+		loading={priority ? 'eager' : 'lazy'}
+		decoding={priority ? 'sync' : 'async'}
+		fetchpriority={priority ? 'high' : undefined}
+		class={`${aspect} w-full object-cover ${className}`}
+	/>
+)}
+
+{media?.kind === 'video' && (
+	<video
+		class={`${aspect} w-full object-cover ${className}`}
+		poster={media.poster}
+		autoplay={media.autoplay || undefined}
+		muted={media.autoplay || undefined}
+		loop={media.autoplay || undefined}
+		playsinline={media.autoplay || undefined}
+		controls={!media.autoplay || undefined}
+		preload={priority ? 'auto' : 'metadata'}
+	>
+		<source src={media.src} />
+	</video>
+)}
+
+{media?.kind === 'embed' && <iframe
+	src={toEmbedUrl(media.url)}
+	title={media.title}
+	loading={priority ? 'eager' : 'lazy'}
+	allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+	allowfullscreen
+	referrerpolicy="strict-origin-when-cross-origin"
+	class={`${ratios[media.ratio] ?? 'aspect-video'} w-full border-0 ${className}`}
+></iframe>}

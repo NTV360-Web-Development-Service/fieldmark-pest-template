@@ -1,0 +1,115 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import PageHeader from '../components/sections/PageHeader.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import { getSection } from '../lib/sections';
+import { entryTrail } from '../lib/breadcrumbs';
+import { site } from '../lib/site';
+import { serviceSchema, locationSchema, faqSchema } from '../lib/schema-org';
+
+/**
+ * Shared page shell for every collection entry.
+ *
+ * The header is generated from the entry itself, so a service page always has
+ * a correct h1 and breadcrumb trail without anyone remembering to add a
+ * page_header section. Editors still control the body through `sections`.
+ */
+interface Props {
+	entry: { id: string; data: Record<string, any> };
+	collection: string;
+	indexLabel: string;
+	/** Optional: a collection whose index page was removed shows the label unlinked. */
+	indexHref?: string;
+}
+
+const { entry, collection, indexLabel, indexHref } = Astro.props;
+const {
+	title,
+	summary,
+	image,
+	seo = {},
+	sections = [],
+	parent,
+	priceNote,
+	customLayout,
+} = entry.data;
+
+// `title` is also the CMS list label, so a main page may set it to
+// "Kitchen — Main Page" for the sidebar; `heading` then carries the real H1.
+const heading = entry.data.heading ?? title;
+
+const base = Astro.site ?? new URL(Astro.url.origin);
+const url = new URL(Astro.url.pathname, base);
+
+const schemas = [
+	collection === 'services' ? serviceSchema(entry.data as any, url, base) : null,
+	collection === 'locations' ? locationSchema(entry.data as any, url, base) : null,
+	faqSchema(sections as any),
+].filter(Boolean);
+
+// Only the standard-header entries carry a trail; a custom-layout entry opens
+// with its own hero and no breadcrumb band.
+const breadcrumbs = customLayout ? [] : entryTrail(heading, indexLabel, indexHref, parent);
+
+// The louder banner header is for main category landings: a top-level entry
+// (no parent) in a collection whose pages are landings. Projects are portfolio
+// detail pages, so they keep the compact split opener even at the top level;
+// a nested service detail (parent set) keeps split too.
+const landingCollection = collection === 'services' || collection === 'locations';
+const headerVariant = landingCollection && !parent ? 'feature' : 'split';
+
+// Same guard as the catch-all route: loud in dev, skipped in production.
+const renderable = sections.flatMap((section: any) => {
+	const Component = getSection(section.type);
+	if (Component) return [{ section, Component }];
+
+	if (import.meta.env.DEV) {
+		throw new Error(
+			`Unknown section type "${section.type}" in ${entry.id}. ` +
+				`Register it in src/lib/sections.ts and src/lib/section-schemas.ts.`
+		);
+	}
+	console.warn(`[sections] skipping unknown type "${section.type}" in ${entry.id}`);
+	return [];
+});
+---
+
+<BaseLayout
+	title={seo.title ?? heading}
+	description={seo.description ?? summary ?? site.tagline}
+	ogImage={seo.ogImage ?? image?.src}
+	noindex={seo.noindex}
+>
+	{/*
+		A custom-layout entry owns its whole page: it opens with a hero section
+		that carries the h1 and its own framing, so both the breadcrumb band and
+		the shared auto-header are skipped. Every other entry gets the trail as
+		its own band above a generated header, which guarantees a correct h1 and
+		breadcrumb trail without an editor remembering to add one.
+	*/}
+	{!customLayout && (
+		<>
+			<Breadcrumbs items={breadcrumbs} />
+			<PageHeader
+				type="page_header"
+				variant={headerVariant}
+				eyebrow={indexLabel}
+				heading={heading}
+				body={summary}
+				image={image}
+				priceNote={priceNote}
+				surface="muted"
+				spacing="sm"
+				width="wide"
+			/>
+		</>
+	)}
+
+	{renderable.map(({ section, Component }: any) => (
+		<Component {...section} />
+	))}
+
+	{schemas.map((schema) => (
+		<script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+	))}
+</BaseLayout>

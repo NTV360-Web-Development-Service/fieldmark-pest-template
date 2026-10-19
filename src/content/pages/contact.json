@@ -1,0 +1,147 @@
+{
+  "title": "Contact",
+  "permalink": "https://modern-cabinets-template.vercel.app/contact",
+  "order": 70,
+  "draft": false,
+  "seo": {
+    "title": "Book a Free Consultation",
+    "description": "Book a free in-home consultation with Modern Cabinets. About an hour, a fixed quote, no obligation. Serving Phoenix, Scottsdale, Chandler and Mesa.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "layout": "split",
+      "background": {
+        "kind": "image",
+        "image": {
+          "source": "upload",
+          "src": "/media/images/kitchen-hero.avif",
+          "alt": "Fitted kitchen shelving measured to the opening"
+        }
+      },
+      "eyebrow": "Free, about an hour",
+      "heading": "Book a free consultation.",
+      "body": "A designer comes to you, measures every cabinet you want changed, and leaves a fixed quote. No cost, and no pressure to book on the day.",
+      "mediaNote": "Built to your exact opening",
+      "ctas": [
+        {
+          "label": "Call the shop",
+          "href": "tel:+15550142200",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "badges": ["Free in-home measure", "Fixed quote, valid 30 days", "No obligation"],
+      "headingLevel": "h1",
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "form_block",
+      "headingLevel": "h2",
+      "eyebrow": "Two minutes",
+      "heading": "Request a call.",
+      "intro": "Tell us which rooms you are thinking about and we will call to arrange a time that suits you.",
+      "endpoint": "https://formspree.io/f/REPLACE_WITH_YOUR_ID",
+      "submitLabel": "Request a call",
+      "fields": [
+        {
+          "kind": "text",
+          "name": "first_name",
+          "label": "First name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "given-name"
+        },
+        {
+          "kind": "text",
+          "name": "last_name",
+          "label": "Last name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "family-name"
+        },
+        {
+          "kind": "email",
+          "name": "email",
+          "label": "Email",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "tel",
+          "name": "phone",
+          "label": "Phone",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "text",
+          "name": "postcode",
+          "label": "Postcode",
+          "required": true,
+          "width": "half",
+          "autocomplete": "postal-code"
+        },
+        {
+          "kind": "select",
+          "name": "rooms",
+          "label": "Which room",
+          "required": true,
+          "width": "half",
+          "choices": ["Kitchen", "Pantry", "Bathroom", "Closets", "More than one"]
+        },
+        {
+          "kind": "textarea",
+          "name": "message",
+          "label": "Anything we should know",
+          "placeholder": "Cabinet sizes, awkward corners, access notes",
+          "rows": 5,
+          "required": false
+        },
+        {
+          "kind": "checkbox",
+          "name": "consent",
+          "label": "You can text me about this enquiry. See the [privacy policy](/privacy).",
+          "required": true
+        },
+        {
+          "kind": "hidden",
+          "name": "source",
+          "value": "contact-page"
+        }
+      ],
+      "footnote": "We use your details to arrange the consultation and nothing else. No lists, no resale.",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "contact_details",
+      "headingLevel": "h2",
+      "eyebrow": "Where to find us",
+      "heading": "Find the shop.",
+      "showPhone": true,
+      "showEmail": true,
+      "showAddress": true,
+      "showHours": true,
+      "extra": [
+        {
+          "label": "Service area",
+          "value": "Phoenix valley, within 40 miles of the shop"
+        }
+      ],
+      "media": {
+        "kind": "embed",
+        "url": "https://maps.google.com/maps?q=1420+Millwork+Ave,+Phoenix,+AZ+85004&z=15&output=embed",
+        "title": "Map showing the Modern Cabinets workshop in Phoenix",
+        "ratio": "4/3"
+      },
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

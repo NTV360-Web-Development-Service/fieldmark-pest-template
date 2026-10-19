@@ -1,0 +1,54 @@
+---
+import { announcement } from '../../lib/announcement';
+---
+
+{announcement.enabled && (
+	<div
+		id="announcement-bar"
+		class="bg-brand px-5 py-2.5 text-center text-sm text-brand-fg sm:px-8"
+		data-dismissible={announcement.dismissible ? 'true' : 'false'}
+	>
+		<div class="mx-auto flex w-full max-w-[104rem] items-center justify-center gap-3">
+			<p>
+				{announcement.text}
+				{announcement.link && (
+					<a href={announcement.link.href} class="ml-2 font-semibold underline underline-offset-4">
+						{announcement.link.label}
+					</a>
+				)}
+			</p>
+			{announcement.dismissible && (
+				<button
+					type="button"
+					data-dismiss
+					class="ml-auto shrink-0 rounded p-1 opacity-70 transition-opacity hover:opacity-100"
+					aria-label="Dismiss announcement"
+				>
+					<svg viewBox="0 0 16 16" class="h-4 w-4 fill-current" aria-hidden="true">
+						<path d="M4.3 3.3l4.7 4.7 4.7-4.7 1 1L10 9l4.7 4.7-1 1L9 10l-4.7 4.7-1-1L7 9 2.3 4.3z" />
+					</svg>
+				</button>
+			)}
+		</div>
+	</div>
+)}
+
+<script>
+	const bar = document.getElementById('announcement-bar');
+
+	if (bar?.dataset.dismissible === 'true') {
+		const key = 'announcement-dismissed';
+
+		// Storage can throw in private windows; a failed read just means the bar shows.
+		try {
+			if (sessionStorage.getItem(key) === '1') bar.hidden = true;
+		} catch {}
+
+		bar.querySelector('[data-dismiss]')?.addEventListener('click', () => {
+			bar.hidden = true;
+			try {
+				sessionStorage.setItem(key, '1');
+			} catch {}
+		});
+	}
+</script>

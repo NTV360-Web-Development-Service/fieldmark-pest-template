@@ -1,0 +1,87 @@
+---
+import { getCollection, getEntry } from 'astro:content';
+import CollectionEntry from '../../layouts/CollectionEntry.astro';
+import { interpolate } from '../../lib/interpolate';
+import { site } from '../../lib/site';
+
+/**
+ * Location pages are generated from one template plus a data row per town.
+ *
+ * This is the mechanism that takes a site from ten location pages to a
+ * thousand: the body is written once, and the differences live in the rows.
+ */
+export async function getStaticPaths() {
+	const [locations, template] = await Promise.all([
+		getCollection('locations', ({ data }) => (import.meta.env.PROD ? !data.draft : true)),
+		getEntry('templates', 'location'),
+	]);
+
+	if (!template) {
+		throw new Error(
+			'Missing src/content/templates/location.json, which every location page needs.'
+		);
+	}
+
+	return locations.map((location) => {
+		const vars = {
+			...location.data,
+			phone: location.data.phone ?? site.contact.phone,
+			business: site.name,
+		};
+
+		// Interpolated per town. An unknown token throws here, naming the row,
+		// rather than shipping a literal {{city}} to a customer.
+		const filled = interpolate(template.data, vars, `locations/${location.id}`);
+
+		// A flagship town owns its whole page: its own sections, interpolated the
+		// same way, with none of the shared template body and no auto-header.
+		if (location.data.customLayout) {
+			const rowSections = interpolate(
+				{ sections: location.data.sections },
+				vars,
+				`locations/${location.id}`
+			).sections;
+
+			return {
+				params: { slug: location.id },
+				props: {
+					entry: {
+						id: location.id,
+						data: {
+							...location.data,
+							sections: rowSections,
+							customLayout: true,
+						},
+					},
+				},
+			};
+		}
+
+		return {
+			params: { slug: location.id },
+			props: {
+				entry: {
+					id: location.id,
+					data: {
+						// Row first so the structured data can still read city, region
+						// and serves; the template then supplies the page-level fields.
+						...location.data,
+						...filled,
+						image: location.data.image,
+						// Town-specific sections run after the shared ones.
+						sections: [...filled.sections, ...location.data.sections],
+					},
+				},
+			},
+		};
+	});
+}
+
+const { entry } = Astro.props;
+---
+
+<CollectionEntry
+	entry={entry}
+	collection="locations"
+	indexLabel="Service areas"
+/>

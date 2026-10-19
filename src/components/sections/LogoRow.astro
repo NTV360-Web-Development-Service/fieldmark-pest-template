@@ -1,0 +1,85 @@
+---
+import type { LogoRow } from './LogoRow.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+
+type Props = LogoRow;
+
+const {
+	headingLevel = 'h2',
+	heading,
+	layout = 'grid',
+	muted = true,
+	logos = [],
+	anchor,
+	surface = 'light',
+	spacing = 'sm',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+const isMarquee = layout === 'marquee' && logos.length > 2;
+// The marquee needs the list twice to loop without a visible seam.
+const track = isMarquee ? [...logos, ...logos] : logos;
+---
+
+<Section
+	anchor={anchor}
+	surface={surface}
+	spacing={spacing}
+	width={isMarquee ? 'full' : width}
+	contained={!isMarquee}
+>
+	{heading && (
+		<p
+			class={`mb-8 text-center font-mono text-[0.6875rem] uppercase tracking-[0.14em] ${
+				onDark ? 'opacity-70' : 'text-body opacity-80'
+			} ${isMarquee ? 'px-5' : ''}`}
+		>
+			{heading}
+		</p>
+	)}
+
+	<div class={isMarquee ? 'logo-marquee relative overflow-hidden' : ''}>
+		<ul
+			class={
+				isMarquee
+					? 'logo-marquee-track flex w-max items-center gap-14'
+					: 'flex flex-wrap items-center justify-center gap-x-14 gap-y-8'
+			}
+		>
+			{track.map((logo, i) => {
+				const content = logo.image ? (
+					<img
+						src={logo.image.src}
+						alt={logo.image.alt || logo.name}
+						loading="lazy"
+						class={`h-9 w-auto object-contain ${
+							muted ? 'opacity-60 grayscale transition hover:opacity-100 hover:grayscale-0' : ''
+						}`}
+					/>
+				) : (
+					<span class="font-display text-lg font-bold uppercase tracking-tight opacity-70">
+						{logo.name}
+					</span>
+				);
+
+				return (
+					<li
+						class="shrink-0"
+						/* The duplicated half is decorative: hide it from assistive tech. */
+						aria-hidden={isMarquee && i >= logos.length ? 'true' : undefined}
+					>
+						{logo.href ? (
+							<a href={logo.href} target="_blank" rel="noopener noreferrer" title={logo.name}>
+								{content}
+							</a>
+						) : (
+							content
+						)}
+					</li>
+				);
+			})}
+		</ul>
+	</div>
+</Section>

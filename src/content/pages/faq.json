@@ -1,0 +1,83 @@
+{
+  "title": "FAQ Page",
+  "permalink": "https://modern-cabinets-template.vercel.app/faq",
+  "order": 80,
+  "draft": false,
+  "seo": {
+    "title": "Frequently Asked Questions",
+    "description": "Common questions about glide-out cabinet shelving: fit, cost, weight, warranty and installation.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "page_header",
+      "headingLevel": "h1",
+      "eyebrow": "Before you book",
+      "heading": "Questions, answered.",
+      "body": "If yours is not here, call the shop. Nobody is working from a script.",
+      "surface": "muted",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "accordion",
+      "headingLevel": "h2",
+      "heading": "Frequently asked questions",
+      "surface": "light",
+      "spacing": "md",
+      "width": "default",
+      "items": [
+        {
+          "question": "Do you have to replace my cabinets?",
+          "answer": "No. The shelves fit inside the cabinet boxes you already have. Your doors, drawer fronts, counters and plumbing all stay where they are."
+        },
+        {
+          "question": "Will they fit an older or non-standard cabinet?",
+          "answer": "Usually yes, and that is the point of measuring on site. Older cabinets are rarely square, so each shelf is cut for one specific opening."
+        },
+        {
+          "question": "How much weight will a shelf hold?",
+          "answer": "Our standard glides are rated to **100 lb** per shelf, which covers stand mixers, stacked cast iron and full cases of tinned goods."
+        },
+        {
+          "question": "How long does installation take?",
+          "answer": "Most kitchens are done in a single morning. Larger jobs across several rooms can run to a full day, and we tell you which before you book."
+        },
+        {
+          "question": "What does it cost?",
+          "answer": "Pricing is per shelf and depends on the width and the glide. You get a fixed quote after the free consultation, before anything is built."
+        },
+        {
+          "question": "Do you offer financing?",
+          "answer": "Yes, on jobs over a threshold. See the [financing page](/financing) for the current terms."
+        },
+        {
+          "question": "What is the warranty?",
+          "answer": "Lifetime on the glide hardware for as long as you own the home. Shelves themselves carry a five year warranty against defects."
+        },
+        {
+          "question": "Do I need to be home for the install?",
+          "answer": "Someone over eighteen needs to be there to let the installer in and confirm the finished work."
+        }
+      ]
+    },
+    {
+      "type": "cta_banner",
+      "headingLevel": "h2",
+      "eyebrow": "No obligation",
+      "heading": "Book a free measure.",
+      "body": "An hour on site, a fixed quote, no pressure to book on the day.",
+      "ctas": [
+        {
+          "label": "Book a consultation",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "surface": "brand",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

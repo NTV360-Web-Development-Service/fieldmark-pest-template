@@ -1,0 +1,93 @@
+---
+import type { ContactDetails } from './ContactDetails.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Media from '../ui/Media.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { site } from '../../lib/site';
+
+type Props = ContactDetails;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	showPhone = true,
+	showEmail = true,
+	showAddress = true,
+	showHours = true,
+	extra = [],
+	media,
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+const address = site.contact.address;
+
+// Built from global settings so a changed phone number changes every page at
+// once. The toggles decide what appears here, not what the business is.
+const lines: { label: string; value: string; href?: string }[] = [
+	...(showPhone
+		? [{ label: 'Phone', value: site.contact.phone, href: site.contact.phoneHref }]
+		: []),
+	...(showEmail && site.contact.email
+		? [{ label: 'Email', value: site.contact.email, href: `mailto:${site.contact.email}` }]
+		: []),
+	...(showAddress && address
+		? [
+				{
+					label: 'Address',
+					value: `${address.street}, ${address.city}, ${address.region} ${address.postalCode}`,
+				},
+			]
+		: []),
+	...(showHours && site.contact.hours ? [{ label: 'Hours', value: site.contact.hours }] : []),
+	...extra,
+];
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	<div class={media ? 'grid gap-12 lg:grid-cols-2 lg:gap-16' : ''}>
+		<div>
+			{(eyebrow || heading || intro) && (
+				<header class="mb-10 max-w-xl">
+					{eyebrow && (
+						<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+					)}
+					{heading && (
+						<Heading level={headingLevel} size="lg">
+							{heading}
+						</Heading>
+					)}
+					{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+				</header>
+			)}
+
+			<dl class="grid gap-x-8 gap-y-7 sm:grid-cols-2">
+				{lines.map((line) => (
+					<div class={`border-t pt-5 ${onDark ? 'border-current/20' : 'border-line'}`}>
+						<dt class="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] opacity-65">
+							{line.label}
+						</dt>
+						<dd class="mt-2 text-base">
+							{line.href ? (
+								<a href={line.href} class="underline-offset-4 hover:underline">
+									{line.value}
+								</a>
+							) : (
+								line.value
+							)}
+						</dd>
+					</div>
+				))}
+			</dl>
+		</div>
+
+		{media && <Media media={media} class="rounded-(--radius-media)" />}
+	</div>
+</Section>

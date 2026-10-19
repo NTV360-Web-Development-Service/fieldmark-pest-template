@@ -1,0 +1,3012 @@
+# Pages CMS schema -- https://pagescms.org/docs/configuration/
+#
+# This file is the editing contract. Every block below must stay in sync with
+# two other places, all keyed by the same string:
+#   - src/lib/section-schemas.ts  (validation)
+#   - src/lib/sections.ts         (rendering)
+# Adding a section in only two of the three is the failure mode to watch for.
+
+media:
+  input: public/media
+  output: /media
+
+components:
+  page_sections:
+    label: Page sections
+    type: block
+    list:
+      collapsible:
+        collapsed: true
+        # The section's friendly type shows in the pill on the right, so the
+        # summary carries the content instead: the heading, or the label for
+        # the few blocks without one. A block with neither (the trust-badge
+        # strip) still reads clearly from its index and type pill.
+        summary: '{index}. {fields.heading}{fields.label}'
+    blockKey: type
+    blocks:
+      - name: hero
+        label: Hero
+        type: object
+        fields:
+          - name: layout
+            label: Layout
+            type: select
+            default: split
+            options:
+              values:
+                - { value: split, label: Text beside image }
+                - { value: centered, label: Centered text }
+                - { value: full, label: Full-bleed background image }
+          - name: background
+            label: Background
+            # A block field without `list` is how Pages CMS does conditional
+            # fields: pick one kind and only that kind's inputs render.
+            # Remove the block for a hero with no media.
+            type: block
+            blockKey: kind
+            blocks:
+              - name: image
+                label: Single image
+                type: object
+                fields:
+                  - { name: image, label: Image, component: image }
+              - name: video
+                label: Looping video
+                type: object
+                fields:
+                  - { name: file, label: Video, component: video_file }
+                  - name: poster
+                    label: Poster image
+                    type: image
+                    description: >-
+                      Shown until the video can play, and all a data-saving
+                      browser ever downloads. Worth setting. Keep it under
+                      about 3 MB.
+              - name: carousel
+                label: Image carousel
+                type: object
+                fields:
+                  - name: slides
+                    label: Slides
+                    type: object
+                    component: image
+                    list:
+                      collapsible:
+                        collapsed: true
+                        summary: '{index}. {fields.alt}'
+                    description: Two or more slides required.
+                  - name: interval
+                    label: Seconds per slide
+                    type: number
+                    default: 6
+          - name: eyebrow
+            label: Dimension callout
+            type: string
+            description: Short label above the headline. A real measurement reads best.
+          - { name: heading, label: Headline, type: string, required: true }
+          - { name: body, label: Intro, type: rich-text }
+          - name: mediaNote
+            label: Image caption
+            type: string
+            description: >-
+              Sits on the bottom edge of the image, and only on the
+              "Text beside image" layout. A real measurement reads best.
+          - name: ctas
+            label: Buttons
+            type: object
+            component: link
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.label}'
+          - { name: badges, label: Trust points, type: string, list: true }
+          - name: rating
+            label: Review rating
+            type: object
+            fields:
+              - { name: value, label: Stars out of 5, type: number }
+              - { name: count, label: Review count, type: number }
+              - { name: label, label: Caption, type: string, default: verified reviews }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h1
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: lg
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: rich_text
+        label: Rich text
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: body, label: Body, type: rich-text, required: true }
+          - name: align
+            label: Alignment
+            type: select
+            default: left
+            options:
+              values: [left, center]
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: narrow
+            options:
+              values: [narrow, default, wide, full]
+      - name: card_grid
+        label: Card grid
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4', '5']
+          - name: cards
+            label: Cards
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            fields:
+              - { name: image, label: Image, component: image }
+              - { name: title, label: Title, type: string, required: true }
+              - { name: body, label: Body, type: text }
+              - { name: link, label: Link, component: link }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: media_split
+        label: Image beside text
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: body, label: Body, type: rich-text }
+          - { name: image, label: Image, component: image }
+          - name: imageSide
+            label: Image side
+            type: select
+            default: right
+            options:
+              values:
+                - { value: right, label: Right }
+                - { value: left, label: Left }
+          - name: bullets
+            label: Bullet points
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.text}'
+            fields:
+              - { name: text, label: Text, type: string, required: true }
+              - name: desc
+                label: Description
+                type: string
+                description: Optional second line for a "title + explanation" bullet.
+              - name: icon
+                label: Icon
+                type: select
+                description: Leave empty for the default tick.
+                options:
+                  values:
+                    - { value: '', label: Default tick }
+                    - { value: shield, label: Shield }
+                    - { value: phone, label: Phone }
+                    - { value: clock, label: Clock }
+                    - { value: check, label: Check }
+                    - { value: star, label: Star }
+                    - { value: wrench, label: Wrench }
+                    - { value: badge, label: Badge }
+                    - { value: dollar, label: Dollar }
+                    - { value: truck, label: Truck }
+                    - { value: user, label: Person }
+          - name: ctas
+            label: Buttons
+            type: object
+            component: link
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.label}'
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: steps
+        label: Numbered steps
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: steps
+            label: Steps
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            description: Numbering is automatic, so reordering renumbers correctly.
+            fields:
+              - { name: title, label: Title, type: string, required: true }
+              - { name: body, label: Body, type: text }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: quotes
+        label: Customer quotes
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - name: items
+            label: Quotes
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.name}'
+            fields:
+              - { name: quote, label: Quote, type: text, required: true }
+              - { name: name, label: Name, type: string, required: true }
+              - name: location
+                label: Location
+                type: string
+                description: City or neighbourhood. Local proof beats a bare first name.
+              - { name: rating, label: Stars out of 5, type: number }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: accordion
+        label: Accordion
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: items
+            label: Items
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.question}'
+            fields:
+              - { name: question, label: Question, type: string, required: true }
+              - { name: answer, label: Answer, type: rich-text, required: true }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: default
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: cta_banner
+        label: Call to action banner
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: body, label: Body, type: rich-text }
+          - name: ctas
+            label: Buttons
+            type: object
+            component: link
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.label}'
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: brand
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+      - name: page_header
+        label: Page header
+        type: object
+        fields:
+          - name: variant
+            label: Layout
+            type: select
+            default: split
+            description: >-
+              Split is the compact opener for interior and detail pages.
+              Feature is the louder banner treatment for the main category
+              pages one level up (Services, a room landing).
+            options:
+              values:
+                - { value: split, label: Split (text beside photo) }
+                - { value: feature, label: Feature (banner below heading) }
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string, required: true }
+          - { name: body, label: Intro, type: rich-text }
+          - { name: image, label: Image, component: image }
+          - name: mediaNote
+            label: Photo caption
+            type: string
+            description: >-
+              Dimension caption pinned over the photo. In the Feature layout
+              it falls back to the dimension callout when left empty; in
+              Split it only shows when set.
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h1
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: sm
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: feature_list
+        label: Feature list
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4']
+          - name: items
+            label: Items
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            fields:
+              - { name: title, label: Title, type: string, required: true }
+              - { name: body, label: Body, type: text }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: stat_band
+        label: Statistics
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - name: stats
+            label: Statistics
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.label}'
+            fields:
+              - name: value
+                label: Value
+                type: string
+                required: true
+                description: Text, not a number, so 1M+ and 4.8 both work.
+              - { name: label, label: Label, type: string, required: true }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: dark
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: logo_row
+        label: Logo row
+        type: object
+        fields:
+          - { name: heading, label: Heading, type: string }
+          - name: layout
+            label: Layout
+            type: select
+            default: grid
+            options:
+              values:
+                - { value: grid, label: Static row }
+                - { value: marquee, label: Sliding marquee }
+          - name: muted
+            label: Mute the logos
+            type: boolean
+            default: true
+            description: Greys them back so a wall of brand colours does not fight the page.
+          - name: logos
+            label: Logos
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.name}'
+            fields:
+              - { name: image, label: Logo image, component: image }
+              - name: name
+                label: Name
+                type: string
+                required: true
+                description: Shown as text when no image is supplied.
+              - { name: href, label: Link, type: string }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: sm
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: legal_text
+        label: Legal text
+        type: object
+        fields:
+          - { name: heading, label: Heading, type: string }
+          - { name: body, label: Body, type: rich-text, required: true }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: sm
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: default
+            options:
+              values: [narrow, default, wide, full]
+      - name: form_block
+        label: Form
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: endpoint
+            label: Submit URL
+            type: string
+            required: true
+            pattern: '^(https?://|/)'
+            description: >-
+              Where the form posts. Use your own Formspree, Web3Forms or serverless
+              endpoint. This site stores nothing itself.
+          - { name: submitLabel, label: Button label, type: string, default: Send }
+          - name: fields
+            label: Fields
+            type: block
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{index}. {fields.heading}{fields.label}'
+            blockKey: kind
+            blocks:
+              - name: text
+                label: Text
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, required: true }
+                  - { name: label, label: Label, type: string, required: true }
+                  - { name: placeholder, label: Placeholder, type: string }
+                  - { name: required, label: Required, type: boolean, default: false }
+                  - name: autocomplete
+                    label: Autocomplete hint
+                    type: string
+                    description: Browser autofill token, for example given-name or postal-code.
+                  - name: width
+                    label: Field width
+                    type: select
+                    default: full
+                    options:
+                      values:
+                        - { value: full, label: Full row }
+                        - { value: half, label: Half row }
+              - name: email
+                label: Email
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, default: email, required: true }
+                  - { name: label, label: Label, type: string, required: true }
+                  - { name: placeholder, label: Placeholder, type: string }
+                  - { name: required, label: Required, type: boolean, default: true }
+                  - name: width
+                    label: Field width
+                    type: select
+                    default: full
+                    options:
+                      values:
+                        - { value: full, label: Full row }
+                        - { value: half, label: Half row }
+              - name: tel
+                label: Phone
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, default: phone, required: true }
+                  - { name: label, label: Label, type: string, required: true }
+                  - { name: placeholder, label: Placeholder, type: string }
+                  - { name: required, label: Required, type: boolean, default: false }
+                  - name: width
+                    label: Field width
+                    type: select
+                    default: full
+                    options:
+                      values:
+                        - { value: full, label: Full row }
+                        - { value: half, label: Half row }
+              - name: textarea
+                label: Long text
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, required: true }
+                  - { name: label, label: Label, type: string, required: true }
+                  - { name: placeholder, label: Placeholder, type: string }
+                  - { name: required, label: Required, type: boolean, default: false }
+                  - { name: rows, label: Rows, type: number, default: 5 }
+              - name: select
+                label: Dropdown
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, required: true }
+                  - { name: label, label: Label, type: string, required: true }
+                  - { name: required, label: Required, type: boolean, default: false }
+                  - { name: choices, label: Choices, type: string, list: true }
+                  - name: width
+                    label: Field width
+                    type: select
+                    default: full
+                    options:
+                      values:
+                        - { value: full, label: Full row }
+                        - { value: half, label: Half row }
+              - name: checkbox
+                label: Checkbox
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, required: true }
+                  - name: label
+                    label: Label
+                    type: rich-text
+                    required: true
+                    description: Rich text so consent wording can link to your policy.
+                  - { name: required, label: Required, type: boolean, default: false }
+              - name: hidden
+                label: Hidden value
+                type: object
+                fields:
+                  - { name: name, label: Field name, type: string, required: true }
+                  - { name: value, label: Value, type: string, required: true }
+          - { name: footnote, label: Footnote, type: rich-text }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the section
+              that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: default
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: contact_details
+        label: Contact details
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: showPhone
+            label: Show phone
+            type: boolean
+            default: true
+            description: Values come from Site Settings, so they stay correct everywhere.
+          - { name: showEmail, label: Show email, type: boolean, default: true }
+          - { name: showAddress, label: Show address, type: boolean, default: true }
+          - { name: showHours, label: Show hours, type: boolean, default: true }
+          - name: extra
+            label: Extra lines
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.label}'
+            fields:
+              - { name: label, label: Label, type: string, required: true }
+              - { name: value, label: Value, type: string, required: true }
+              - { name: href, label: Link, type: string }
+          - { name: media, label: Map or image, component: media }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the section
+              that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: media_gallery
+        label: Gallery
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4']
+          - name: layout
+            label: Layout
+            type: select
+            default: grid
+            options:
+              values:
+                - { value: grid, label: Even grid }
+                - { value: masonry, label: Masonry }
+          - name: items
+            label: Items
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.caption}'
+            fields:
+              - { name: media, label: Media, component: media }
+              - { name: caption, label: Caption, type: string }
+              - name: category
+                label: Category
+                type: string
+                description: >-
+                  Adds a filter bar once two or more categories are used. Leave empty for
+                  no filtering.
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the section
+              that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: media_compare
+        label: Before and after
+        type: object
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: display
+            label: Display
+            type: select
+            default: slider
+            options:
+              values:
+                - { value: slider, label: Drag slider }
+                - { value: split, label: Side by side }
+          - { name: beforeLabel, label: Before label, type: string, default: Before }
+          - { name: afterLabel, label: After label, type: string, default: After }
+          - name: items
+            label: Pairs
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.caption}'
+            fields:
+              - { name: before, label: Before image, component: image }
+              - { name: after, label: After image, component: image }
+              - { name: caption, label: Caption, type: string }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the section
+              that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+      - name: collection_feed
+        label: Collection feed
+        type: object
+        description: >-
+          Pulls entries from a collection instead of hand-typed cards, so adding a
+          service or location makes it appear everywhere this points.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: source
+            label: Collection
+            type: select
+            required: true
+            options:
+              values:
+                - { value: services, label: Services }
+                - { value: projects, label: Projects }
+                - { value: locations, label: Service areas }
+          - name: layout
+            label: Layout
+            type: select
+            default: grid
+            options:
+              values:
+                - { value: grid, label: Cards }
+                - { value: list, label: Compact list }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4', '5']
+          - name: limit
+            label: Maximum entries
+            type: number
+            default: 0
+            description: Zero shows every entry.
+          - name: topLevelOnly
+            label: Top-level categories only
+            type: boolean
+            default: false
+            description: Services only. Hides sub-services, showing just the main rooms.
+          - { name: showImage, label: Show images, type: boolean, default: true }
+          - { name: showSummary, label: Show summaries, type: boolean, default: true }
+          - { name: showPrice, label: Show prices, type: boolean, default: true }
+          - { name: moreLabel, label: More link label, type: string }
+          - { name: moreHref, label: More link URL, type: string }
+          - name: moreStyle
+            label: More link style
+            type: select
+            default: ghost
+            options:
+              values:
+                - { value: ghost, label: Text link }
+                - { value: primary, label: Primary button }
+                - { value: secondary, label: Outline button }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+      - name: service_areas
+        label: Service areas
+        type: object
+        description: Lists every published location. Add a location file to update it.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4']
+          - { name: showServed, label: List neighbourhoods, type: boolean, default: true }
+          - { name: showPostalCodes, label: List postal codes, type: boolean, default: true }
+          - name: map
+            label: Map
+            component: media
+            description: >-
+              Usually a map embed. In Google Maps use Share, then Embed a
+              map, and paste the address; it shows beside the heading.
+          - { name: footnote, label: Footnote, type: rich-text }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: search_block
+        label: Area lookup
+        type: object
+        description: >-
+          Town or postcode filter over the locations collection. Every area is
+          listed already, so it still works without JavaScript.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - { name: label, label: Input label, type: string, default: Town or postcode }
+          - { name: placeholder, label: Placeholder, type: string }
+          - { name: emptyNote, label: No-match message, type: string }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: default
+            options:
+              values: [narrow, default, wide, full]
+      - name: placeholder
+        label: To be added
+        type: object
+        description: >-
+          A reserved slot for content you will supply later. It renders as an
+          obviously unfinished block, and the build lists every page still
+          carrying one, so none ship by accident.
+        fields:
+          - name: label
+            label: What goes here
+            type: string
+            default: Content to be added
+            description: Write it for whoever fills it in, for example Six project photos.
+          - { name: note, label: Guidance, type: text }
+          - name: size
+            label: Reserved height
+            type: select
+            default: md
+            options:
+              values: [sm, md, lg]
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: offers
+        label: Offers and coupons
+        type: object
+        description: >-
+          Expired offers disappear on their end date, and the whole section hides
+          itself when nothing is live.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3']
+          - name: items
+            label: Offers
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            fields:
+              - { name: title, label: Title, type: string, required: true }
+              - name: value
+                label: The saving
+                type: string
+                description: Shown large, for example $100 off or Free consultation.
+              - { name: body, label: Description, type: text }
+              - name: code
+                label: Coupon code
+                type: string
+                description: Leave empty for an offer with no code. Visitors can copy it.
+              - name: expires
+                label: Ends on
+                type: date
+                description: >-
+                  The offer is removed from the page the day after. Leave empty for no
+                  end date.
+              - { name: terms, label: Small print, type: text }
+              - { name: cta, label: Button, component: link }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+      - name: content_blocks
+        label: Free layout
+        type: object
+        description: >-
+          Build an arrangement out of parts. Use a named section when the pattern
+          repeats across pages, and this when it does not.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '2'
+            description: >-
+              Blocks fill these columns in order. Two columns with an image then text
+              gives image on the left; text then image puts it on the right.
+            options:
+              values: ['1', '2', '3']
+          - name: align
+            label: Column alignment
+            type: select
+            default: start
+            options:
+              values:
+                - { value: start, label: Top }
+                - { value: center, label: Middle }
+          - name: blocks
+            label: Blocks
+            type: block
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{index}. {fields.caption}{fields.label}'
+            blockKey: kind
+            blocks:
+              - name: text
+                label: Text
+                type: object
+                fields:
+                  - { name: body, label: Body, type: rich-text, required: true }
+                  - name: align
+                    label: Alignment
+                    type: select
+                    default: left
+                    options:
+                      values: [left, center]
+                  - { name: full, label: Span all columns, type: boolean, default: false }
+              - name: media
+                label: Image or video
+                type: object
+                fields:
+                  - { name: media, label: Media, component: media }
+                  - { name: caption, label: Caption, type: string }
+                  - name: ratio
+                    label: Shape
+                    type: select
+                    default: '4/3'
+                    options:
+                      values: ['auto', '16/9', '4/3', '1/1']
+                  - { name: full, label: Span all columns, type: boolean, default: false }
+              - name: buttons
+                label: Buttons
+                type: object
+                fields:
+                  - name: items
+                    label: Buttons
+                    type: object
+                    component: link
+                    list:
+                      collapsible:
+                        collapsed: true
+                        summary: '{fields.label}'
+                  - name: align
+                    label: Alignment
+                    type: select
+                    default: left
+                    options:
+                      values: [left, center]
+                  - { name: full, label: Span all columns, type: boolean, default: true }
+              - name: divider
+                label: Divider
+                type: object
+                fields:
+                  - name: label
+                    label: Label
+                    type: string
+                    description: Leave empty for a plain rule, or add a measurement.
+              - name: spacer
+                label: Space
+                type: object
+                fields:
+                  - name: size
+                    label: Height
+                    type: select
+                    default: md
+                    options:
+                      values: [sm, md, lg]
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+      - name: badge_strip
+        label: Trust badges
+        type: object
+        description: >-
+          A thin band of icon and label pairs, sized to sit just under a
+          hero. For the trust row (24/7, Licensed, Free estimates), not for
+          a section with a heading and body copy.
+        fields:
+          - name: label
+            label: Section name
+            type: string
+            default: Trust badges
+            description: >-
+              Only names this section in the list above. Not shown on the
+              page.
+          - name: items
+            label: Badges
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            fields:
+              - name: icon
+                label: Icon
+                type: select
+                default: check
+                options:
+                  values:
+                    - { value: shield, label: Shield }
+                    - { value: phone, label: Phone }
+                    - { value: clock, label: Clock }
+                    - { value: check, label: Check }
+                    - { value: star, label: Star }
+                    - { value: wrench, label: Wrench }
+                    - { value: badge, label: Badge }
+                    - { value: dollar, label: Dollar }
+                    - { value: truck, label: Truck }
+                    - { value: user, label: Person }
+              - { name: title, label: Title, type: string, required: true }
+              - { name: subtitle, label: Subtitle, type: string }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: brand
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: sm
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: nearby_areas
+        label: Nearby areas
+        type: object
+        description: >-
+          Links a location page to the other towns served. Works out which
+          town it is on by itself, so one entry in the location template
+          covers every generated page.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string, default: Also serving }
+          - name: limit
+            label: Maximum towns
+            type: number
+            default: 8
+            description: Zero shows every other town.
+          - name: columns
+            label: Columns
+            type: select
+            default: '4'
+            options:
+              values: ['2', '3', '4']
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: sm
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: service_menu
+        label: Service menu (tabbed)
+        type: object
+        description: >-
+          A tabbed explorer: category tabs each swap a banner and a grid of
+          numbered service cards. Use it to browse a category's services.
+          With no JavaScript the first tab's cards show, so nothing is
+          hidden from search engines.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: nowViewingLabel
+            label: Banner label
+            type: string
+            default: Now viewing
+            description: Small label above the banner title on each tab.
+          - name: columns
+            label: Card columns
+            type: select
+            default: '4'
+            options:
+              values: ['2', '3', '4']
+          - name: tabs
+            label: Tabs
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.label}'
+            fields:
+              - { name: label, label: Tab label, type: string, required: true }
+              - name: bannerTitle
+                label: Banner title
+                type: string
+                description: Large text on the banner. Defaults to the tab label.
+              - { name: image, label: Banner image, component: image }
+              - name: cards
+                label: Service cards
+                type: object
+                list:
+                  collapsible:
+                    collapsed: true
+                    summary: '{fields.title}'
+                fields:
+                  - name: icon
+                    label: Icon
+                    type: select
+                    description: Leave empty to show the card number instead.
+                    options:
+                      values:
+                        - { value: '', label: 'Number only' }
+                        - { value: shield, label: Shield }
+                        - { value: phone, label: Phone }
+                        - { value: clock, label: Clock }
+                        - { value: check, label: Check }
+                        - { value: star, label: Star }
+                        - { value: wrench, label: Wrench }
+                        - { value: badge, label: Badge }
+                        - { value: dollar, label: Dollar }
+                        - { value: truck, label: Truck }
+                        - { value: user, label: Person }
+                  - { name: title, label: Title, type: string, required: true }
+                  - { name: body, label: Body, type: text }
+                  - { name: link, label: Link, component: link }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: promo_cards
+        label: Promo cards
+        type: object
+        description: >-
+          A row of image-led promotion cards: a photo with an icon and a
+          corner badge, over a coloured panel with a title, an accent
+          subtitle, a price or body, and a button beside a phone number. For
+          the maintenance / financing / offer band, not the coupon grid
+          (that is Offers and coupons).
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3']
+          - name: cards
+            label: Cards
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            fields:
+              - { name: image, label: Image, component: image }
+              - name: icon
+                label: Icon
+                type: select
+                description: Small chip on the photo. Leave empty for none.
+                options:
+                  values:
+                    - { value: '', label: 'None' }
+                    - { value: shield, label: Shield }
+                    - { value: phone, label: Phone }
+                    - { value: clock, label: Clock }
+                    - { value: check, label: Check }
+                    - { value: star, label: Star }
+                    - { value: wrench, label: Wrench }
+                    - { value: badge, label: Badge }
+                    - { value: dollar, label: Dollar }
+                    - { value: truck, label: Truck }
+                    - { value: user, label: Person }
+              - name: badge
+                label: Corner badge
+                type: string
+                description: Small tag in the top corner, e.g. Members only, Limited time.
+              - { name: title, label: Title, type: string, required: true }
+              - name: subtitle
+                label: Accent subtitle
+                type: string
+                description: The accent line under the title, e.g. For as low as.
+              - name: price
+                label: Price callout
+                type: object
+                description: Shown in place of the body. Leave empty for a text-only card.
+                fields:
+                  - { name: label, label: Small label above, type: string }
+                  - { name: value, label: Value, type: string, required: true }
+                  - { name: unit, label: Small label below, type: string }
+              - { name: body, label: Body, type: text }
+              - { name: cta, label: Button, component: link }
+              - { name: phone, label: Phone (display), type: string }
+              - name: phoneHref
+                label: Phone (link)
+                type: string
+                description: Dialable form, e.g. tel:+15550142200. Derived from the display if left empty.
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: pricing_tiers
+        label: Pricing tiers
+        type: object
+        description: >-
+          A side-by-side comparison band of two to four tiers, one optionally
+          featured. Each tier has a price, an optional term note, a ticked
+          feature list, and a button. Add the toggle to let one switch flip
+          every card between two price sets (e.g. monthly vs. total). For
+          financing options or package comparisons, not the image-led promo
+          band (that is Promo cards) or the coupon grid (Offers and coupons).
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4']
+          - name: toggle
+            label: Billing toggle
+            type: object
+            description: >-
+              Optional. When set, each tier switches between its main price
+              and its alt price. Leave empty for static cards.
+            fields:
+              - { name: primaryLabel, label: First label, type: string, required: true }
+              - { name: altLabel, label: Second label, type: string, required: true }
+              - name: note
+                label: Note beside switch
+                type: string
+                description: e.g. Longer terms, lower monthly.
+          - name: tiers
+            label: Tiers
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.name}'
+            fields:
+              - { name: name, label: Name, type: string, required: true }
+              - name: badge
+                label: Badge
+                type: string
+                description: Small tag on the featured card, e.g. Most chosen.
+              - name: featured
+                label: Featured
+                type: boolean
+                default: false
+                description: Draws the recommended treatment. One per row reads best.
+              - name: priceLabel
+                label: Label above price
+                type: string
+                description: e.g. From.
+              - { name: price, label: Price, type: string, required: true }
+              - name: priceUnit
+                label: Unit after price
+                type: string
+                description: e.g. /mo.
+              - name: priceAlt
+                label: Alt price
+                type: string
+                description: Shown in the toggle's second mode. Falls back to the price.
+              - { name: priceAltUnit, label: Alt unit, type: string }
+              - name: note
+                label: Note under price
+                type: string
+                description: e.g. On jobs from $2,000.
+              - name: features
+                label: Features
+                type: string
+                list: true
+                description: One line each, shown with a tick.
+              - { name: cta, label: Button, component: link }
+          - name: footnote
+            label: Footnote
+            type: text
+            description: Small print under the row, e.g. the representative example.
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: muted
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: team
+        label: Team grid
+        type: object
+        description: >-
+          A grid of people, each a photo, name, role, and short bio.
+          For a "meet the team" section. The role shows in accent caps
+          between the name and the bio.
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: columns
+            label: Columns
+            type: select
+            default: '3'
+            options:
+              values: ['2', '3', '4']
+          - name: members
+            label: Members
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.name}'
+            fields:
+              - { name: photo, label: Photo, component: image }
+              - { name: name, label: Name, type: string, required: true }
+              - { name: role, label: Role, type: string }
+              - { name: bio, label: Bio, type: text }
+          - name: cta
+            label: Button under the grid
+            component: link
+            description: >-
+              Optional. Use on an overview to link to the full team page.
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            default: light
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            default: md
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            default: wide
+            options:
+              values: [narrow, default, wide, full]
+
+      - name: global_block
+        label: Global section
+        type: object
+        description: >-
+          Drops a global section into the page. Edit the content once in its own
+          entry (Book a Consultation or Map) and it stays in sync everywhere it
+          is used. For questions and answers, use the Accordion section.
+        fields:
+          - name: which
+            label: Which section
+            type: select
+            required: true
+            default: booking
+            options:
+              values:
+                - { value: booking, label: Book a Consultation }
+                - { value: map, label: Map }
+          - name: headingLevel
+            label: Heading level
+            type: select
+            default: h2
+            description: >-
+              Document outline rank, not size. Use h1 once per page, on the
+              section that opens it.
+            options:
+              values: [h1, h2, h3, h4]
+          - { name: anchor, label: Anchor ID, type: string }
+          - name: surface
+            label: Background
+            type: select
+            description: Leave blank to use the section's usual background.
+            options:
+              values:
+                - { value: light, label: Page }
+                - { value: muted, label: Muted }
+                - { value: dark, label: Dark }
+                - { value: brand, label: Brand }
+          - name: spacing
+            label: Vertical space
+            type: select
+            description: Leave blank to use the section's usual spacing.
+            options:
+              values: [none, sm, md, lg]
+          - name: width
+            label: Content width
+            type: select
+            description: Leave blank to use the section's usual width.
+            options:
+              values: [narrow, default, wide, full]
+
+  link:
+    type: object
+    label: Link
+    fields:
+      - { name: label, label: Label, type: string, required: true }
+      - { name: href, label: URL, type: string, required: true }
+      - name: style
+        label: Style
+        type: select
+        default: primary
+        options:
+          values:
+            - { value: primary, label: Primary button }
+            - { value: secondary, label: Outline button }
+            - { value: ghost, label: Text link }
+      - { name: newTab, label: Open in new tab, type: boolean, default: false }
+
+  image:
+    # A block without `list` is how Pages CMS does conditional fields: the
+    # editor picks upload or link and only that input renders. Both variants
+    # write the same flat shape, so rendering does not care which was used.
+    type: block
+    label: Image
+    blockKey: source
+    blocks:
+      - name: upload
+        label: Upload a file
+        type: object
+        fields:
+          - name: src
+            label: File
+            type: image
+            required: true
+            description: >-
+              Under about 3 MB. The CMS sends uploads through a function whose
+              request body caps at 4.5 MB, and base64 encoding inflates the file
+              by a third. Phone photos are often 5-8 MB, so resize first, or
+              link to a hosted copy instead.
+          - name: alt
+            label: Alt text
+            type: string
+            description: Describe what the image shows. Leave empty only if decorative.
+      - name: url
+        label: Link to a hosted image
+        type: object
+        fields:
+          - name: src
+            label: Image URL
+            type: string
+            required: true
+            pattern: '^(https?://|/)'
+            description: >-
+              Full URL from your image host, or a path starting with / for a file
+              already in this repo. No size limit this way.
+          - name: alt
+            label: Alt text
+            type: string
+            description: Describe what the image shows. Leave empty only if decorative.
+
+  media:
+    # Image, video or third-party embed. A block so only the chosen kind
+    # renders inputs, and so two kinds can never both be filled.
+    type: block
+    label: Media
+    blockKey: kind
+    blocks:
+      - name: image
+        label: Image
+        type: object
+        fields:
+          - name: source
+            label: Where from
+            type: select
+            default: upload
+            options:
+              values:
+                - { value: upload, label: Uploaded file }
+                - { value: url, label: Hosted URL }
+          - name: src
+            label: Image file or URL
+            type: string
+            required: true
+            description: >-
+              Upload under about 3 MB, or paste a full URL from your image host.
+          - name: alt
+            label: Alt text
+            type: string
+            description: Describe what the image shows. Leave empty only if decorative.
+      - name: video
+        label: Video
+        type: object
+        fields:
+          - name: src
+            label: Video URL
+            type: string
+            required: true
+            pattern: '^(https?://|/)'
+            description: Direct MP4 URL. Use Embed below for YouTube or Vimeo.
+          - { name: poster, label: Poster image, type: image }
+          - name: autoplay
+            label: Autoplay muted loop
+            type: boolean
+            default: false
+            description: >-
+              Off means the visitor gets play controls. On is for background
+              motion only, and forces the video muted.
+      - name: embed
+        label: Embed
+        type: object
+        fields:
+          - name: url
+            label: URL
+            type: string
+            required: true
+            description: >-
+              Paste the normal address bar URL. YouTube and Vimeo watch links
+              are converted automatically. Also takes maps and other iframes.
+          - name: title
+            label: Title
+            type: string
+            required: true
+            description: >-
+              Required. Screen readers announce this in place of the embed.
+          - name: ratio
+            label: Aspect ratio
+            type: select
+            default: '16/9'
+            options:
+              values: ['16/9', '4/3', '1/1', '21/9']
+
+  video_file:
+    type: block
+    label: Video
+    blockKey: source
+    blocks:
+      - name: upload
+        label: Upload a file
+        type: object
+        fields:
+          - name: src
+            label: File
+            type: file
+            required: true
+            description: >-
+              Under about 3 MB, which is very short for video. Linking is
+              usually the right choice. Note that git keeps every version of an
+              uploaded file forever.
+      - name: url
+        label: Link to a hosted video
+        type: object
+        fields:
+          - name: src
+            label: Video URL
+            type: string
+            required: true
+            pattern: '^(https?://|/)'
+            description: Direct MP4 URL from your video host. No size limit this way.
+
+content:
+  - name: site
+    label: Site Settings
+    type: file
+    path: src/content/site.json
+    format: json
+    fields:
+      - { name: name, label: Business name, type: string, required: true }
+      - { name: legalName, label: Legal name, type: string }
+      - { name: tagline, label: Tagline, type: string }
+      - { name: logo, label: Logo, component: image }
+
+      - name: contact
+        label: Contact
+        type: object
+        fields:
+          - { name: phone, label: Phone (display), type: string, required: true }
+          - name: phoneHref
+            label: Phone (link)
+            type: string
+            description: Dialable form, for example tel:+15550142200
+            required: true
+          - { name: email, label: Email, type: string }
+          - name: address
+            label: Address
+            type: object
+            fields:
+              - { name: street, label: Street, type: string }
+              - { name: city, label: City, type: string }
+              - { name: region, label: State / Region, type: string }
+              - { name: postalCode, label: Postal code, type: string }
+              - { name: country, label: Country, type: string, default: US }
+          - { name: hours, label: Hours, type: string }
+
+      # The footer is intentionally not editable in the CMS. Its link columns
+      # and legal links are structural URLs that map to real routes, so a typo
+      # would break navigation site-wide; they live in src/content/site.json as
+      # developer-set defaults. The copyright line is built automatically from
+      # the year and legal name, so there is nothing to edit here.
+
+      - name: social
+        label: Social profiles
+        type: object
+        list:
+          collapsible:
+            collapsed: true
+            summary: '{fields.platform}'
+        fields:
+          - { name: platform, label: Platform, type: string, required: true }
+          - { name: href, label: URL, type: string, required: true }
+
+      - name: theme
+        label: Theme
+        description: Brand colors and type. Changing these restyles the whole site.
+        type: object
+        fields:
+          - name: primary
+            label: Primary
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: primaryHover
+            label: Primary (hover)
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: primaryFg
+            label: Primary text
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: accent
+            label: Accent
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: accentFg
+            label: Accent text
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: accentInk
+            label: Accent (on light)
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Darker accent used on pale backgrounds, where the main accent fails contrast'
+          - name: ink
+            label: Heading text
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: body
+            label: Body text
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: muted
+            label: Muted background
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: line
+            label: Border
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: surface
+            label: Page background
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: dark
+            label: Dark background
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - name: darkFg
+            label: Dark text
+            type: string
+            required: true
+            pattern: '^#[0-9a-fA-F]{6}$'
+            description: 'Six-digit hex, for example #22463a'
+          - { name: radius, label: Corner radius, type: string, required: true }
+          - { name: radiusMedia, label: Corner radius (media), type: string, required: true }
+          - { name: fontDisplay, label: Display font stack, type: string, required: true }
+          - { name: fontHeading, label: Heading font stack, type: string, required: true }
+          - { name: fontBody, label: Body font stack, type: string, required: true }
+          - { name: fontMono, label: Mono font stack, type: string, required: true }
+          - { name: fontHref, label: Web font stylesheet URL, type: string }
+
+  - name: announcement
+    label: Announcement Bar
+    description: >-
+      The thin promotional strip across the top of every page. Turn it off to
+      hide it site-wide.
+    type: file
+    path: src/content/announcement.json
+    format: json
+    fields:
+      - { name: enabled, label: Show the bar, type: boolean, default: false }
+      - { name: text, label: Message, type: string }
+      - name: link
+        label: Link
+        type: object
+        fields:
+          - { name: label, label: Label, type: string }
+          - { name: href, label: URL, type: string }
+      - { name: dismissible, label: Visitors can dismiss, type: boolean, default: true }
+
+  - name: popup
+    label: Popup
+    description: >-
+      A promotional dialog shown once per visit. Closes with Escape, and
+      never reappears after someone dismisses it.
+    type: file
+    path: src/content/popup.json
+    format: json
+    fields:
+      - { name: enabled, label: Show the popup, type: boolean, default: false }
+      - name: trigger
+        label: When to show it
+        type: select
+        default: delay
+        options:
+          values:
+            - { value: delay, label: After a delay }
+            - { value: scroll, label: After scrolling }
+            - { value: exit, label: On leaving the page }
+      - { name: delaySeconds, label: Delay in seconds, type: number, default: 8 }
+      - { name: scrollPercent, label: Scroll percentage, type: number, default: 50 }
+      - name: frequency
+        label: How often
+        type: select
+        default: session
+        options:
+          values:
+            - { value: session, label: Once per visit }
+            - { value: once, label: Once, then never again }
+      - { name: eyebrow, label: Eyebrow, type: string }
+      - { name: heading, label: Heading, type: string, required: true }
+      - { name: body, label: Body, type: rich-text }
+      - name: image
+        label: Side image
+        type: object
+        description: >-
+          Optional. When set, the popup shows as a two-panel card with this
+          image beside the text. Leave empty for a plain text card.
+        fields:
+          - { name: src, label: File, type: image }
+          - { name: alt, label: Alt text, type: string }
+      - { name: cta, label: Button, component: link }
+      - { name: dismissLabel, label: Dismiss label, type: string, default: No thanks }
+
+  - name: pages
+    label: Pages
+    type: collection
+    path: src/content/pages
+    format: json
+    # Both are required. Without `filename`, Pages CMS falls back to
+    # "{year}-{month}-{day}-{primary}.md" and then derives `extension` from it,
+    # so the collection lists only *.md and every .json page goes missing.
+    filename: '{primary}.json'
+    extension: json
+    subfolders: true
+    view:
+      fields: [title, draft]
+      # Sort the list by order, not the title column, so the home page
+      # (order 0) sits at the top above the rest. Ties fall back to the title.
+      sort: [order, title]
+      default:
+        sort: order
+        order: asc
+    fields:
+      # Live Page URL sits first so an editor sees where the page publishes
+      # before anything else.
+      - name: permalink
+        label: Live Page URL
+        type: string
+        readonly: true
+        description: >-
+          Where this page is published -- copy it into your browser to check
+          your edit. Read-only: the URL is set by the file name (about.json is
+          /about, services/kitchen.json is /services/kitchen, _home.json is the
+          site root), so to change it, rename the file.
+      # A page can still override its URL with a `slug` in the JSON, honoured by
+      # the router and the permalink sync. It is deliberately not a CMS field:
+      # pages route by file name, and an editable override only invited the "why
+      # is this empty?" confusion. Set it by hand in the rare case it is needed.
+      - { name: title, label: Page title, type: string, required: true }
+      - name: order
+        label: Sort order
+        type: number
+        default: 100
+        description: >-
+          Position in this list only. Lower sorts first; the home page is 0 so
+          it stays on top. Ties fall back to the title.
+      - { name: draft, label: Draft, type: boolean, default: false }
+
+      - name: seo
+        label: SEO
+        type: object
+        fields:
+          - { name: title, label: Meta title, type: string }
+          - { name: description, label: Meta description, type: text }
+          - name: ogImage
+            label: Share image
+            type: image
+            description: Keep it under about 3 MB. 1200x630 works best.
+          - { name: noindex, label: Hide from search engines, type: boolean, default: false }
+
+      - { name: sections, label: Page sections, component: page_sections }
+
+  # Global sections -- edited once here, pulled into any page with the "Global
+  # section" block. Changing one of these updates every page that shows it.
+  # Grouped in the sidebar; the group is navigation-only and does not change
+  # where the files are stored.
+  - name: globals
+    label: Global Sections
+    type: group
+    items:
+      - name: booking
+        label: Book a Consultation
+        type: file
+        path: src/content/booking.json
+        format: json
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: steps
+            label: Steps
+            type: object
+            list:
+              collapsible:
+                collapsed: true
+                summary: '{fields.title}'
+            fields:
+              - { name: title, label: Title, type: string, required: true }
+              - { name: body, label: Body, type: text }
+          - { name: cta, label: Button, component: link }
+
+      - name: map
+        label: Map
+        description: Paste a Google Maps embed URL. Shown wherever the Map global is used.
+        type: file
+        path: src/content/map.json
+        format: json
+        fields:
+          - { name: eyebrow, label: Dimension callout, type: string }
+          - { name: heading, label: Heading, type: string }
+          - { name: intro, label: Intro, type: rich-text }
+          - name: embedUrl
+            label: Map embed URL
+            type: string
+            required: true
+            description: >-
+              From Google Maps: Share -> Embed a map -> copy the src URL (or any
+              /maps?...&output=embed link).
+          - name: embedTitle
+            label: Map title
+            type: string
+            required: true
+            description: Required. Screen readers announce this in place of the map.
+          - {
+              name: addressLine,
+              label: Address line,
+              type: string,
+              description: Optional plain-text address shown beside the map.,
+            }
+
+  # Services is a navigation-only group so the sidebar shows a collapsible
+  # "Services" dropdown. Inside it, each room is its own collection -- so the
+  # room is a dropdown too, listing its main page (_main.json, sorted first by
+  # the leading underscore) and its sub-services. Splitting the one services
+  # collection into five by folder changes only the CMS sidebar: the Astro side
+  # still loads every file from src/content/services via one glob, and routing
+  # is unchanged (src/lib/collections.ts entrySlug strips the trailing /_main,
+  # so <room>/_main.json stays at /services/<room>).
+  - name: services-group
+    label: Services
+    type: group
+    items:
+      - name: service-kitchen
+        label: Kitchen Shelves
+        type: collection
+        path: src/content/services/kitchen
+        format: json
+        filename: '{primary}.json'
+        extension: json
+        view:
+          fields: [title, draft]
+          # Sort the list by order, not the title column, so the room's main
+          # page (lowest order) sits at the top above its sub-services.
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Service name
+            type: string
+            required: true
+            description: >-
+              The page's main heading and its name in this list. The top of the
+              page (heading, intro and image) is built from these fields
+              automatically, so there is no hero to add in Page sections below --
+              those are the body. For a room's main page, name it so it reads as
+              the main page here (e.g. "Kitchen — Main Page") and set the Public
+              heading below to the real on-page title.
+          - name: heading
+            label: Public heading
+            type: string
+            description: >-
+              Optional. Overrides the on-page H1 when the name above is a CMS
+              label rather than the title you want visitors to see. Leave empty
+              to use the name above.
+          - name: summary
+            label: Card summary
+            type: text
+            required: true
+            description: >-
+              One or two lines. Shown as the intro under the page heading, and
+              wherever this service appears as a card.
+          - name: priceNote
+            label: Price note
+            type: string
+            description: 'Shown on cards as a from-price or range, e.g. From $900. Free text.'
+          - name: image
+            label: Card image
+            component: image
+            description: Used as the page's header image and on cards. Leave empty for a text-only header.
+          - name: parent
+            label: Parent category
+            type: object
+            description: >-
+              For a sub-service, the room it sits under, so its breadcrumb reads
+              Home / Services / Kitchen / This page. Leave empty for the room's
+              own main page.
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: href, label: URL, type: string }
+          - name: order
+            label: Sort order
+            type: number
+            default: 100
+            description: Lower sorts first. Ties fall back to the name.
+          - { name: draft, label: Draft, type: boolean, default: false }
+
+          - name: seo
+            label: SEO
+            type: object
+            fields:
+              - { name: title, label: Meta title, type: string }
+              - { name: description, label: Meta description, type: text }
+              - name: ogImage
+                label: Share image
+                type: image
+                description: Keep it under about 3 MB. 1200x630 works best.
+              - { name: noindex, label: Hide from search engines, type: boolean, default: false }
+
+          - { name: sections, label: Page sections, component: page_sections }
+
+      - name: service-pantry
+        label: Pantry Storage
+        type: collection
+        path: src/content/services/pantry
+        format: json
+        filename: '{primary}.json'
+        extension: json
+        view:
+          fields: [title, draft]
+          # Sort the list by order, not the title column, so the room's main
+          # page (lowest order) sits at the top above its sub-services.
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Service name
+            type: string
+            required: true
+            description: >-
+              The page's main heading and its name in this list. The top of the
+              page (heading, intro and image) is built from these fields
+              automatically, so there is no hero to add in Page sections below --
+              those are the body. For a room's main page, name it so it reads as
+              the main page here (e.g. "Kitchen — Main Page") and set the Public
+              heading below to the real on-page title.
+          - name: heading
+            label: Public heading
+            type: string
+            description: >-
+              Optional. Overrides the on-page H1 when the name above is a CMS
+              label rather than the title you want visitors to see. Leave empty
+              to use the name above.
+          - name: summary
+            label: Card summary
+            type: text
+            required: true
+            description: >-
+              One or two lines. Shown as the intro under the page heading, and
+              wherever this service appears as a card.
+          - name: priceNote
+            label: Price note
+            type: string
+            description: 'Shown on cards as a from-price or range, e.g. From $900. Free text.'
+          - name: image
+            label: Card image
+            component: image
+            description: Used as the page's header image and on cards. Leave empty for a text-only header.
+          - name: parent
+            label: Parent category
+            type: object
+            description: >-
+              For a sub-service, the room it sits under, so its breadcrumb reads
+              Home / Services / Kitchen / This page. Leave empty for the room's
+              own main page.
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: href, label: URL, type: string }
+          - name: order
+            label: Sort order
+            type: number
+            default: 100
+            description: Lower sorts first. Ties fall back to the name.
+          - { name: draft, label: Draft, type: boolean, default: false }
+
+          - name: seo
+            label: SEO
+            type: object
+            fields:
+              - { name: title, label: Meta title, type: string }
+              - { name: description, label: Meta description, type: text }
+              - name: ogImage
+                label: Share image
+                type: image
+                description: Keep it under about 3 MB. 1200x630 works best.
+              - { name: noindex, label: Hide from search engines, type: boolean, default: false }
+
+          - { name: sections, label: Page sections, component: page_sections }
+
+      - name: service-bathroom
+        label: Bathroom Vanities
+        type: collection
+        path: src/content/services/bathroom
+        format: json
+        filename: '{primary}.json'
+        extension: json
+        view:
+          fields: [title, draft]
+          # Sort the list by order, not the title column, so the room's main
+          # page (lowest order) sits at the top above its sub-services.
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Service name
+            type: string
+            required: true
+            description: >-
+              The page's main heading and its name in this list. The top of the
+              page (heading, intro and image) is built from these fields
+              automatically, so there is no hero to add in Page sections below --
+              those are the body. For a room's main page, name it so it reads as
+              the main page here (e.g. "Kitchen — Main Page") and set the Public
+              heading below to the real on-page title.
+          - name: heading
+            label: Public heading
+            type: string
+            description: >-
+              Optional. Overrides the on-page H1 when the name above is a CMS
+              label rather than the title you want visitors to see. Leave empty
+              to use the name above.
+          - name: summary
+            label: Card summary
+            type: text
+            required: true
+            description: >-
+              One or two lines. Shown as the intro under the page heading, and
+              wherever this service appears as a card.
+          - name: priceNote
+            label: Price note
+            type: string
+            description: 'Shown on cards as a from-price or range, e.g. From $900. Free text.'
+          - name: image
+            label: Card image
+            component: image
+            description: Used as the page's header image and on cards. Leave empty for a text-only header.
+          - name: parent
+            label: Parent category
+            type: object
+            description: >-
+              For a sub-service, the room it sits under, so its breadcrumb reads
+              Home / Services / Kitchen / This page. Leave empty for the room's
+              own main page.
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: href, label: URL, type: string }
+          - name: order
+            label: Sort order
+            type: number
+            default: 100
+            description: Lower sorts first. Ties fall back to the name.
+          - { name: draft, label: Draft, type: boolean, default: false }
+
+          - name: seo
+            label: SEO
+            type: object
+            fields:
+              - { name: title, label: Meta title, type: string }
+              - { name: description, label: Meta description, type: text }
+              - name: ogImage
+                label: Share image
+                type: image
+                description: Keep it under about 3 MB. 1200x630 works best.
+              - { name: noindex, label: Hide from search engines, type: boolean, default: false }
+
+          - { name: sections, label: Page sections, component: page_sections }
+
+      - name: service-closets
+        label: Closet Systems
+        type: collection
+        path: src/content/services/closets
+        format: json
+        filename: '{primary}.json'
+        extension: json
+        view:
+          fields: [title, draft]
+          # Sort the list by order, not the title column, so the room's main
+          # page (lowest order) sits at the top above its sub-services.
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Service name
+            type: string
+            required: true
+            description: >-
+              The page's main heading and its name in this list. The top of the
+              page (heading, intro and image) is built from these fields
+              automatically, so there is no hero to add in Page sections below --
+              those are the body. For a room's main page, name it so it reads as
+              the main page here (e.g. "Kitchen — Main Page") and set the Public
+              heading below to the real on-page title.
+          - name: heading
+            label: Public heading
+            type: string
+            description: >-
+              Optional. Overrides the on-page H1 when the name above is a CMS
+              label rather than the title you want visitors to see. Leave empty
+              to use the name above.
+          - name: summary
+            label: Card summary
+            type: text
+            required: true
+            description: >-
+              One or two lines. Shown as the intro under the page heading, and
+              wherever this service appears as a card.
+          - name: priceNote
+            label: Price note
+            type: string
+            description: 'Shown on cards as a from-price or range, e.g. From $900. Free text.'
+          - name: image
+            label: Card image
+            component: image
+            description: Used as the page's header image and on cards. Leave empty for a text-only header.
+          - name: parent
+            label: Parent category
+            type: object
+            description: >-
+              For a sub-service, the room it sits under, so its breadcrumb reads
+              Home / Services / Kitchen / This page. Leave empty for the room's
+              own main page.
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: href, label: URL, type: string }
+          - name: order
+            label: Sort order
+            type: number
+            default: 100
+            description: Lower sorts first. Ties fall back to the name.
+          - { name: draft, label: Draft, type: boolean, default: false }
+
+          - name: seo
+            label: SEO
+            type: object
+            fields:
+              - { name: title, label: Meta title, type: string }
+              - { name: description, label: Meta description, type: text }
+              - name: ogImage
+                label: Share image
+                type: image
+                description: Keep it under about 3 MB. 1200x630 works best.
+              - { name: noindex, label: Hide from search engines, type: boolean, default: false }
+
+          - { name: sections, label: Page sections, component: page_sections }
+
+      - name: service-creative-spaces
+        label: Creative Spaces
+        type: collection
+        path: src/content/services/creative-spaces
+        format: json
+        filename: '{primary}.json'
+        extension: json
+        view:
+          fields: [title, draft]
+          # Sort the list by order, not the title column, so the room's main
+          # page (lowest order) sits at the top above its sub-services.
+          sort: [order, title]
+          default:
+            sort: order
+            order: asc
+        fields:
+          - name: title
+            label: Service name
+            type: string
+            required: true
+            description: >-
+              The page's main heading and its name in this list. The top of the
+              page (heading, intro and image) is built from these fields
+              automatically, so there is no hero to add in Page sections below --
+              those are the body. For a room's main page, name it so it reads as
+              the main page here (e.g. "Kitchen — Main Page") and set the Public
+              heading below to the real on-page title.
+          - name: heading
+            label: Public heading
+            type: string
+            description: >-
+              Optional. Overrides the on-page H1 when the name above is a CMS
+              label rather than the title you want visitors to see. Leave empty
+              to use the name above.
+          - name: summary
+            label: Card summary
+            type: text
+            required: true
+            description: >-
+              One or two lines. Shown as the intro under the page heading, and
+              wherever this service appears as a card.
+          - name: priceNote
+            label: Price note
+            type: string
+            description: 'Shown on cards as a from-price or range, e.g. From $900. Free text.'
+          - name: image
+            label: Card image
+            component: image
+            description: Used as the page's header image and on cards. Leave empty for a text-only header.
+          - name: parent
+            label: Parent category
+            type: object
+            description: >-
+              For a sub-service, the room it sits under, so its breadcrumb reads
+              Home / Services / Kitchen / This page. Leave empty for the room's
+              own main page.
+            fields:
+              - { name: label, label: Label, type: string }
+              - { name: href, label: URL, type: string }
+          - name: order
+            label: Sort order
+            type: number
+            default: 100
+            description: Lower sorts first. Ties fall back to the name.
+          - { name: draft, label: Draft, type: boolean, default: false }
+
+          - name: seo
+            label: SEO
+            type: object
+            fields:
+              - { name: title, label: Meta title, type: string }
+              - { name: description, label: Meta description, type: text }
+              - name: ogImage
+                label: Share image
+                type: image
+                description: Keep it under about 3 MB. 1200x630 works best.
+              - { name: noindex, label: Hide from search engines, type: boolean, default: false }
+
+          - { name: sections, label: Page sections, component: page_sections }

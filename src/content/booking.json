@@ -1,0 +1,29 @@
+{
+  "eyebrow": "Free, about an hour",
+  "heading": "Book a measure.",
+  "intro": "A designer comes to you, measures every cabinet you want changed, and leaves a fixed quote. No obligation.",
+  "steps": [
+    {
+      "title": "You book",
+      "body": "Pick a slot. We confirm by phone the same day."
+    },
+    {
+      "title": "We measure",
+      "body": "About an hour in your home, taking the numbers that matter."
+    },
+    {
+      "title": "You get a quote",
+      "body": "Fixed price per shelf, valid thirty days, no pressure on the day."
+    },
+    {
+      "title": "We build and fit",
+      "body": "Usually two weeks to build, then one morning to install."
+    }
+  ],
+  "cta": {
+    "label": "Book a consultation",
+    "href": "/contact",
+    "style": "primary",
+    "newTab": false
+  }
+}

@@ -1,0 +1,26 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionEntry from '../../layouts/CollectionEntry.astro';
+import { entrySlug } from '../../lib/collections';
+
+/**
+ * One page per service file. Adding `src/content/services/anything.json`
+ * creates `/services/anything` with no route work. A room's main page lives at
+ * `<room>/index.json` so the CMS groups it with its sub-services; `entrySlug`
+ * strips the `/index` so it still serves `/services/<room>`.
+ */
+export async function getStaticPaths() {
+	const entries = await getCollection('services', ({ data }) =>
+		import.meta.env.PROD ? !data.draft : true
+	);
+
+	return entries.map((entry) => ({
+		params: { slug: entrySlug(entry.id) },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+---
+
+<CollectionEntry entry={entry} collection="services" indexLabel="Services" indexHref="/services" />

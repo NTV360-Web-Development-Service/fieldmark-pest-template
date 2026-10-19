@@ -1,0 +1,31 @@
+---
+import type { LegalText } from './LegalText.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+
+type Props = LegalText;
+
+const {
+	headingLevel = 'h2',
+	heading,
+	body,
+	anchor,
+	surface = 'light',
+	spacing = 'sm',
+	width = 'default',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	<div class={`border-t pt-8 ${onDark ? 'border-current/20' : 'border-line'}`}>
+		{heading && (
+			<h2 class="mb-4 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] opacity-70">
+				{heading}
+			</h2>
+		)}
+		<Prose html={body} invert={onDark} size="sm" class="opacity-70" />
+	</div>
+</Section>

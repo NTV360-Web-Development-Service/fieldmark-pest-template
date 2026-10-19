@@ -1,0 +1,132 @@
+---
+import { getCollection } from 'astro:content';
+import type { CollectionFeed } from './CollectionFeed.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import Button from '../ui/Button.astro';
+import { childLevel } from '../../lib/section-base';
+import { collectionBasePath, entrySlug } from '../../lib/collections';
+
+type Props = CollectionFeed;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	source,
+	layout = 'grid',
+	columns = '3',
+	limit = 0,
+	topLevelOnly = false,
+	showImage = true,
+	showSummary = true,
+	showPrice = true,
+	moreLabel,
+	moreHref,
+	moreStyle = 'ghost',
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+// Drafts are visible while writing and gone in production, matching how the
+// pages collection behaves.
+const entries = await getCollection(source, ({ data }) =>
+	import.meta.env.PROD ? !data.draft : true
+);
+
+// Sub-services carry a `parent`; top-level categories do not. This keeps the
+// services index to the main rooms instead of every child page.
+const filtered = topLevelOnly
+	? entries.filter((entry) => !('parent' in entry.data && entry.data.parent))
+	: entries;
+
+filtered.sort((a, b) => a.data.order - b.data.order || a.data.title.localeCompare(b.data.title));
+
+const shown = limit > 0 ? filtered.slice(0, limit) : filtered;
+const base = collectionBasePath[source];
+
+const gridCols = {
+	'2': 'sm:grid-cols-2',
+	'3': 'sm:grid-cols-2 lg:grid-cols-3',
+	'4': 'sm:grid-cols-2 lg:grid-cols-4',
+	'5': 'sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5',
+};
+const isList = layout === 'list';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-12 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	{shown.length === 0 ? (
+		/* An empty collection is a content state, not an error. Say so plainly
+			   rather than rendering an empty grid. */
+		<p class="text-sm opacity-70">Nothing published here yet.</p>
+	) : (
+		<ul
+			class={
+				isList
+					? 'divide-y divide-line border-y border-line'
+					: `grid gap-x-8 gap-y-12 ${gridCols[columns]}`
+			}
+		>
+			{shown.map((entry) => (
+				<li class={isList ? 'group relative py-6' : 'group relative'}>
+					{showImage && entry.data.image && !isList && (
+						<img
+							src={entry.data.image.src}
+							alt={entry.data.image.alt}
+							loading="lazy"
+							class="mb-6 aspect-4/3 w-full rounded-(--radius-media) object-cover"
+						/>
+					)}
+
+					<div
+						class={isList ? 'flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2' : ''}
+					>
+						<Heading level={childLevel(headingLevel, Boolean(heading))} size="sm">
+							<a href={`${base}/${entrySlug(entry.id)}`} class="transition-colors hover:text-brand">
+								<span class="absolute inset-0" aria-hidden="true" />
+								{entry.data.title}
+							</a>
+						</Heading>
+
+						{showPrice && 'priceNote' in entry.data && entry.data.priceNote && (
+							<span class="font-mono text-[0.6875rem] uppercase tracking-[0.12em] opacity-65">
+								{entry.data.priceNote}
+							</span>
+						)}
+					</div>
+
+					{showSummary && (
+						<p class="mt-3 max-w-prose text-sm leading-relaxed">{entry.data.summary}</p>
+					)}
+				</li>
+			))}
+		</ul>
+	)}
+
+	{moreLabel && moreHref && (
+		<div class="mt-12">
+			<Button label={moreLabel} href={moreHref} style={moreStyle} arrow onDark={onDark} />
+		</div>
+	)}
+</Section>

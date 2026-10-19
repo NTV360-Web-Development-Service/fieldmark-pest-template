@@ -1,0 +1,68 @@
+---
+import type { Accordion } from './Accordion.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import { childLevel } from '../../lib/section-base';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = Accordion;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	items = [],
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'default',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-12 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	{/*
+		Native details/summary: keyboard accessible, findable by in-page search,
+		and open by default when JavaScript never runs. No script needed.
+	*/}
+	<div class={`border-t ${onDark ? 'border-current/20' : 'border-line'}`}>
+		{items.map((item) => (
+			<details class={`group border-b ${onDark ? 'border-current/20' : 'border-line'}`}>
+				<summary class="flex cursor-pointer list-none items-center justify-between gap-6 py-6 text-left [&::-webkit-details-marker]:hidden">
+					<Heading
+						level={childLevel(headingLevel, Boolean(heading))}
+						size="sm"
+						class="text-current"
+					>
+						{item.question}
+					</Heading>
+					<span
+						class={`relative h-4 w-4 shrink-0 ${onDark ? 'text-accent' : 'text-accent-ink'}`}
+						aria-hidden="true"
+					>
+						<span class="absolute top-1/2 left-0 h-px w-4 -translate-y-1/2 bg-current" />
+						<span class="absolute top-1/2 left-0 h-px w-4 -translate-y-1/2 rotate-90 bg-current transition-transform duration-300 group-open:rotate-0" />
+					</span>
+				</summary>
+				<Prose html={item.answer} invert={onDark} class="max-w-2xl pb-7" />
+			</details>
+		))}
+	</div>
+</Section>

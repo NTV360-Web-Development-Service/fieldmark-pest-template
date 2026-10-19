@@ -1,0 +1,218 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Button from '../components/ui/Button.astro';
+import DimensionLine from '../components/ui/DimensionLine.astro';
+import Prose from '../components/ui/Prose.astro';
+import { site } from '../lib/site';
+import { contrast, verdict } from '../lib/contrast';
+
+/**
+ * Live palette reference.
+ *
+ * Pages CMS has no colour field, and the hosted app cannot load a custom one,
+ * so hex values are edited blind. This page is the answer: save in the CMS,
+ * the site rebuilds, and the palette is here as real swatches rendered with
+ * the real tokens -- plus the contrast checks that decide whether a palette
+ * is actually usable.
+ *
+ * Not linked from anywhere and marked noindex. Share the URL with whoever is
+ * picking colours.
+ */
+const t = site.theme;
+
+const swatches = [
+	{ name: 'Primary', token: 'primary', hex: t.primary, note: 'Buttons, links, brand surfaces' },
+	{
+		name: 'Primary (hover)',
+		token: 'primaryHover',
+		hex: t.primaryHover,
+		note: 'Button hover only',
+	},
+	{ name: 'Primary text', token: 'primaryFg', hex: t.primaryFg, note: 'Text on primary' },
+	{ name: 'Accent', token: 'accent', hex: t.accent, note: 'Dimension lines and stars, on dark' },
+	{
+		name: 'Accent (on light)',
+		token: 'accentInk',
+		hex: t.accentInk,
+		note: 'Same role, pale grounds',
+	},
+	{ name: 'Accent text', token: 'accentFg', hex: t.accentFg, note: 'Text on accent' },
+	{ name: 'Heading text', token: 'ink', hex: t.ink, note: 'Headings' },
+	{ name: 'Body text', token: 'body', hex: t.body, note: 'Paragraphs' },
+	{ name: 'Page background', token: 'surface', hex: t.surface, note: 'Default section ground' },
+	{ name: 'Muted background', token: 'muted', hex: t.muted, note: 'Alternating bands' },
+	{ name: 'Border', token: 'line', hex: t.line, note: 'Rules and dividers' },
+	{ name: 'Dark background', token: 'dark', hex: t.dark, note: 'Footer, dark sections' },
+	{ name: 'Dark text', token: 'darkFg', hex: t.darkFg, note: 'Text on dark' },
+];
+
+// Only pairs that actually appear together in the UI. A matrix of every
+// combination would be mostly noise.
+const pairs = [
+	{ label: 'Body on page', fg: t.body, bg: t.surface, min: 4.5 },
+	{ label: 'Heading on page', fg: t.ink, bg: t.surface, min: 3 },
+	{ label: 'Body on muted', fg: t.body, bg: t.muted, min: 4.5 },
+	{ label: 'Accent (on light) on page', fg: t.accentInk, bg: t.surface, min: 4.5 },
+	// Documented on purpose: this is the pair that forced accentInk into
+	// existence. It is never used, so it is shown but not counted as a failure.
+	{ label: 'Accent on page (not used)', fg: t.accent, bg: t.surface, min: 4.5, info: true },
+	{ label: 'Button text on primary', fg: t.primaryFg, bg: t.primary, min: 4.5 },
+	{ label: 'Button text on primary hover', fg: t.primaryFg, bg: t.primaryHover, min: 4.5 },
+	{ label: 'Text on dark', fg: t.darkFg, bg: t.dark, min: 4.5 },
+	{ label: 'Accent on dark', fg: t.accent, bg: t.dark, min: 4.5 },
+	{ label: 'Text on accent', fg: t.accentFg, bg: t.accent, min: 4.5 },
+].map((p) => {
+	const ratio = contrast(p.fg, p.bg);
+	return { info: false, ...p, ratio, verdict: verdict(ratio), passes: ratio >= p.min };
+});
+
+// Informational rows document a combination we deliberately avoid, so they
+// must not raise an alarm about a palette that is actually fine.
+const failures = pairs.filter((p) => !p.passes && !p.info);
+
+const fonts = [
+	{ name: 'Display', stack: t.fontDisplay, sample: 'Keep your cabinets' },
+	{ name: 'Heading', stack: t.fontHeading, sample: 'Built to fit your opening' },
+	{ name: 'Body', stack: t.fontBody, sample: 'Every shelf is measured in your kitchen.' },
+	{ name: 'Mono', stack: t.fontMono, sample: '23-11/16 IN.' },
+];
+---
+
+<BaseLayout title="Theme" description="Live palette and type reference." noindex>
+	<section class="bg-surface py-16 md:py-24">
+		<div class="mx-auto w-full max-w-[104rem] px-5 sm:px-8 lg:px-12">
+			<DimensionLine label="Internal reference" rule="both" class="mb-6 max-w-xs" />
+			<h1 class="display text-[clamp(2.4rem,5vw,4rem)]">Theme</h1>
+			<p class="mt-5 max-w-2xl text-lg">
+				Everything below renders with the live tokens from{' '}
+				<code class="font-mono text-sm">site.json</code>. Edit the colours in Pages CMS, save, and
+				reload this page to see the result.
+			</p>
+
+			{failures.length > 0 ? (
+				<div class="mt-8 max-w-2xl border-l-4 border-red-600 bg-red-50 p-5 text-sm text-red-900">
+					<p class="font-semibold">
+						{failures.length} contrast {failures.length === 1 ? 'pair fails' : 'pairs fail'} WCAG AA
+					</p>
+					<ul class="mt-2 list-disc pl-5">
+						{failures.map((f) => (
+							<li>
+								{f.label} is {f.ratio.toFixed(2)}:1, needs {f.min}:1
+							</li>
+						))}
+					</ul>
+				</div>
+			) : (
+				<p class="mt-8 max-w-2xl border-l-4 border-brand bg-muted p-5 text-sm">
+					All checked pairs clear WCAG AA.
+				</p>
+			)}
+
+			<h2 class="mt-16 text-3xl">Colours</h2>
+			<ul class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				{swatches.map((s) => (
+					<li class="overflow-hidden rounded-(--radius-media) border border-line">
+						<div class="h-28 w-full" style={`background:${s.hex}`} />
+						<div class="bg-surface p-4">
+							<p class="font-semibold text-ink">{s.name}</p>
+							<p class="mt-1 font-mono text-xs uppercase tracking-[0.1em] text-body">{s.hex}</p>
+							<p class="mt-2 text-sm text-body">{s.note}</p>
+							<p class="mt-2 font-mono text-[0.625rem] uppercase tracking-[0.1em] text-body opacity-60">
+								theme.{s.token}
+							</p>
+						</div>
+					</li>
+				))}
+			</ul>
+
+			<h2 class="mt-20 text-3xl">Contrast</h2>
+			<div class="mt-8 overflow-x-auto">
+				<table class="w-full min-w-[40rem] border-collapse text-left text-sm">
+					<thead>
+						<tr class="border-b border-line">
+							<th class="py-3 pr-4 font-semibold text-ink">Pair</th>
+							<th class="py-3 pr-4 font-semibold text-ink">Sample</th>
+							<th class="py-3 pr-4 font-semibold text-ink">Ratio</th>
+							<th class="py-3 pr-4 font-semibold text-ink">Needs</th>
+							<th class="py-3 font-semibold text-ink">Result</th>
+						</tr>
+					</thead>
+					<tbody>
+						{pairs.map((p) => (
+							<tr class="border-b border-line">
+								<td class="py-3 pr-4">{p.label}</td>
+								<td class="py-3 pr-4">
+									<span
+										class="inline-block rounded px-3 py-1.5"
+										style={`background:${p.bg};color:${p.fg}`}
+									>
+										Sample
+									</span>
+								</td>
+								<td class="py-3 pr-4 font-mono">{p.ratio.toFixed(2)}:1</td>
+								<td class="py-3 pr-4 font-mono opacity-70">{p.min}:1</td>
+								<td class="py-3">
+									<span
+										class={`font-mono text-xs uppercase tracking-[0.1em] ${
+											p.info ? 'text-body opacity-60' : p.passes ? 'text-brand' : 'text-red-700'
+										}`}
+									>
+										{p.info ? 'Avoided' : p.passes ? p.verdict : 'Fail'}
+									</span>
+								</td>
+							</tr>
+						))}
+					</tbody>
+				</table>
+			</div>
+
+			<h2 class="mt-20 text-3xl">Type</h2>
+			<ul class="mt-8 space-y-8">
+				{fonts.map((f) => (
+					<li class="border-b border-line pb-8">
+						<p class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-accent-ink">
+							{f.name}
+						</p>
+						<p class="mt-3 text-3xl text-ink" style={`font-family:${f.stack}`}>
+							{f.sample}
+						</p>
+						<p class="mt-3 font-mono text-xs text-body opacity-70">{f.stack}</p>
+					</li>
+				))}
+			</ul>
+		</div>
+	</section>
+
+	<section class="bg-muted py-16 md:py-24">
+		<div class="mx-auto w-full max-w-[104rem] px-5 sm:px-8 lg:px-12">
+			<h2 class="text-3xl">Components on light</h2>
+			<div class="mt-8 flex flex-wrap items-center gap-3">
+				<Button label="Primary button" href="#" style="primary" />
+				<Button label="Outline button" href="#" style="secondary" />
+				<Button label="Text link" href="#" style="ghost" />
+			</div>
+			<DimensionLine label="Built to 1/16 in." rule="both" class="mt-8 max-w-sm" />
+			<Prose
+				html="<p>Body copy on the muted band, with a <a href='#'>link</a> and some <strong>bold text</strong> to check both against the palette.</p>"
+				class="mt-8"
+			/>
+		</div>
+	</section>
+
+	<section class="bg-dark py-16 text-dark-fg md:py-24">
+		<div class="mx-auto w-full max-w-[104rem] px-5 sm:px-8 lg:px-12">
+			<h2 class="text-3xl text-dark-fg">Components on dark</h2>
+			<div class="mt-8 flex flex-wrap items-center gap-3">
+				<Button label="Primary button" href="#" style="primary" onDark />
+				<Button label="Outline button" href="#" style="secondary" onDark />
+				<Button label="Text link" href="#" style="ghost" onDark />
+			</div>
+			<DimensionLine label="Measured on site" rule="both" onDark class="mt-8 max-w-sm" />
+			<Prose
+				html="<p>Body copy on the dark band, with a <a href='#'>link</a> and some <strong>bold text</strong> to check both against the palette.</p>"
+				invert
+				class="mt-8"
+			/>
+		</div>
+	</section>
+</BaseLayout>

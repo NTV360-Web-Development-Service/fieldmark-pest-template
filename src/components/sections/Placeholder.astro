@@ -1,0 +1,75 @@
+---
+import type { Placeholder } from './Placeholder.schema';
+import Section from '../ui/Section.astro';
+
+type Props = Placeholder;
+
+const {
+	label = 'Content to be added',
+	note,
+	size = 'md',
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const heights = {
+	sm: 'min-h-40',
+	md: 'min-h-64',
+	lg: 'min-h-96',
+};
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{/*
+		Marked as a note rather than a region: it is scaffolding, so a screen
+		reader should not announce it as part of the finished page structure.
+		No heading either, which keeps it out of the document outline.
+	*/}
+	<div
+		data-placeholder
+		role="note"
+		class={`group relative flex flex-col items-center justify-center gap-4 overflow-hidden rounded-(--radius-media) border border-dashed border-line px-6 py-14 text-center ${heights[size]}`}
+	>
+		{/*
+			A faint diagonal hatch reads as the "not yet drawn" fill on a shop
+			drawing -- it marks the panel as deliberate scaffolding rather than a
+			broken empty box. Purely decorative, so it is hidden from assistive tech.
+		*/}
+		<span
+			aria-hidden="true"
+			class="pointer-events-none absolute inset-0 opacity-[0.06] [background-image:repeating-linear-gradient(45deg,var(--color-ink)_0,var(--color-ink)_1px,transparent_1px,transparent_11px)]"
+		></span>
+
+		{/*
+			Registration ticks at each corner -- the brass L-marks a draftsman
+			squares a sheet with. They frame the empty field as a measured area
+			waiting to be filled.
+		*/}
+		<span
+			aria-hidden="true"
+			class="pointer-events-none absolute left-3 top-3 h-4 w-4 border-l-2 border-t-2 border-accent/60"
+		></span>
+		<span
+			aria-hidden="true"
+			class="pointer-events-none absolute right-3 top-3 h-4 w-4 border-r-2 border-t-2 border-accent/60"
+		></span>
+		<span
+			aria-hidden="true"
+			class="pointer-events-none absolute bottom-3 left-3 h-4 w-4 border-b-2 border-l-2 border-accent/60"
+		></span>
+		<span
+			aria-hidden="true"
+			class="pointer-events-none absolute bottom-3 right-3 h-4 w-4 border-b-2 border-r-2 border-accent/60"
+		></span>
+
+		<span class="dim relative" aria-hidden="true">
+			<span class="dim-rule dim-rule-short"></span>
+			<span class="whitespace-nowrap">To be added</span>
+			<span class="dim-rule dim-rule-short"></span>
+		</span>
+		<p class="relative font-heading text-xl font-semibold tracking-tight text-ink">{label}</p>
+		{note && <p class="relative max-w-md text-sm leading-relaxed text-body opacity-75">{note}</p>}
+	</div>
+</Section>

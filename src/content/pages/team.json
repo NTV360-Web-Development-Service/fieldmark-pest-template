@@ -1,0 +1,145 @@
+{
+  "title": "Meet the team",
+  "permalink": "https://modern-cabinets-template.vercel.app/team",
+  "order": 60,
+  "draft": false,
+  "seo": {
+    "title": "Meet the team — Modern Cabinets",
+    "description": "The designers, cabinetmakers and installers behind Modern Cabinets. Licensed, family owned, and building glide-out shelving across the Phoenix valley since 2009.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "layout": "split",
+      "headingLevel": "h1",
+      "background": {
+        "kind": "image",
+        "image": {
+          "source": "upload",
+          "src": "/media/images/team-group.avif",
+          "alt": "Wooden cabinetry with open shelving"
+        }
+      },
+      "eyebrow": "About us",
+      "heading": "Meet the team behind Modern Cabinets.",
+      "body": "Licensed cabinetmakers, seasoned installers, and a support crew who treat every job like it is their own home. Get to know the people building your shelving across the Phoenix valley.",
+      "mediaNote": "Family owned since 2009",
+      "ctas": [
+        {
+          "label": "Book a free consultation",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "Call (555) 014-2200",
+          "href": "tel:+15550142200",
+          "style": "secondary",
+          "newTab": false
+        }
+      ],
+      "badges": ["Family owned", "Licensed & insured", "Fixed quotes"],
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "team",
+      "headingLevel": "h2",
+      "eyebrow": "Our team",
+      "heading": "The people powering your service.",
+      "intro": "Designers, cabinetmakers, and office staff who show up on time and stand behind the work. Add each person's photo in Site Settings.",
+      "columns": "3",
+      "members": [
+        {
+          "photo": {
+            "source": "upload",
+            "src": "/media/images/team-marcus.avif",
+            "alt": "Portrait of Marcus Reyes"
+          },
+          "name": "Marcus Reyes",
+          "role": "Owner & master cabinetmaker",
+          "bio": "18 years in the trade. Founded the company on a simple promise: do every job right."
+        },
+        {
+          "photo": {
+            "source": "upload",
+            "src": "/media/images/team-daniela.avif",
+            "alt": "Portrait of Daniela Cruz"
+          },
+          "name": "Daniela Cruz",
+          "role": "Operations manager",
+          "bio": "Runs scheduling, dispatch, and quality control across the entire crew."
+        },
+        {
+          "photo": {
+            "source": "upload",
+            "src": "/media/images/team-tyrone.avif",
+            "alt": "Portrait of Tyrone Walker"
+          },
+          "name": "Tyrone Walker",
+          "role": "Lead installer",
+          "bio": "Specialises in glide-out retrofits and awkward corner cabinets. Eight years with the team."
+        },
+        {
+          "photo": {
+            "source": "upload",
+            "src": "/media/images/team-priya.avif",
+            "alt": "Portrait of Priya Anand"
+          },
+          "name": "Priya Anand",
+          "role": "Design lead",
+          "bio": "Measures on site and turns a wish list into a shelf-by-shelf plan you can read."
+        },
+        {
+          "photo": {
+            "source": "upload",
+            "src": "/media/images/team-jamal.avif",
+            "alt": "Portrait of Jamal Foster"
+          },
+          "name": "Jamal Foster",
+          "role": "Cabinetmaker",
+          "bio": "Cuts and finishes every shelf to the sixteenth in the shop before it ever reaches your kitchen."
+        },
+        {
+          "photo": {
+            "source": "upload",
+            "src": "/media/images/team-sophia.avif",
+            "alt": "Portrait of Sophia Nguyen"
+          },
+          "name": "Sophia Nguyen",
+          "role": "Customer care lead",
+          "bio": "The friendly voice on the phone, scheduling appointments and keeping every visit on track."
+        }
+      ],
+      "surface": "light",
+      "spacing": "lg",
+      "width": "wide"
+    },
+    {
+      "type": "cta_banner",
+      "headingLevel": "h2",
+      "eyebrow": "Join the team",
+      "heading": "Want to build with us?",
+      "body": "We are always looking for skilled cabinetmakers, installers, and support staff who share our standards. Fair pay, steady work, and a real trade to grow in.",
+      "ctas": [
+        {
+          "label": "Get in touch",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "Call (555) 014-2200",
+          "href": "tel:+15550142200",
+          "style": "secondary",
+          "newTab": false
+        }
+      ],
+      "surface": "brand",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

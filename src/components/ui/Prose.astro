@@ -1,0 +1,58 @@
+---
+import { markdown, shiftHeadings } from '../../lib/markdown';
+
+/**
+ * Renders a Pages CMS `rich-text` field.
+ *
+ * Those fields store **markdown**, not HTML -- the field defaults to markdown
+ * and only emits HTML when configured with `options: { format: html }`. Saving
+ * through the CMS rewrites any HTML that was hand-authored in the JSON, so the
+ * renderer has to handle markdown or the page ships literal `**asterisks**`.
+ *
+ * marked passes block HTML through unchanged, so content authored before this
+ * switch still renders correctly. Link targets are repaired on the way through;
+ * see src/lib/markdown.ts.
+ *
+ * The content is authored by the site owner in their own CMS and lives in the
+ * repo, so it is trusted the same way the rest of the codebase is. Never point
+ * this component at input from site visitors.
+ */
+interface Props {
+	html?: string;
+	/** Use on dark / brand surfaces so prose colors invert. */
+	invert?: boolean;
+	size?: 'sm' | 'base' | 'lg';
+	/**
+	 * Rank the shallowest heading in this prose should take. Sections pass the
+	 * level below their own, so editor headings never break the page outline.
+	 */
+	headingStart?: number;
+	class?: string;
+}
+
+const {
+	html,
+	invert = false,
+	size = 'base',
+	headingStart = 3,
+	class: className = '',
+} = Astro.props;
+
+const sizes = {
+	sm: 'prose-sm',
+	base: 'prose',
+	lg: 'prose prose-lg',
+};
+
+// `async: false` keeps this synchronous so the result can be used directly in
+// the template rather than awaited per render.
+const parsed = html ? markdown.parse(html, { async: false }) : '';
+const rendered = parsed ? shiftHeadings(parsed, headingStart) : '';
+---
+
+{rendered && (
+	<div
+		class={`rich-text ${sizes[size]} ${invert ? 'rich-text-invert' : ''} ${className}`}
+		set:html={rendered}
+	/>
+)}

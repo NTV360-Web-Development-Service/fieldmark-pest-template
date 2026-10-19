@@ -1,0 +1,9 @@
+{
+  "enabled": true,
+  "text": "Free in-home design consultation - book by the end of the month.",
+  "link": {
+    "label": "Book a measure",
+    "href": "/contact"
+  },
+  "dismissible": true
+}

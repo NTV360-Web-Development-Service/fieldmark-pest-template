@@ -1,0 +1,446 @@
+{
+  "title": "Home — Modern Cabinets",
+  "permalink": "https://modern-cabinets-template.vercel.app/",
+  "order": 0,
+  "draft": false,
+  "seo": {
+    "title": "Glide-Out Cabinet Shelves, Built to Fit",
+    "description": "Custom glide-out shelves installed into the cabinets you already own. Measured on site, built to the sixteenth, installed in a single visit.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "layout": "full",
+      "background": {
+        "kind": "video",
+        "file": {
+          "source": "url",
+          "src": "https://ucarecdn.com/98f63f73-dcba-4066-8140-59969e3c4cf1/"
+        },
+        "poster": "/media/images/kitchen-island.avif"
+      },
+      "eyebrow": "Built to 1/16 in.",
+      "heading": "Keep your cabinets. Reach the back.",
+      "body": "We build glide-out shelves for the cabinets you already have. Every shelf is measured in your kitchen and cut to that opening, so the back corner stops being storage you never reach.",
+      "ctas": [
+        {
+          "label": "Book a free consultation",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "See recent work",
+          "href": "/#our-work",
+          "style": "ghost",
+          "newTab": false
+        }
+      ],
+      "badges": ["Licensed and insured", "Lifetime warranty on glides", "Installed in one visit"],
+      "rating": {
+        "value": 4.8,
+        "count": 2431,
+        "label": "verified reviews"
+      },
+      "headingLevel": "h1",
+      "surface": "light",
+      "spacing": "lg",
+      "width": "wide"
+    },
+    {
+      "type": "badge_strip",
+      "label": "Trust badges",
+      "items": [
+        { "icon": "clock", "title": "Free consultation", "subtitle": "Booked in a call" },
+        { "icon": "shield", "title": "Licensed & insured", "subtitle": "Bonded team" },
+        { "icon": "user", "title": "Background checked", "subtitle": "Our own installers" },
+        { "icon": "dollar", "title": "No hidden fees", "subtitle": "Fixed price per shelf" },
+        { "icon": "badge", "title": "Lifetime warranty", "subtitle": "On every glide" }
+      ],
+      "surface": "brand",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "offers",
+      "eyebrow": "Current offers",
+      "heading": "Save on your first project.",
+      "intro": "Mention the code at your free consultation. One offer per household.",
+      "columns": "3",
+      "items": [
+        {
+          "title": "$100 off your first order",
+          "value": "$100 off",
+          "body": "On any glide-out shelf order of three shelves or more.",
+          "code": "REACH100",
+          "expires": "2026-12-31",
+          "terms": "New customers only. Cannot be combined with other offers."
+        },
+        {
+          "title": "Free in-home measure",
+          "value": "Free",
+          "body": "A designer measures every cabinet you want changed, at no cost and no obligation.",
+          "code": "MEASUREFREE",
+          "cta": {
+            "label": "Book a free measure",
+            "href": "/contact",
+            "style": "primary",
+            "newTab": false
+          }
+        },
+        {
+          "title": "Seniors save 10%",
+          "value": "10% off",
+          "body": "A standing discount for customers 65 and over on any complete project.",
+          "code": "SENIOR10",
+          "terms": "Proof of age required. Cannot be combined with other offers."
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "media_split",
+      "eyebrow": "About us",
+      "heading": "A local shop that measures before it builds.",
+      "body": "For fifteen years we have fitted glide-out shelves into the kitchens of the valley, and in that time we have built more than 12,000 of them. One trade, done well: we measure the cabinet you already own, build to that exact opening, and install it in a single visit without tearing anything out.\n\nEvery shelf is cut in our own shop by the same people who measured it. No subcontractors, no stock sizes trimmed to fit, no second trip. If a shelf ever stops gliding, the team that built it comes back and sets it right.",
+      "image": {
+        "source": "upload",
+        "src": "/media/images/cabinet-wood.avif",
+        "alt": "Wooden kitchen cabinetry built in the workshop"
+      },
+      "imageSide": "left",
+      "bullets": [
+        { "icon": "user", "text": "Family-owned and operated in the valley since 2011" },
+        { "icon": "wrench", "text": "12,000+ shelves measured, built and installed" },
+        { "icon": "star", "text": "Rated 4.8 out of 5 across 2,431 verified reviews" },
+        { "icon": "badge", "text": "Backed by a lifetime warranty on every glide" }
+      ],
+      "ctas": [
+        {
+          "label": "More about us",
+          "href": "/about",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "card_grid",
+      "eyebrow": "What we do",
+      "heading": "Every room, one idea.",
+      "intro": "Anywhere a cabinet is deeper than your arm is long.",
+      "columns": "5",
+      "cards": [
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-hero.avif",
+            "alt": "Kitchen with white shaker cabinets"
+          },
+          "title": "Kitchen",
+          "body": "Pots, pans and the lids that never match them. Full-extension shelves bring the back row forward.",
+          "link": {
+            "label": "Kitchen shelving",
+            "href": "/services/kitchen",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/shelf-detail.avif",
+            "alt": "Dishes on a glide-out shelf"
+          },
+          "title": "Pantry",
+          "body": "Two usable rows becomes four. Nothing expires behind something else.",
+          "link": {
+            "label": "Pantry storage",
+            "href": "/services/pantry",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/cabinet-wood.avif",
+            "alt": "Wooden kitchen cabinetry"
+          },
+          "title": "Bathroom",
+          "body": "Around the plumbing, not into it. Shelves cut to clear the trap.",
+          "link": {
+            "label": "Bathroom vanities",
+            "href": "/services/bathroom",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-island.avif",
+            "alt": "Kitchen with a dark island"
+          },
+          "title": "Closets",
+          "body": "Shoes, linens and the vacuum you wrestle out every week.",
+          "link": {
+            "label": "Closet systems",
+            "href": "/services/closets",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/shelf-detail.avif",
+            "alt": "Open shelving for glassware and bottles"
+          },
+          "title": "Creative Spaces",
+          "body": "Offices, craft rooms and a wall for the wine. Built for what you make, not just what you store.",
+          "link": {
+            "label": "Creative spaces",
+            "href": "/services/creative-spaces",
+            "style": "ghost",
+            "newTab": false
+          }
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "media_split",
+      "eyebrow": "Maintenance",
+      "heading": "We keep them gliding for good.",
+      "body": "A glide-out shelf takes a decade of daily use. When a runner needs adjusting or a soft-close wears out, we come back and set it right rather than sell you a replacement. Every installation carries a lifetime warranty on the glides, and a tune-up is only a phone call away.",
+      "image": {
+        "source": "upload",
+        "src": "/media/images/shelf-detail.avif",
+        "alt": "Full-extension glide-out shelf holding ceramic dishes"
+      },
+      "imageSide": "right",
+      "bullets": [
+        {
+          "icon": "badge",
+          "text": "Lifetime warranty on glides",
+          "desc": "Runners, bearings and soft-close dampers are covered for as long as you own the cabinet."
+        },
+        {
+          "icon": "wrench",
+          "text": "Runner & soft-close service",
+          "desc": "We re-level shelves and swap worn dampers on site, in a single visit."
+        },
+        {
+          "icon": "user",
+          "text": "The same team, every time",
+          "desc": "The people who built your shelves are the ones who come back to service them."
+        }
+      ],
+      "ctas": [
+        {
+          "label": "Maintenance & warranty",
+          "href": "/maintenance",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "dark",
+      "spacing": "lg",
+      "width": "wide"
+    },
+    {
+      "type": "media_split",
+      "eyebrow": "Financing",
+      "heading": "Spread the cost over months, not one bill.",
+      "body": "A full retrofit does not have to be a single bill. Approved buyers can finance the work with low monthly payments and 0% APR for the first twelve months, so you get the kitchen now and pay for it over time.",
+      "image": {
+        "source": "upload",
+        "src": "/media/images/kitchen-island.avif",
+        "alt": "Kitchen with a dark island and glide-out storage"
+      },
+      "imageSide": "left",
+      "bullets": [
+        {
+          "icon": "dollar",
+          "text": "Low monthly payments",
+          "desc": "Manageable instalments sized to your budget, with 0% APR for the first twelve months."
+        },
+        {
+          "icon": "clock",
+          "text": "Fast, soft-check approval",
+          "desc": "Apply in minutes and see your rate with no impact on your credit score."
+        },
+        {
+          "icon": "shield",
+          "text": "No early-repayment fee",
+          "desc": "Clear the balance whenever you like, without a penalty for paying early."
+        }
+      ],
+      "ctas": [
+        {
+          "label": "Check your rate",
+          "href": "/financing",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "Call (555) 014-2200",
+          "href": "tel:+15550142200",
+          "style": "secondary",
+          "newTab": false
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "muted",
+      "spacing": "lg",
+      "width": "wide"
+    },
+    {
+      "type": "collection_feed",
+      "anchor": "our-work",
+      "eyebrow": "Our work",
+      "heading": "Recent projects around the valley.",
+      "intro": "A few kitchens, pantries and closets we finished this season. Follow along for more on our socials.",
+      "source": "projects",
+      "layout": "grid",
+      "columns": "3",
+      "limit": 3,
+      "showImage": true,
+      "showSummary": true,
+      "moreLabel": "See more works",
+      "moreHref": "https://instagram.com/",
+      "moreStyle": "secondary",
+      "headingLevel": "h2",
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "quotes",
+      "eyebrow": "4.8 / 5 on Google",
+      "heading": "Reviews from real kitchens.",
+      "items": [
+        {
+          "quote": "I stopped kneeling on the floor to find anything. That sounds small until you are sixty-eight and doing it three times a day.",
+          "name": "Margaret H.",
+          "location": "Scottsdale, AZ",
+          "rating": 5
+        },
+        {
+          "quote": "The measurements were exact. Every shelf cleared the hinges by the same gap, which I did not expect from a retrofit.",
+          "name": "Daniel R.",
+          "location": "Chandler, AZ",
+          "rating": 5
+        },
+        {
+          "quote": "Quoted on a Tuesday, installed three weeks later in one morning. The kitchen was usable by lunch.",
+          "name": "Priya S.",
+          "location": "Phoenix, AZ",
+          "rating": 4
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "form_block",
+      "eyebrow": "Get in touch",
+      "heading": "Tell us about your cabinets.",
+      "intro": "Send a few details and we will call to book your free in-home measure.",
+      "endpoint": "https://formspree.io/f/your-form-id",
+      "submitLabel": "Request my free measure",
+      "successNote": "Thanks — we will be in touch within one business day.",
+      "fields": [
+        {
+          "kind": "text",
+          "name": "name",
+          "label": "Name",
+          "placeholder": "Your name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "name"
+        },
+        {
+          "kind": "tel",
+          "name": "phone",
+          "label": "Phone",
+          "placeholder": "(555) 555-5555",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "email",
+          "name": "email",
+          "label": "Email",
+          "placeholder": "you@example.com",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "text",
+          "name": "postcode",
+          "label": "ZIP code",
+          "placeholder": "85001",
+          "required": true,
+          "width": "half",
+          "autocomplete": "postal-code"
+        },
+        {
+          "kind": "select",
+          "name": "rooms",
+          "label": "What would you like shelved?",
+          "required": false,
+          "width": "full",
+          "choices": ["Kitchen", "Pantry", "Bathroom", "Closets", "More than one room"]
+        },
+        {
+          "kind": "textarea",
+          "name": "message",
+          "label": "Anything else we should know?",
+          "placeholder": "Number of cabinets, timing, questions…",
+          "required": false,
+          "rows": 4
+        }
+      ],
+      "footnote": "We never share your details. You will only hear from us about your project.",
+      "headingLevel": "h2",
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "service_areas",
+      "eyebrow": "Where we work",
+      "heading": "Serving the greater Phoenix valley.",
+      "intro": "Book a free measure anywhere across these areas and the towns around them.",
+      "columns": "4",
+      "showServed": true,
+      "map": {
+        "kind": "embed",
+        "url": "https://maps.google.com/maps?q=Phoenix,AZ&z=10&output=embed",
+        "title": "Map of the greater Phoenix valley service area",
+        "ratio": "4/3"
+      },
+      "footnote": "Not listed? Call us — we cover more of the valley than we can fit here.",
+      "headingLevel": "h2",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

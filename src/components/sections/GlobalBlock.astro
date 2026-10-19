@@ -1,0 +1,111 @@
+---
+import type { GlobalBlock } from './GlobalBlock.schema';
+import { booking, map } from '../../lib/globals';
+import { childLevel } from '../../lib/section-base';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Media from '../ui/Media.astro';
+import Button from '../ui/Button.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+/**
+ * Renders one of the global sections in place.
+ *
+ * Reads the chosen global (edited once in its own CMS singleton) and renders it
+ * so the booking steps and the shop map look identical wherever they are pulled
+ * in. The per-placement presentation props (surface, spacing,
+ * width, anchor, headingLevel) override the global's own look for this spot;
+ * left blank, each section's sensible default applies.
+ */
+type Props = GlobalBlock;
+
+const { which, headingLevel = 'h2', anchor } = Astro.props;
+
+// Per-section fallbacks, matching each component's own default surface, so a
+// global dropped onto a page without presentation overrides looks the way its
+// standalone section always has.
+const defaults = {
+	booking: { surface: 'muted', spacing: 'md', width: 'wide' },
+	map: { surface: 'light', spacing: 'md', width: 'wide' },
+} as const;
+
+const base = defaults[which];
+const surface = Astro.props.surface ?? base.surface;
+const spacing = Astro.props.spacing ?? base.spacing;
+const width = Astro.props.width ?? base.width;
+
+const onDark = surface === 'dark' || surface === 'brand';
+---
+
+{which === 'booking' && (
+	<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+		{(booking.eyebrow || booking.heading || booking.intro) && (
+			<header class="mb-14 max-w-2xl">
+				{booking.eyebrow && (
+					<DimensionLine label={booking.eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+				)}
+				{booking.heading && (
+					<Heading level={headingLevel} size="lg">
+						{booking.heading}
+					</Heading>
+				)}
+				{booking.intro && <Prose html={booking.intro} invert={onDark} class="mt-6" />}
+			</header>
+		)}
+
+		<ol class="grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:grid-cols-4">
+			{booking.steps.map((step, i) => (
+				<li class="relative">
+					<span
+						class={`font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] ${
+							onDark ? 'text-accent' : 'text-accent-ink'
+						}`}
+					>
+						{String(i + 1).padStart(2, '0')}
+					</span>
+					<span
+						class={`mt-3 mb-5 block h-px w-full ${onDark ? 'bg-current/25' : 'bg-line'}`}
+						aria-hidden="true"
+					/>
+					<Heading level={childLevel(headingLevel, Boolean(booking.heading))} size="sm">
+						{step.title}
+					</Heading>
+					{step.body && <p class="mt-3 text-sm leading-relaxed">{step.body}</p>}
+				</li>
+			))}
+		</ol>
+
+		{booking.cta && (
+			<div class="mt-12">
+				<Button {...booking.cta} onDark={onDark} />
+			</div>
+		)}
+	</Section>
+)}
+
+{which === 'map' && (
+	<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+		{(map.eyebrow || map.heading || map.intro || map.addressLine) && (
+			<header class="mb-10 max-w-2xl">
+				{map.eyebrow && (
+					<DimensionLine label={map.eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+				)}
+				{map.heading && (
+					<Heading level={headingLevel} size="lg">
+						{map.heading}
+					</Heading>
+				)}
+				{map.intro && <Prose html={map.intro} invert={onDark} class="mt-6" />}
+				{map.addressLine && (
+					<p class="mt-4 font-mono text-sm tracking-wide text-body/80">{map.addressLine}</p>
+				)}
+			</header>
+		)}
+
+		<Media
+			media={{ kind: 'embed', url: map.embedUrl, title: map.embedTitle, ratio: '16/9' }}
+			class="overflow-hidden rounded-(--radius-media)"
+		/>
+	</Section>
+)}

@@ -1,0 +1,124 @@
+---
+import type { MediaSplit } from './MediaSplit.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Button from '../ui/Button.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { iconPaths } from '../../lib/icons';
+
+type Props = MediaSplit;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	body,
+	image,
+	imageSide = 'right',
+	bullets = [],
+	ctas = [],
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+// Source order stays text-then-image so the heading is read first; only the
+// visual order flips.
+const imageFirst = imageSide === 'left';
+
+// A bullet is a bare string or a { text, desc, icon } object. Normalise so the
+// markup reads one shape; a bullet with an icon gets a stroked mark from the
+// shared set, one without keeps the default tick.
+const items = bullets.map((b) =>
+	typeof b === 'string' ? { text: b, desc: undefined, icon: undefined } : b
+);
+const bulletAccent = onDark ? 'text-accent' : 'text-accent-ink';
+// When any bullet carries a description the list becomes a "titled" list: the
+// icon sits boxed against the top of a two-line entry rather than centred on one.
+const titled = items.some((item) => item.desc);
+const boxBorder = onDark ? 'border-current/25' : 'border-line';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	<div class="grid items-center gap-12 lg:grid-cols-2 lg:gap-20">
+		<div class={imageFirst ? 'lg:order-2' : ''}>
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			<Heading level={headingLevel} size="lg">
+				{heading}
+			</Heading>
+			{body && <Prose html={body} invert={onDark} class="mt-6" />}
+
+			{items.length > 0 && (
+				<ul class={titled ? 'mt-9 space-y-6' : 'mt-8 space-y-4'}>
+					{items.map((item) => (
+						<li class={`flex gap-4 ${titled ? 'items-start' : 'items-center gap-3.5 text-sm'}`}>
+							{item.icon ? (
+								<span
+									class={
+										titled
+											? `flex h-10 w-10 shrink-0 items-center justify-center rounded-(--radius-brand) border ${boxBorder}`
+											: 'shrink-0'
+									}
+								>
+									<svg
+										viewBox="0 0 24 24"
+										class={`${titled ? 'h-5 w-5' : 'h-6 w-6'} ${bulletAccent}`}
+										fill="none"
+										stroke="currentColor"
+										stroke-width="1.75"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										aria-hidden="true"
+									>
+										<path d={iconPaths[item.icon]} />
+									</svg>
+								</span>
+							) : (
+								<svg
+									viewBox="0 0 16 16"
+									class={`${titled ? 'mt-1.5' : ''} h-3.5 w-3.5 shrink-0 ${onDark ? 'fill-accent' : 'fill-accent-ink'}`}
+									aria-hidden="true"
+								>
+									<path d="M6.2 11.7L2.8 8.3l1.2-1.2 2.2 2.2 5.8-5.8 1.2 1.2z" />
+								</svg>
+							)}
+
+							{item.desc ? (
+								<span class="block">
+									<span class="block text-base font-semibold text-current">{item.text}</span>
+									<span class="mt-1 block text-sm leading-relaxed opacity-75">{item.desc}</span>
+								</span>
+							) : (
+								<span>{item.text}</span>
+							)}
+						</li>
+					))}
+				</ul>
+			)}
+
+			{ctas.length > 0 && (
+				<div class="mt-9 flex flex-wrap items-center gap-3">
+					{ctas.map((cta) => (
+						<Button {...cta} onDark={onDark} />
+					))}
+				</div>
+			)}
+		</div>
+
+		{image && (
+			<img
+				src={image.src}
+				alt={image.alt}
+				loading="lazy"
+				class={`aspect-4/3 w-full rounded-(--radius-media) object-cover lg:aspect-square ${
+					imageFirst ? 'lg:order-1' : ''
+				}`}
+			/>
+		)}
+	</div>
+</Section>

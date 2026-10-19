@@ -1,0 +1,131 @@
+---
+import type { MediaGallery } from './MediaGallery.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Media from '../ui/Media.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = MediaGallery;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	columns = '3',
+	layout = 'grid',
+	items = [],
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+// Categories come from the content, so the filter bar exists only when the
+// editor actually categorised things, and never lists an empty filter.
+const categories = [...new Set(items.map((i) => i.category).filter(Boolean))] as string[];
+const hasFilter = categories.length > 1;
+
+const gridCols = {
+	'2': 'sm:grid-cols-2',
+	'3': 'sm:grid-cols-2 lg:grid-cols-3',
+	'4': 'sm:grid-cols-2 lg:grid-cols-4',
+};
+
+const masonryCols = {
+	'2': 'sm:columns-2',
+	'3': 'sm:columns-2 lg:columns-3',
+	'4': 'sm:columns-2 lg:columns-4',
+};
+
+const isMasonry = layout === 'masonry';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-10 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	{hasFilter && (
+		<div class="mb-10 flex flex-wrap gap-2" data-gallery-filter>
+			<button
+				type="button"
+				data-filter="all"
+				aria-pressed="true"
+				class="rounded-(--radius-brand) border border-line px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] transition-colors aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-brand-fg"
+			>
+				All
+			</button>
+			{categories.map((category) => (
+				<button
+					type="button"
+					data-filter={category}
+					aria-pressed="false"
+					class="rounded-(--radius-brand) border border-line px-4 py-2 font-mono text-[0.6875rem] uppercase tracking-[0.12em] transition-colors aria-pressed:border-brand aria-pressed:bg-brand aria-pressed:text-brand-fg"
+				>
+					{category}
+				</button>
+			))}
+		</div>
+	)}
+
+	<ul
+		class={isMasonry ? `${masonryCols[columns]} gap-6` : `grid gap-6 ${gridCols[columns]}`}
+		data-gallery-items
+	>
+		{items.map((item) => (
+			<li data-category={item.category ?? ''} class={isMasonry ? 'mb-6 break-inside-avoid' : ''}>
+				<figure>
+					<Media
+						media={item.media}
+						aspect={isMasonry ? 'aspect-auto' : 'aspect-4/3'}
+						class="rounded-(--radius-media)"
+					/>
+					{item.caption && (
+						<figcaption class="mt-3 font-mono text-[0.6875rem] uppercase tracking-[0.12em] opacity-65">
+							{item.caption}
+						</figcaption>
+					)}
+				</figure>
+			</li>
+		))}
+	</ul>
+</Section>
+
+<script>
+	// Filtering is progressive enhancement: with no JavaScript every item is
+	// already in the DOM and visible, and the filter bar simply does nothing.
+	document.querySelectorAll('[data-gallery-filter]').forEach((bar) => {
+		const section = bar.closest('section');
+		const items = section?.querySelectorAll('[data-gallery-items] > li');
+		if (!items) return;
+
+		bar.addEventListener('click', (event) => {
+			const button = (event.target as HTMLElement).closest('[data-filter]');
+			if (!(button instanceof HTMLElement)) return;
+
+			const wanted = button.dataset.filter;
+			bar.querySelectorAll('[data-filter]').forEach((b) => {
+				b.setAttribute('aria-pressed', String(b === button));
+			});
+
+			items.forEach((item) => {
+				const category = (item as HTMLElement).dataset.category;
+				(item as HTMLElement).hidden = wanted !== 'all' && category !== wanted;
+			});
+		});
+	});
+</script>

@@ -1,0 +1,43 @@
+---
+import type { RichText } from './RichText.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import { childLevel, levelNumber } from '../../lib/section-base';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = RichText;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	body,
+	align = 'left',
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'narrow',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	<div class={align === 'center' ? 'text-center' : ''}>
+		{eyebrow && (
+			<DimensionLine
+				label={eyebrow}
+				rule="both"
+				class={`mb-7 max-w-sm ${align === 'center' ? 'mx-auto' : ''}`}
+			/>
+		)}
+		{heading && <h2 class="mb-8 text-[clamp(1.9rem,3.6vw,3rem)]">{heading}</h2>}
+		<Prose
+			html={body}
+			invert={onDark}
+			headingStart={levelNumber(childLevel(headingLevel, Boolean(heading)))}
+			class={align === 'center' ? 'mx-auto' : ''}
+		/>
+	</div>
+</Section>

@@ -1,0 +1,247 @@
+{
+  "name": "Modern Cabinets",
+  "legalName": "Modern Cabinets LLC",
+  "businessType": "HomeAndConstructionBusiness",
+  "tagline": "Custom cabinet storage, built to fit",
+  "logo": {
+    "src": "/media/logos/logo-horizontal.svg",
+    "alt": "Modern Cabinets"
+  },
+  "rating": {
+    "value": 4.8,
+    "count": 2431
+  },
+  "contact": {
+    "phone": "(555) 014-2200",
+    "phoneHref": "tel:+15550142200",
+    "email": "hello@moderncabinets.example",
+    "address": {
+      "street": "1420 Millwork Ave",
+      "city": "Phoenix",
+      "region": "AZ",
+      "postalCode": "85004",
+      "country": "US"
+    },
+    "hours": "Mon-Fri 8am-6pm, Sat 9am-2pm"
+  },
+  "nav": [
+    {
+      "label": "Services",
+      "href": "/services",
+      "children": [
+        {
+          "label": "Kitchen Shelves",
+          "href": "/services/kitchen",
+          "children": [
+            { "label": "Pots & Pans", "href": "/services/kitchen/pots-and-pans" },
+            {
+              "label": "Bakeware & Storage Containers",
+              "href": "/services/kitchen/bakeware-and-storage-containers"
+            },
+            { "label": "Trash & Recycling", "href": "/services/kitchen/trash-and-recycling" },
+            { "label": "Overhead Storage", "href": "/services/kitchen/overhead-storage" },
+            { "label": "Flat Items", "href": "/services/kitchen/flat-items" },
+            { "label": "Under the Sink", "href": "/services/kitchen/under-the-sink" },
+            { "label": "Spice Racks", "href": "/services/kitchen/spice-racks" },
+            {
+              "label": "Pull-Out Organizers & Dividers",
+              "href": "/services/kitchen/pull-out-organizers-and-dividers"
+            },
+            { "label": "Corner Cabinet", "href": "/services/kitchen/corner-cabinet" },
+            { "label": "Lazy Susan", "href": "/services/kitchen/lazy-susan" },
+            { "label": "Blind Corner Cabinets", "href": "/services/kitchen/blind-corner-cabinets" }
+          ]
+        },
+        {
+          "label": "Pantry Shelves",
+          "href": "/services/pantry",
+          "children": [
+            { "label": "Closet Pantry", "href": "/services/pantry/closet-pantry" },
+            { "label": "Cabinet Pantry", "href": "/services/pantry/cabinet-pantry" },
+            { "label": "Corner Pantry", "href": "/services/pantry/corner-pantry" },
+            { "label": "Walk-In Pantry", "href": "/services/pantry/walk-in-pantry" },
+            { "label": "Double-Door Pantry", "href": "/services/pantry/double-door-pantry" },
+            { "label": "Custom Pantry Designs", "href": "/services/pantry/custom-pantry-designs" }
+          ]
+        },
+        {
+          "label": "Bathroom Shelves",
+          "href": "/services/bathroom",
+          "children": [
+            { "label": "Under the Sink", "href": "/services/bathroom/under-the-sink" },
+            { "label": "Vanity Cabinets", "href": "/services/bathroom/cabinets" },
+            { "label": "Cabinet Organizers", "href": "/services/bathroom/cabinet-organizers" },
+            {
+              "label": "Pull-Out Organizers & Dividers",
+              "href": "/services/bathroom/pull-out-organizers-and-dividers"
+            }
+          ]
+        },
+        {
+          "label": "Closets & Home Spaces",
+          "href": "/services/closets",
+          "children": [
+            { "label": "Closets & Wardrobes", "href": "/services/closets/closets-and-wardrobes" },
+            {
+              "label": "Office, Crafts & Entertainment",
+              "href": "/services/closets/office-crafts-and-entertainment-rooms"
+            },
+            { "label": "Laundry & Mud Room", "href": "/services/closets/laundry-and-mud-room" },
+            { "label": "Garage & Storage", "href": "/services/closets/garage-and-storage" }
+          ]
+        },
+        {
+          "label": "Creative Spaces",
+          "href": "/services/creative-spaces",
+          "children": [
+            { "label": "Office & Crafts", "href": "/services/creative-spaces/office-and-crafts" },
+            { "label": "Spirits & Wine", "href": "/services/creative-spaces/spirits-and-wine" },
+            { "label": "Custom Layouts", "href": "/services/creative-spaces/custom-layouts" }
+          ]
+        }
+      ]
+    },
+    {
+      "label": "Service areas",
+      "children": [
+        { "label": "Phoenix", "href": "/locations/phoenix" },
+        { "label": "Scottsdale", "href": "/locations/scottsdale" },
+        { "label": "Mesa", "href": "/locations/mesa" },
+        { "label": "Chandler", "href": "/locations/chandler" }
+      ]
+    },
+    {
+      "label": "Maintenance",
+      "href": "/maintenance"
+    },
+    {
+      "label": "Financing",
+      "href": "/financing"
+    },
+    {
+      "label": "About us",
+      "href": "/about",
+      "children": [
+        { "label": "Meet The Team", "href": "/team" }
+      ]
+    }
+  ],
+  "primaryCta": {
+    "label": "Free consultation",
+    "href": "/contact",
+    "style": "primary"
+  },
+  "footer": {
+    "columns": [
+      {
+        "title": "Services",
+        "links": [
+          {
+            "label": "Kitchen Shelves",
+            "href": "/services/kitchen"
+          },
+          {
+            "label": "Pantry Shelves",
+            "href": "/services/pantry"
+          },
+          {
+            "label": "Bathroom Shelves",
+            "href": "/services/bathroom"
+          },
+          {
+            "label": "Closets & Home Spaces",
+            "href": "/services/closets"
+          },
+          {
+            "label": "Creative Spaces",
+            "href": "/services/creative-spaces"
+          }
+        ]
+      },
+      {
+        "title": "Service areas",
+        "links": [
+          {
+            "label": "Phoenix",
+            "href": "/locations/phoenix"
+          },
+          {
+            "label": "Scottsdale",
+            "href": "/locations/scottsdale"
+          },
+          {
+            "label": "Mesa",
+            "href": "/locations/mesa"
+          },
+          {
+            "label": "Chandler",
+            "href": "/locations/chandler"
+          }
+        ]
+      },
+      {
+        "title": "Company",
+        "links": [
+          {
+            "label": "About us",
+            "href": "/about"
+          },
+          {
+            "label": "Meet The Team",
+            "href": "/team"
+          },
+          {
+            "label": "Maintenance",
+            "href": "/maintenance"
+          },
+          {
+            "label": "Financing",
+            "href": "/financing"
+          }
+        ]
+      }
+    ],
+    "legal": [
+      {
+        "label": "Privacy Policy",
+        "href": "/privacy"
+      },
+      {
+        "label": "Terms of Use",
+        "href": "/terms"
+      }
+    ]
+  },
+  "social": [
+    {
+      "platform": "Facebook",
+      "href": "https://facebook.com/"
+    },
+    {
+      "platform": "Instagram",
+      "href": "https://instagram.com/"
+    }
+  ],
+  "theme": {
+    "primary": "#22463a",
+    "primaryHover": "#1a3730",
+    "primaryFg": "#f7f3ec",
+    "accent": "#b8894a",
+    "accentFg": "#14120f",
+    "accentInk": "#8a6230",
+    "ink": "#14120f",
+    "body": "#55514a",
+    "muted": "#eae3d7",
+    "line": "#d8cfc0",
+    "surface": "#f7f3ec",
+    "dark": "#14120f",
+    "darkFg": "#f2f0ee",
+    "radius": "4px",
+    "radiusMedia": "14px",
+    "fontDisplay": "'DM Sans', ui-sans-serif, system-ui, sans-serif",
+    "fontHeading": "'DM Sans', ui-sans-serif, system-ui, sans-serif",
+    "fontBody": "'DM Sans', ui-sans-serif, system-ui, sans-serif",
+    "fontMono": "'DM Mono', ui-monospace, SFMono-Regular, monospace",
+    "fontHref": "https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400..800&family=DM+Mono:wght@400;500&display=swap"
+  }
+}

@@ -1,0 +1,101 @@
+---
+import type { HeroBackground } from './Hero.schema';
+
+/**
+ * The media layer behind a full-bleed hero. Split out so Hero itself stays
+ * about the text, and so a new background kind is one branch here rather than
+ * another nested ternary in the middle of the content markup.
+ */
+interface Props {
+	background?: HeroBackground | null;
+	/** Adds the contrast scrim. Off when the media sits beside the text. */
+	scrim?: boolean;
+}
+
+const { background, scrim = true } = Astro.props;
+---
+
+{background?.kind === 'video' && (
+	<video
+		class="absolute inset-0 -z-20 h-full w-full object-cover"
+		autoplay
+		muted
+		loop
+		playsinline
+		poster={background.poster}
+		aria-hidden="true"
+		tabindex="-1"
+	>
+		<source src={background.file.src} />
+	</video>
+)}
+
+{background?.kind === 'carousel' && (
+	<div
+		class="absolute inset-0 -z-20"
+		data-hero-carousel
+		data-interval={String((background.interval ?? 6) * 1000)}
+	>
+		{background.slides.map((slide, i) => (
+			<img
+				src={slide.src}
+				alt={slide.alt}
+				data-slide
+				class="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)] data-[active]:opacity-100"
+				data-active={i === 0 ? '' : undefined}
+				fetchpriority={i === 0 ? 'high' : undefined}
+				loading={i === 0 ? 'eager' : 'lazy'}
+			/>
+		))}
+	</div>
+)}
+
+{background?.kind === 'image' && (
+	<img
+		src={background.image.src}
+		alt={background.image.alt}
+		class="absolute inset-0 -z-20 h-full w-full object-cover"
+		fetchpriority="high"
+	/>
+)}
+
+{/* Contrast scrim. Its own layer so it applies to every kind. */}
+{background && scrim && (
+	<div class="absolute inset-0 -z-10 bg-gradient-to-r from-dark/96 via-dark/72 to-dark/20" />
+)}
+
+<script>
+	// Crossfades hero carousels. Pauses when the tab is hidden and does not run
+	// at all for reduced-motion users, who get the first slide as a still.
+	const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+	document.querySelectorAll('[data-hero-carousel]').forEach((root) => {
+		const slides = Array.from(root.querySelectorAll('[data-slide]'));
+		if (reduced || slides.length < 2 || !(root instanceof HTMLElement)) return;
+
+		const interval = Number(root.dataset.interval) || 6000;
+		let index = 0;
+		let timer = 0;
+
+		const advance = () => {
+			slides[index].removeAttribute('data-active');
+			index = (index + 1) % slides.length;
+			slides[index].setAttribute('data-active', '');
+		};
+
+		const start = () => {
+			stop();
+			timer = window.setInterval(advance, interval);
+		};
+		const stop = () => {
+			if (timer) window.clearInterval(timer);
+			timer = 0;
+		};
+
+		document.addEventListener('visibilitychange', () => {
+			document.hidden ? stop() : start();
+		});
+
+		start();
+	});
+</script>

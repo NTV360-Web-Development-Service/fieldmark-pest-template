@@ -1,0 +1,415 @@
+---
+import { popup } from '../../lib/popup';
+import Button from '../ui/Button.astro';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+/**
+ * Site-wide promotional dialog, configured in its own Popup CMS singleton.
+ *
+ * Uses a native <dialog>, which gives focus trapping, Escape to close and
+ * inertness of the page behind it without any of that being reimplemented.
+ * It stays closed until the trigger fires, so a visitor who never qualifies
+ * never sees it.
+ *
+ * `showLauncher` adds a floating button that re-opens the dialog on demand,
+ * independent of the auto-trigger -- so once the offer has shown and been
+ * dismissed, the visitor still has a way back to it.
+ */
+interface Props {
+	showLauncher?: boolean;
+}
+
+const { showLauncher = false } = Astro.props;
+
+// Label the launcher from the CTA where possible so the button and the offer
+// read as one thing; fall back to a generic prompt.
+const launcherLabel = popup.cta?.label ?? popup.eyebrow ?? 'Special offer';
+---
+
+{popup.enabled && (
+	<dialog
+		id="site-popup"
+		data-popup
+		data-trigger={popup.trigger}
+		data-delay={String(popup.delaySeconds)}
+		data-scroll={String(popup.scrollPercent)}
+		data-frequency={popup.frequency}
+		aria-labelledby="site-popup-title"
+		class={`site-popup m-auto overflow-hidden rounded-(--radius-media) border border-line bg-surface p-0 text-body shadow-[0_40px_80px_-24px_rgba(20,18,15,0.55)] backdrop:bg-dark/60 backdrop:backdrop-blur-sm ${
+			popup.image
+				? 'w-[min(46rem,calc(100vw-2rem))]'
+				: 'w-[min(30rem,calc(100vw-2rem))]'
+		}`}
+	>
+		{/*
+			Close button is fixed to the dialog's own top-right so it sits above the
+			image panel too. On an image layout it gets a translucent chip so it stays
+			legible over the photo; on the plain card it's a bare circular icon.
+		*/}
+		<form method="dialog" class="absolute top-4 right-4 z-10">
+			<button
+				value="dismiss"
+				aria-label="Close"
+				class={`flex h-8 w-8 items-center justify-center rounded-full transition-colors ${
+					popup.image
+						? 'bg-surface/80 text-ink backdrop-blur-sm hover:bg-surface'
+						: 'text-body/60 hover:bg-muted hover:text-ink'
+				}`}
+			>
+				<svg viewBox="0 0 16 16" class="h-3.5 w-3.5 fill-current" aria-hidden="true">
+					<path d="M4.3 3.3l4.7 4.7 4.7-4.7 1 1L10 9l4.7 4.7-1 1L9 10l-4.7 4.7-1-1L7 9 2.3 4.3z" />
+				</svg>
+			</button>
+		</form>
+
+		<div class={popup.image ? 'grid sm:grid-cols-2' : ''}>
+			{popup.image && (
+				<figure class="relative order-first h-40 sm:h-auto">
+					<img
+						src={popup.image.src}
+						alt={popup.image.alt}
+						loading="lazy"
+						decoding="async"
+						class="h-full w-full object-cover"
+					/>
+					{/*
+						Soft scrim melts the photo's inner edge into the warm content
+						panel so the two halves read as one lit card, not a hard split.
+						Runs bottom-up on mobile (image on top), left-to-right on desktop.
+					*/}
+					<span
+						class="absolute inset-0 bg-gradient-to-t from-surface/60 to-transparent sm:bg-gradient-to-r sm:from-transparent sm:to-surface/30"
+						aria-hidden="true"
+					/>
+					{/* Brass seam, the shop-drawing rule, sitting on the join. */}
+					<span
+						class="absolute inset-x-0 bottom-0 h-0.5 bg-accent sm:inset-y-0 sm:right-0 sm:left-auto sm:h-full sm:w-0.5"
+						aria-hidden="true"
+					/>
+				</figure>
+			)}
+
+			{/*
+				Content panel carries a soft warm wash -- ivory lifting into a hint of
+				brass in the far corner -- so it feels lit and inviting rather than a
+				flat fill. Falls back cleanly on the plain (imageless) card too.
+			*/}
+			<div class="relative bg-gradient-to-br from-surface via-surface to-accent/8 px-8 pt-9 pb-9 sm:px-9">
+				{!popup.image && (
+					<span class="absolute inset-x-0 top-0 h-0.5 bg-accent" aria-hidden="true" />
+				)}
+
+				{popup.eyebrow && (
+					<DimensionLine label={popup.eyebrow} rule="short" class="mb-5" />
+				)}
+
+				<h2
+					id="site-popup-title"
+					class="max-w-[20ch] text-[clamp(1.5rem,3vw,2rem)] leading-[1.1] text-ink"
+				>
+					{popup.heading}
+				</h2>
+
+				{popup.body && <Prose html={popup.body} size="sm" class="mt-4 max-w-[40ch]" />}
+
+				<div class="mt-8 flex flex-wrap items-center gap-x-5 gap-y-3">
+					{popup.cta && <Button {...popup.cta} />}
+					<form method="dialog">
+						<button
+							value="dismiss"
+							class="font-mono text-[0.6875rem] uppercase tracking-[0.14em] text-body/70 underline underline-offset-4 transition-colors hover:text-ink"
+						>
+							{popup.dismissLabel}
+						</button>
+					</form>
+				</div>
+			</div>
+		</div>
+	</dialog>
+)}
+
+{popup.enabled && showLauncher && (
+	<button
+		type="button"
+		data-popup-launcher
+		aria-haspopup="dialog"
+		aria-controls="site-popup"
+		class="popup-launcher group fixed right-5 bottom-5 z-40 inline-flex items-center gap-3 rounded-full border border-accent/40 bg-brand py-3 pr-6 pl-3.5 text-brand-fg shadow-[0_18px_40px_-12px_rgba(20,18,15,0.55)] transition-[transform,box-shadow] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1 hover:border-accent/70 hover:shadow-[0_26px_56px_-14px_rgba(20,18,15,0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent sm:right-8 sm:bottom-8"
+	>
+		{/*
+			Brass tag mark on a filled disc -- the shop-drawing motif. The disc
+			brightens and the tag tilts on hover so the button feels alive and
+			clickable rather than a static chip.
+		*/}
+		<span
+			class="launcher-disc flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-accent text-dark shadow-[inset_0_1px_1px_rgba(255,255,255,0.35)] transition-colors duration-300 group-hover:bg-cta"
+			aria-hidden="true"
+		>
+			<svg
+				viewBox="0 0 24 24"
+				class="launcher-tag h-4 w-4 fill-current transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-rotate-12"
+			>
+				<path d="M20.6 10.6l-7.2-7.2A2 2 0 0 0 12 2.8H5A2 2 0 0 0 3 4.8v7a2 2 0 0 0 .6 1.4l7.2 7.2a2 2 0 0 0 2.8 0l7-7a2 2 0 0 0 0-2.8zM7 8.8a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3z" />
+			</svg>
+		</span>
+		<span class="flex flex-col items-start gap-0.5 leading-none">
+			{/*
+				Eyebrow in the bone foreground at reduced opacity, not brass: brass on
+				the forest button is only ~3.3:1, which fails AA for text this small.
+			*/}
+			<span class="font-mono text-[0.5625rem] font-medium uppercase tracking-[0.2em] text-brand-fg/75">
+				{popup.eyebrow ?? 'This month'}
+			</span>
+			<span class="font-mono text-[0.75rem] font-semibold uppercase tracking-[0.14em] whitespace-nowrap">
+				{launcherLabel}
+			</span>
+		</span>
+	</button>
+)}
+
+<style>
+	/*
+		Entrance: the dialog fades its backdrop in and the card rises + settles,
+		using the site's expo ease. Native <dialog> has no open transition, so we
+		animate on the [open] state the browser sets when showModal() runs.
+		Honoured only where motion is welcome.
+	*/
+	@media (prefers-reduced-motion: no-preference) {
+		.site-popup[open] {
+			animation: popup-in 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+		}
+		.site-popup[open]::backdrop {
+			animation: popup-backdrop 0.4s ease-out;
+		}
+	}
+
+	@keyframes popup-in {
+		from {
+			opacity: 0;
+			transform: translateY(16px) scale(0.98);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0) scale(1);
+		}
+	}
+
+	@keyframes popup-backdrop {
+		from {
+			opacity: 0;
+		}
+		to {
+			opacity: 1;
+		}
+	}
+
+	/*
+		While the dialog is open the launcher fades down and out of the way, then
+		returns when the offer closes. `transform`/`opacity` only, so it never
+		intercepts clicks meant for the modal. The base button carries
+		`transition-transform`; add opacity here so the fade is smooth both ways.
+	*/
+	.popup-launcher {
+		position: fixed;
+		transition:
+			transform 0.3s ease,
+			box-shadow 0.3s ease,
+			opacity 0.3s ease,
+			border-color 0.3s ease;
+	}
+	.popup-launcher[data-dialog-open] {
+		opacity: 0;
+		transform: translateY(0.75rem);
+		pointer-events: none;
+	}
+
+	/*
+		Inviting cue: a brass ring pings outward from the button edge, like sonar,
+		so the offer visibly asks to be tapped. It lives on an ::before that sits
+		BEHIND the button (z-index -1) and expands via box-shadow -- crucially this
+		NEVER moves the button itself or changes its hit area, so hovering is rock
+		steady. (An earlier version bobbed the whole button, which moved the hit
+		target out from under the cursor and made hover flicker on and off.)
+	*/
+	.popup-launcher::before {
+		content: '';
+		position: absolute;
+		inset: 0;
+		z-index: -1;
+		border-radius: inherit;
+		/* Start frame for the ping; the keyframes drive it when motion is welcome. */
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-accent) 60%, transparent);
+	}
+
+	@media (prefers-reduced-motion: no-preference) {
+		/* Two offset rings so there is almost always one mid-flight -- reads as a
+		   steady, lively pulse rather than a single blink. */
+		.popup-launcher::before {
+			animation: launcher-ping 1.8s cubic-bezier(0.22, 0.61, 0.36, 1) infinite;
+		}
+
+		/* The brass disc inside gives a soft heartbeat. It is an inner element, so
+		   scaling it leaves the button's outer hit area untouched -- no hover flicker. */
+		.popup-launcher .launcher-disc {
+			animation: launcher-throb 1.8s ease-in-out infinite;
+		}
+
+		.popup-launcher {
+			animation: popup-launcher-in 0.5s cubic-bezier(0.16, 1, 0.3, 1) 0.6s backwards;
+		}
+	}
+
+	/* The attention motion settles once the visitor hovers/focuses -- they've
+	   noticed it. The button's own hover lift comes from its Tailwind transition,
+	   which is untouched here, so the lift stays smooth and stable. */
+	.popup-launcher:hover::before,
+	.popup-launcher:focus-visible::before,
+	.popup-launcher:hover .launcher-disc,
+	.popup-launcher:focus-visible .launcher-disc {
+		animation-play-state: paused;
+	}
+
+	@keyframes launcher-ping {
+		0% {
+			box-shadow:
+				0 0 0 0 color-mix(in srgb, var(--color-accent) 60%, transparent),
+				0 0 0 0 color-mix(in srgb, var(--color-accent) 40%, transparent);
+		}
+		100% {
+			box-shadow:
+				0 0 0 14px color-mix(in srgb, var(--color-accent) 0%, transparent),
+				0 0 0 24px color-mix(in srgb, var(--color-accent) 0%, transparent);
+		}
+	}
+
+	@keyframes launcher-throb {
+		0%,
+		100% {
+			transform: scale(1);
+		}
+		50% {
+			transform: scale(1.1);
+		}
+	}
+
+	@keyframes popup-launcher-in {
+		from {
+			opacity: 0;
+			transform: translateY(1rem);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+</style>
+
+<script>
+	const popup = document.querySelector('[data-popup]');
+
+	if (popup instanceof HTMLDialogElement) {
+		const trigger = popup.dataset.trigger ?? 'delay';
+		const frequency = popup.dataset.frequency ?? 'session';
+		const key = 'popup-seen';
+
+		// Storage throws in private windows and can be cleared at any time, so a
+		// failed read simply means the popup shows.
+		const alreadySeen = () => {
+			try {
+				const store = frequency === 'once' ? localStorage : sessionStorage;
+				return store.getItem(key) === '1';
+			} catch {
+				return false;
+			}
+		};
+
+		const remember = () => {
+			try {
+				const store = frequency === 'once' ? localStorage : sessionStorage;
+				store.setItem(key, '1');
+			} catch {
+				/* Nothing to do; it may show again next visit. */
+			}
+		};
+
+		let opened = false;
+		const open = () => {
+			if (opened || alreadySeen() || popup.open) return;
+			opened = true;
+			popup.showModal();
+			remember();
+		};
+
+		// Light-dismiss: a click on the dimmed area outside the card closes the
+		// offer, the way visitors expect a modal to behave. With a native <dialog>,
+		// a click on the backdrop lands on the dialog element itself (the content
+		// is a child), so `target === popup` means "outside the card".
+		//
+		// `pressStartedInside` guards the drag-out case: selecting text in the card
+		// and releasing over the backdrop must NOT count as an outside click, or the
+		// dialog would close mid-selection.
+		let pressStartedInside = false;
+		popup.addEventListener('pointerdown', (event) => {
+			pressStartedInside = event.target !== popup;
+		});
+		popup.addEventListener('click', (event) => {
+			if (event.target === popup && !pressStartedInside) {
+				popup.close('dismiss');
+			}
+			pressStartedInside = false;
+		});
+
+		if (!alreadySeen()) {
+			if (trigger === 'delay') {
+				window.setTimeout(open, Number(popup.dataset.delay ?? 8) * 1000);
+			}
+
+			if (trigger === 'scroll') {
+				const wanted = Number(popup.dataset.scroll ?? 50);
+				const onScroll = () => {
+					const max = document.documentElement.scrollHeight - window.innerHeight;
+					const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+					if (pct >= wanted) {
+						open();
+						window.removeEventListener('scroll', onScroll);
+					}
+				};
+				window.addEventListener('scroll', onScroll, { passive: true });
+			}
+
+			if (trigger === 'exit') {
+				// Pointer leaving through the top of the viewport reads as leaving the
+				// page. Meaningless on touch, so those visitors simply never see it.
+				const onLeave = (event: MouseEvent) => {
+					if (event.clientY > 0) return;
+					open();
+					document.removeEventListener('mouseout', onLeave);
+				};
+				document.addEventListener('mouseout', onLeave);
+			}
+		}
+
+		// Floating launcher: an explicit click should always open the offer, even
+		// after it has auto-shown and been dismissed -- so this bypasses the
+		// seen-gate that the automatic triggers respect. A `data-dialog-open`
+		// attribute mirrors the dialog's state so CSS can fade the launcher out
+		// while the modal is up (it would otherwise peek out beside it).
+		const launcher = document.querySelector('[data-popup-launcher]');
+		if (launcher instanceof HTMLButtonElement) {
+			launcher.addEventListener('click', () => {
+				if (!popup.open) popup.showModal();
+			});
+
+			// The `open` attribute flips for every open and close, from the launcher,
+			// the auto-triggers and Escape alike, so one observer covers them all.
+			const observer = new MutationObserver(() =>
+				launcher.toggleAttribute('data-dialog-open', popup.open)
+			);
+			observer.observe(popup, { attributes: true, attributeFilter: ['open'] });
+
+			// Return focus to the launcher after the visitor closes the offer.
+			popup.addEventListener('close', () => launcher.focus());
+		}
+	}
+</script>

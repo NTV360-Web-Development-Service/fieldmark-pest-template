@@ -1,0 +1,345 @@
+{
+  "title": "About",
+  "permalink": "https://modern-cabinets-template.vercel.app/about",
+  "order": 50,
+  "draft": false,
+  "seo": {
+    "title": "About Modern Cabinets",
+    "description": "A cabinet shop that measures on site and builds glide-out shelving to the sixteenth. Licensed, bonded and insured, installing across the Phoenix valley since 2009.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "layout": "split",
+      "headingLevel": "h1",
+      "background": {
+        "kind": "image",
+        "image": {
+          "source": "upload",
+          "src": "/media/images/cabinet-business.avif",
+          "alt": "Wooden cabinetry with open shelving"
+        }
+      },
+      "eyebrow": "About us",
+      "heading": "The people behind your cabinets.",
+      "body": "Modern Cabinets is a Phoenix workshop that builds glide-out shelving for the cabinets you already own. The same designers, cabinetmakers and installers you meet on day one are the ones who measure, build and fit the work — no subcontractors, no call center.",
+      "mediaNote": "Building in Phoenix since 2009",
+      "ctas": [
+        {
+          "label": "Book a free consultation",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "Call (555) 014-2200",
+          "href": "tel:+15550142200",
+          "style": "secondary",
+          "newTab": false
+        }
+      ],
+      "badges": ["Built in-house", "Licensed & insured", "Fixed quotes"],
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "placeholder",
+      "headingLevel": "h2",
+      "label": "Our story",
+      "note": "The company narrative goes here — who started Modern Cabinets, why, and what has stayed the same since 2009. Aim for two or three short paragraphs, ideally with a photo of the shop or the team.",
+      "size": "md",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "offers",
+      "headingLevel": "h2",
+      "eyebrow": "This month",
+      "heading": "What is on.",
+      "intro": "Everything here has an end date and terms you can read without a magnifying glass.",
+      "columns": "3",
+      "items": [
+        {
+          "title": "Free in-home measure",
+          "value": "No cost",
+          "body": "A designer measures every cabinet you want changed and leaves a fixed quote.",
+          "terms": "No purchase necessary. One per household.",
+          "cta": {
+            "label": "Book a measure",
+            "href": "/contact",
+            "style": "primary",
+            "newTab": false
+          }
+        },
+        {
+          "title": "Four shelves or more",
+          "value": "$100 off",
+          "code": "FOURPLUS",
+          "body": "Applied to the total when four or more glide-out shelves are fitted in one visit.",
+          "expires": "2026-11-02",
+          "terms": "Cannot be combined with other offers. Quoted before work begins."
+        },
+        {
+          "title": "Soft-close upgrade",
+          "value": "Half price",
+          "code": "SOFTCLOSE",
+          "body": "Add soft-close glides to any shelf at half the usual rate.",
+          "expires": "2026-11-02",
+          "terms": "Per shelf. Applies to standard widths only."
+        }
+      ],
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "card_grid",
+      "eyebrow": "What we do",
+      "heading": "Every room, one idea.",
+      "intro": "Anywhere a cabinet is deeper than your arm is long.",
+      "columns": "5",
+      "cards": [
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-hero.avif",
+            "alt": "Kitchen with white shaker cabinets"
+          },
+          "title": "Kitchen",
+          "body": "Pots, pans and the lids that never match them. Full-extension shelves bring the back row forward.",
+          "link": {
+            "label": "Kitchen shelving",
+            "href": "/services/kitchen",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/shelf-detail.avif",
+            "alt": "Dishes on a glide-out shelf"
+          },
+          "title": "Pantry",
+          "body": "Two usable rows becomes four. Nothing expires behind something else.",
+          "link": {
+            "label": "Pantry storage",
+            "href": "/services/pantry",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/cabinet-wood.avif",
+            "alt": "Wooden kitchen cabinetry"
+          },
+          "title": "Bathroom",
+          "body": "Around the plumbing, not into it. Shelves cut to clear the trap.",
+          "link": {
+            "label": "Bathroom vanities",
+            "href": "/services/bathroom",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-island.avif",
+            "alt": "Kitchen with a dark island"
+          },
+          "title": "Closets",
+          "body": "Shoes, linens and the vacuum you wrestle out every week.",
+          "link": {
+            "label": "Closet systems",
+            "href": "/services/closets",
+            "style": "ghost",
+            "newTab": false
+          }
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/shelf-detail.avif",
+            "alt": "Open shelving for glassware and bottles"
+          },
+          "title": "Creative Spaces",
+          "body": "Offices, craft rooms and a wall for the wine. Built for what you make, not just what you store.",
+          "link": {
+            "label": "Creative spaces",
+            "href": "/services/creative-spaces",
+            "style": "ghost",
+            "newTab": false
+          }
+        }
+      ],
+      "headingLevel": "h2",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "quotes",
+      "headingLevel": "h2",
+      "eyebrow": "4.8 / 5",
+      "heading": "Why people call us back.",
+      "items": [
+        {
+          "quote": "They measured on a Thursday and the shelves fit like the cabinets were built around them. I have had contractors miss by half an inch and call it close.",
+          "name": "Ellen T.",
+          "location": "Mesa, AZ",
+          "rating": 5
+        },
+        {
+          "quote": "Second job with them. The installer remembered the first kitchen without checking his notes.",
+          "name": "Raymond K.",
+          "location": "Chandler, AZ",
+          "rating": 5
+        },
+        {
+          "quote": "Quote did not move between the consultation and the invoice, which is not something I can say about the rest of the remodel.",
+          "name": "Anita B.",
+          "location": "Gilbert, AZ",
+          "rating": 5
+        }
+      ],
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "accordion",
+      "headingLevel": "h2",
+      "eyebrow": "Before you book",
+      "heading": "Questions, answered.",
+      "intro": "If yours is not here, call the shop. Nobody is working from a script.",
+      "items": [
+        {
+          "question": "Do you have to replace my cabinets?",
+          "answer": "No. The shelves fit inside the cabinet boxes you already have. Your doors, drawer fronts, counters and plumbing all stay where they are."
+        },
+        {
+          "question": "Will they fit an older or non-standard cabinet?",
+          "answer": "Usually yes, and that is the point of measuring on site. Older cabinets are rarely square, so each shelf is cut for one specific opening."
+        },
+        {
+          "question": "How much weight will a shelf hold?",
+          "answer": "Our standard glides are rated to **100 lb** per shelf, which covers stand mixers, stacked cast iron and full cases of tinned goods."
+        },
+        {
+          "question": "How long does installation take?",
+          "answer": "Most kitchens are done in a single morning. Larger jobs across several rooms can run to a full day, and we tell you which before you book."
+        },
+        {
+          "question": "What is the warranty?",
+          "answer": "Lifetime on the glide hardware for as long as you own the home. Shelves themselves carry a five year warranty against defects."
+        }
+      ],
+      "surface": "muted",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "form_block",
+      "headingLevel": "h2",
+      "eyebrow": "Two minutes",
+      "heading": "Request a call.",
+      "intro": "Tell us which rooms you are thinking about and we will call to arrange a time that suits you.",
+      "endpoint": "https://formspree.io/f/REPLACE_WITH_YOUR_ID",
+      "submitLabel": "Request a call",
+      "fields": [
+        {
+          "kind": "text",
+          "name": "first_name",
+          "label": "First name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "given-name"
+        },
+        {
+          "kind": "text",
+          "name": "last_name",
+          "label": "Last name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "family-name"
+        },
+        {
+          "kind": "email",
+          "name": "email",
+          "label": "Email",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "tel",
+          "name": "phone",
+          "label": "Phone",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "select",
+          "name": "rooms",
+          "label": "Which room",
+          "required": true,
+          "width": "half",
+          "choices": ["Kitchen", "Pantry", "Bathroom", "Closets", "More than one"]
+        },
+        {
+          "kind": "textarea",
+          "name": "message",
+          "label": "Anything we should know",
+          "placeholder": "Cabinet sizes, awkward corners, access notes",
+          "rows": 5,
+          "required": false
+        },
+        {
+          "kind": "checkbox",
+          "name": "consent",
+          "label": "You can text me about this enquiry. See the [privacy policy](/privacy).",
+          "required": true
+        },
+        {
+          "kind": "hidden",
+          "name": "source",
+          "value": "about-page"
+        }
+      ],
+      "footnote": "We use your details to arrange the consultation and nothing else. No lists, no resale.",
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "contact_details",
+      "headingLevel": "h2",
+      "eyebrow": "Where to find us",
+      "heading": "Find the shop.",
+      "showPhone": true,
+      "showEmail": true,
+      "showAddress": true,
+      "showHours": true,
+      "extra": [
+        {
+          "label": "Service area",
+          "value": "Phoenix valley, within 40 miles of the shop"
+        }
+      ],
+      "media": {
+        "kind": "embed",
+        "url": "https://maps.google.com/maps?q=1420+Millwork+Ave,+Phoenix,+AZ+85004&z=15&output=embed",
+        "title": "Map showing the Modern Cabinets workshop in Phoenix",
+        "ratio": "4/3"
+      },
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

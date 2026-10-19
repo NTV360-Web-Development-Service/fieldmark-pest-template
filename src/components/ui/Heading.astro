@@ -1,0 +1,35 @@
+---
+/**
+ * Splits the semantic level from the visual size.
+ *
+ * A section heading often needs to be an h3 for the document outline while
+ * still looking like a section title. Tying size to tag forces a choice
+ * between a correct outline and a sensible design; this keeps both.
+ */
+interface Props {
+	/** Document outline rank. One h1 per page. */
+	level?: 'h1' | 'h2' | 'h3' | 'h4';
+	/** Visual weight, independent of rank. */
+	size?: 'hero' | 'xl' | 'lg' | 'md' | 'sm';
+	/** Uppercase condensed treatment. Short, declarative headings only. */
+	display?: boolean;
+	class?: string;
+}
+
+const { level = 'h2', size = 'lg', display = false, class: className = '' } = Astro.props;
+
+// Astro renders a capitalised variable as a dynamic tag.
+const Tag = level;
+
+const sizes = {
+	hero: 'text-[clamp(2.6rem,6.4vw,5.25rem)]',
+	xl: 'text-[clamp(2.2rem,5vw,4rem)]',
+	lg: 'text-[clamp(1.9rem,3.6vw,3rem)]',
+	md: 'text-[clamp(1.4rem,2.2vw,1.875rem)]',
+	sm: 'text-lg',
+};
+---
+
+<Tag class={`${sizes[size]} ${display ? 'display' : ''} ${className}`}>
+	<slot />
+</Tag>

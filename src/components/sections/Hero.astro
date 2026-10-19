@@ -1,0 +1,161 @@
+---
+import type { Hero } from './Hero.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Button from '../ui/Button.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import HeroBackground from './HeroBackground.astro';
+
+type Props = Hero;
+
+const {
+	headingLevel = 'h1',
+	layout = 'split',
+	eyebrow,
+	heading,
+	body,
+	background,
+	mediaNote,
+	ctas = [],
+	badges = [],
+	rating,
+	anchor,
+	surface = 'light',
+	spacing = 'lg',
+	width = 'wide',
+} = Astro.props;
+
+// `full` breaks the container entirely: the image runs edge to edge and only
+// the text inside it is held to the page measure.
+const isFull = layout === 'full';
+const onDark = isFull || surface === 'dark' || surface === 'brand';
+const stars = rating ? Math.round(rating.value) : 0;
+---
+
+<Section
+	anchor={anchor}
+	surface={isFull ? 'dark' : surface}
+	spacing={isFull ? 'none' : spacing}
+	width={isFull ? 'full' : width}
+	contained={!isFull}
+	reveal={false}
+>
+	<div
+		class={
+			isFull
+				? 'relative isolate flex min-h-[clamp(34rem,88vh,54rem)] items-end overflow-hidden bg-dark text-dark-fg [&_:is(h1,h2,h3,h4)]:text-current'
+				: layout === 'centered'
+					? 'mx-auto max-w-3xl text-center'
+					: 'grid items-center gap-14 lg:grid-cols-[1fr_1.05fr] lg:gap-20'
+		}
+	>
+		{isFull && <HeroBackground background={background} />}
+
+		<div
+			class={
+				isFull
+					? 'mx-auto w-full max-w-[104rem] px-5 pb-16 pt-32 sm:px-8 sm:pb-20 lg:px-12 lg:pb-24'
+					: ''
+			}
+		>
+			{/*
+				The text column is capped by a wrapper rather than by a `[&>*]` rule:
+				an arbitrary child selector outranks the plain `max-w-*` utilities the
+				children set for themselves, and silently widens them.
+			*/}
+			<div class={isFull ? 'max-w-[58rem]' : ''}>
+				{eyebrow && (
+					<DimensionLine
+						label={eyebrow}
+						rule="both"
+						animate
+						onDark={onDark}
+						class={`mb-6 max-w-xs ${layout === 'centered' ? 'mx-auto' : ''}`}
+					/>
+				)}
+
+				<Heading level={headingLevel} size="hero" display class="max-w-[16ch]">
+					{heading}
+				</Heading>
+
+				{body && (
+					<Prose
+						html={body}
+						invert={onDark}
+						size="lg"
+						class={`mt-7 max-w-xl ${layout === 'centered' ? 'mx-auto' : ''}`}
+					/>
+				)}
+
+				{ctas.length > 0 && (
+					<div
+						class={`mt-9 flex flex-wrap items-center gap-x-4 gap-y-3 ${layout === 'centered' ? 'justify-center' : ''}`}
+					>
+						{/*
+							Hero CTAs take the `lg` scale -- the page's primary action, sized a
+							step above the already-heavier-than-body default. Ghost CTAs stay a
+							text link (the size token drops its padding in Button).
+						*/}
+						{ctas.map((cta) => (
+							<Button {...cta} size="lg" onDark={onDark} />
+						))}
+					</div>
+				)}
+
+				{rating && (
+					<div
+						class={`mt-8 flex items-center gap-3 ${layout === 'centered' ? 'justify-center' : ''}`}
+					>
+						<div class="flex gap-0.5" aria-hidden="true">
+							{Array.from({ length: 5 }).map((_, i) => (
+								<svg
+									viewBox="0 0 20 20"
+									class={`h-4 w-4 ${i < stars ? 'fill-accent' : 'fill-current opacity-25'}`}
+								>
+									<path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z" />
+								</svg>
+							))}
+						</div>
+						<p class="mono-label opacity-75">
+							{rating.value.toFixed(1)} / 5 &middot; {rating.label}
+							{rating.count ? ` (${rating.count.toLocaleString()})` : ''}
+						</p>
+					</div>
+				)}
+
+				{badges.length > 0 && (
+					<ul
+						class={`mt-9 flex flex-wrap gap-x-7 gap-y-3 border-t pt-6 text-sm ${
+							onDark ? 'border-current/20' : 'border-line'
+						} ${layout === 'centered' ? 'justify-center' : ''}`}
+					>
+						{badges.map((badge) => (
+							<li class="flex items-center gap-2.5">
+								<span class="h-1 w-1 bg-accent" aria-hidden="true" />
+								{badge}
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+		</div>
+
+		{!isFull && layout === 'split' && background && (
+			<figure class="relative isolate overflow-hidden rounded-(--radius-media)">
+				<div class="relative aspect-4/5 w-full sm:aspect-4/3 lg:aspect-5/4">
+					<HeroBackground background={background} scrim={false} />
+				</div>
+				{mediaNote && (
+					<figcaption class="pointer-events-none absolute inset-x-0 bottom-0 p-4 sm:p-6">
+						<div class="dim dim-animate rounded-(--radius-brand) bg-dark/75 px-4 py-2.5 text-accent backdrop-blur-sm">
+							<span class="dim-rule" />
+							<span class="whitespace-nowrap">{mediaNote}</span>
+							<span class="dim-rule" />
+						</div>
+					</figcaption>
+				)}
+			</figure>
+		)}
+	</div>
+</Section>

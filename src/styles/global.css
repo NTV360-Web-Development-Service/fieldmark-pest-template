@@ -1,0 +1,349 @@
+@import 'tailwindcss';
+@plugin '@tailwindcss/typography';
+
+/*
+  Brand tokens -- "Finish Room".
+  Palette and type come from the millwork shop: bone paper stock, cabinet-paint
+  forest, brass hardware, pencil graphite. Defaults below are overridden at
+  runtime by BaseLayout from `site.json` -> `theme`, which is what lets one
+  template serve many client sites.
+*/
+:root {
+	--brand-primary: #22463a;
+	--brand-primary-hover: #1a3730;
+	--brand-primary-fg: #f7f3ec;
+	--brand-accent: #b8894a;
+	--brand-accent-fg: #14120f;
+	/* Darkened brass for use on light grounds: 2.6:1 fails, this clears 4.5:1. */
+	--brand-accent-ink: #8a6230;
+
+	/* A brighter, more saturated gold reserved for the primary CTA button. The
+	   decorative --brand-accent brass is too close in luminance to the green
+	   banner to read as an action; this pops off it. */
+	--brand-cta: #e0a83e;
+	--brand-cta-hover: #efbb52;
+	--brand-cta-fg: #14120f;
+
+	--brand-ink: #14120f;
+	--brand-body: #55514a;
+	--brand-muted: #eae3d7;
+	--brand-line: #d8cfc0;
+	--brand-surface: #f7f3ec;
+
+	--brand-dark: #14120f;
+	--brand-dark-fg: #f2f0ee;
+
+	--brand-radius: 4px;
+	/* Media blocks sit on a larger radius than UI chrome. */
+	--brand-radius-media: 14px;
+	--brand-font-display: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+	--brand-font-heading: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+	--brand-font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+	--brand-font-mono: 'DM Mono', ui-monospace, SFMono-Regular, monospace;
+}
+
+/*
+  `@theme inline` keeps the var() reference in generated utilities instead of
+  inlining the hex, so runtime overrides on :root actually take effect.
+*/
+@theme inline {
+	--color-brand: var(--brand-primary);
+	--color-brand-hover: var(--brand-primary-hover);
+	--color-brand-fg: var(--brand-primary-fg);
+	--color-accent: var(--brand-accent);
+	--color-accent-fg: var(--brand-accent-fg);
+	--color-accent-ink: var(--brand-accent-ink);
+	--color-cta: var(--brand-cta);
+	--color-cta-hover: var(--brand-cta-hover);
+	--color-cta-fg: var(--brand-cta-fg);
+
+	--color-ink: var(--brand-ink);
+	--color-body: var(--brand-body);
+	--color-muted: var(--brand-muted);
+	--color-line: var(--brand-line);
+	--color-surface: var(--brand-surface);
+	--color-dark: var(--brand-dark);
+	--color-dark-fg: var(--brand-dark-fg);
+
+	--radius-brand: var(--brand-radius);
+	--radius-media: var(--brand-radius-media);
+	--font-display: var(--brand-font-display);
+	--font-heading: var(--brand-font-heading);
+	--font-body: var(--brand-font-body);
+	--font-mono: var(--brand-font-mono);
+}
+
+@layer base {
+	html {
+		scroll-behavior: smooth;
+		-webkit-text-size-adjust: 100%;
+	}
+
+	body {
+		background: var(--brand-surface);
+		/* Auto-contrast foreground for the page background, so a dark surface set
+		   in the CMS still reads. Falls back to the brand body colour. */
+		color: var(--surface-light-fg, var(--brand-body));
+		font-family: var(--brand-font-body);
+		font-size: 1rem;
+		line-height: 1.6;
+		-webkit-font-smoothing: antialiased;
+	}
+
+	/*
+	  Display type is set tight and slightly condensed -- catalog/spec-sheet
+	  register rather than editorial. Tracking opens back up at small sizes.
+	*/
+	h1,
+	h2,
+	h3,
+	h4 {
+		/* Auto-contrast heading colour for the page background. Sections override
+		   this with their own per-surface heading variable. */
+		color: var(--surface-light-heading, var(--brand-ink));
+		text-wrap: balance;
+	}
+
+	/*
+	  Display sizes run DM Sans at its heaviest. It is a geometric face rather
+	  than a condensed one, so impact comes from weight and tight tracking --
+	  both of which need pulling back hard at large sizes.
+	*/
+	h1,
+	h2 {
+		font-family: var(--brand-font-display);
+		font-weight: 800;
+		line-height: 0.95;
+		letter-spacing: -0.035em;
+	}
+
+	h3,
+	h4 {
+		font-family: var(--brand-font-heading);
+		font-weight: 600;
+		line-height: 1.18;
+		letter-spacing: -0.015em;
+	}
+
+	p {
+		text-wrap: pretty;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--brand-accent);
+		outline-offset: 3px;
+		border-radius: 2px;
+	}
+
+	::selection {
+		background: var(--brand-accent);
+		color: var(--brand-accent-fg);
+	}
+}
+
+@layer components {
+	/*
+	  Reserved for short, declarative headlines -- a hero statement or a
+	  two-word section title. Long sentences stay in sentence case, where the
+	  weight still carries but the line stays readable.
+	*/
+	.display {
+		text-transform: uppercase;
+		line-height: 0.92;
+		letter-spacing: -0.04em;
+	}
+
+	/*
+	  Signature device: the dimension line.
+	  A tick-terminated rule carrying a monospace measurement, lifted from shop
+	  drawings. Used as section eyebrow, divider, and photo annotation -- it
+	  states the actual promise (exact fit) rather than decorating.
+	*/
+	.dim {
+		display: flex;
+		align-items: center;
+		gap: 0.75rem;
+		font-family: var(--brand-font-mono);
+		font-size: 0.6875rem;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+		color: var(--brand-accent-ink);
+	}
+
+	.dim-rule {
+		position: relative;
+		flex: 1 1 auto;
+		height: 1px;
+		background: currentColor;
+		opacity: 0.55;
+		transform-origin: left center;
+	}
+
+	/* Tick terminators, as on a drafted dimension line. */
+	.dim-rule::before,
+	.dim-rule::after {
+		content: '';
+		position: absolute;
+		top: -3px;
+		width: 1px;
+		height: 7px;
+		background: currentColor;
+	}
+
+	.dim-rule::before {
+		left: 0;
+	}
+
+	.dim-rule::after {
+		right: 0;
+	}
+
+	/* On dark grounds the full-strength brass is the legible one. */
+	.dim-on-dark {
+		color: var(--brand-accent);
+	}
+
+	.dim-rule-short {
+		flex: 0 0 2.5rem;
+	}
+
+	/* The one orchestrated motion moment: the rule measures itself out. */
+	.dim-animate .dim-rule {
+		animation: dim-measure 900ms cubic-bezier(0.22, 1, 0.36, 1) both;
+	}
+
+	@keyframes dim-measure {
+		from {
+			transform: scaleX(0);
+		}
+		to {
+			transform: scaleX(1);
+		}
+	}
+
+	/*
+	  Logo marquee. The track holds the list twice and slides exactly half its
+	  width, so the loop has no visible seam. Masked at both edges so logos fade
+	  rather than being chopped off.
+	*/
+	.logo-marquee {
+		-webkit-mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+		mask-image: linear-gradient(to right, transparent, black 8%, black 92%, transparent);
+	}
+
+	.logo-marquee-track {
+		animation: logo-scroll 40s linear infinite;
+	}
+
+	.logo-marquee:hover .logo-marquee-track {
+		animation-play-state: paused;
+	}
+
+	@keyframes logo-scroll {
+		from {
+			transform: translateX(0);
+		}
+		to {
+			/* Half the track is the duplicate, so this lands back at the start. */
+			transform: translateX(calc(-50% - 1.75rem));
+		}
+	}
+
+	.mono-label {
+		font-family: var(--brand-font-mono);
+		font-size: 0.6875rem;
+		font-weight: 500;
+		letter-spacing: 0.14em;
+		text-transform: uppercase;
+	}
+
+	/*
+	  Scroll reveal, applied only once JS has confirmed it can un-reveal them.
+	  The `.js` gate means a failed script, a blocked bundle, or a crawler gets
+	  fully visible content instead of a blank page.
+	*/
+	.js .reveal {
+		opacity: 0;
+		transform: translateY(20px);
+		transition:
+			opacity 800ms cubic-bezier(0.22, 1, 0.36, 1),
+			transform 800ms cubic-bezier(0.22, 1, 0.36, 1);
+	}
+
+	.js .reveal.is-visible {
+		opacity: 1;
+		transform: none;
+	}
+
+	.rich-text :where(h2, h3, h4) {
+		font-family: var(--brand-font-heading);
+	}
+
+	.rich-text :where(a) {
+		text-underline-offset: 3px;
+	}
+
+	.rich-text :where(code) {
+		font-family: var(--brand-font-mono);
+	}
+}
+
+/*
+  Rich-text fields from Pages CMS arrive as HTML strings and render through
+  <Prose />. Typography defaults are re-pointed at the brand tokens so CMS prose
+  inherits the client palette instead of Tailwind grays.
+
+  Deliberately unlayered: the typography plugin emits `.prose` into the
+  `utilities` layer, which wins over `components` no matter how specific the
+  selector is. Unlayered rules outrank every layer, so these have to sit here.
+*/
+.rich-text {
+	--tw-prose-body: var(--brand-body);
+	--tw-prose-headings: var(--brand-ink);
+	--tw-prose-bold: var(--brand-ink);
+	--tw-prose-links: var(--brand-primary);
+	--tw-prose-bullets: var(--brand-accent);
+	--tw-prose-counters: var(--brand-accent);
+	--tw-prose-quotes: var(--brand-ink);
+	--tw-prose-quote-borders: var(--brand-accent);
+	--tw-prose-hr: var(--brand-line);
+}
+
+/* Inverted prose for sections rendered on dark or brand backgrounds. */
+.rich-text-invert {
+	--tw-prose-body: color-mix(in srgb, var(--brand-dark-fg) 94%, transparent);
+	--tw-prose-headings: var(--brand-dark-fg);
+	--tw-prose-bold: var(--brand-dark-fg);
+	--tw-prose-links: var(--brand-accent);
+	--tw-prose-bullets: var(--brand-accent);
+	--tw-prose-counters: var(--brand-accent);
+	--tw-prose-quotes: var(--brand-dark-fg);
+	--tw-prose-quote-borders: var(--brand-accent);
+	--tw-prose-hr: color-mix(in srgb, var(--brand-dark-fg) 20%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+	html {
+		scroll-behavior: auto;
+	}
+
+	.reveal {
+		opacity: 1;
+		transform: none;
+		transition: none;
+	}
+
+	.dim-animate .dim-rule,
+	.logo-marquee-track {
+		animation: none;
+	}
+
+	*,
+	*::before,
+	*::after {
+		animation-duration: 0.01ms !important;
+		animation-iteration-count: 1 !important;
+		transition-duration: 0.01ms !important;
+	}
+}

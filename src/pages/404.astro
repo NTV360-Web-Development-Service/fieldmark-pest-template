@@ -1,0 +1,68 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Section from '../components/ui/Section.astro';
+import Heading from '../components/ui/Heading.astro';
+import DimensionLine from '../components/ui/DimensionLine.astro';
+import Button from '../components/ui/Button.astro';
+import { site } from '../lib/site';
+import { entrySlug } from '../lib/collections';
+
+/**
+ * A missing page is a dead end, so the job here is to offer the next step
+ * rather than apologise. The service list is generated, so it cannot rot into
+ * a page of broken links the way a hand-written one would.
+ */
+const services = await getCollection('services', ({ data }) => !data.draft);
+services.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout
+	title="Page not found"
+	description="That page does not exist. Here is where everything else lives."
+	noindex
+>
+	<Section surface="muted" spacing="lg" width="wide" reveal={false}>
+		<DimensionLine label="Error 404" rule="both" class="mb-6 max-w-xs" />
+		<Heading level="h1" size="xl" display>
+			Nothing here.
+		</Heading>
+		<p class="mt-6 max-w-xl text-lg">
+			The page you were after has moved or never existed. Nothing is broken on your end.
+		</p>
+
+		<div class="mt-9 flex flex-wrap items-center gap-3">
+			<Button label="Back to home" href="/" style="primary" />
+			<Button
+				label={`Call ${site.contact.phone}`}
+				href={site.contact.phoneHref}
+				style="secondary"
+			/>
+		</div>
+	</Section>
+
+	<Section surface="light" spacing="md" width="wide">
+		<Heading level="h2" size="lg">
+			Try one of these.
+		</Heading>
+
+		<ul class="mt-10 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3">
+			{[
+				...services.map((s) => ({ label: s.data.title, href: `/services/${entrySlug(s.id)}` })),
+				{ label: 'Recent projects', href: '/#our-work' },
+				{ label: 'Book a measure', href: '/contact' },
+				{ label: 'Questions', href: '/faq' },
+			].map((link) => (
+				<li class="group relative border-t border-line pt-5">
+					<a
+						href={link.href}
+						class="font-heading text-lg font-semibold transition-colors hover:text-brand"
+					>
+						<span class="absolute inset-0" aria-hidden="true" />
+						{link.label}
+					</a>
+				</li>
+			))}
+		</ul>
+	</Section>
+</BaseLayout>

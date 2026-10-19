@@ -1,0 +1,88 @@
+---
+/**
+ * The breadcrumb trail as its own band, plus its structured data.
+ *
+ * Breadcrumbs are wayfinding chrome, not editor content: they belong to the
+ * route, sit at a fixed spot, and are derived (see `lib/breadcrumbs.ts`), so an
+ * editor can neither misplace them nor let a crumb drift from the page. The
+ * band shares the header's surface and hugs it with tight bottom spacing, so
+ * the two read as one continuous top region.
+ *
+ * Emitting the BreadcrumbList schema here, from the same list that renders the
+ * trail, means the markup and the schema can never disagree: search engines get
+ * exactly the trail the visitor sees.
+ */
+import type { Crumb } from '../../lib/breadcrumbs';
+import Section from './Section.astro';
+
+interface Props {
+	items: Crumb[];
+	/** Match the surface below when it is dark, so the trail stays legible. */
+	onDark?: boolean;
+}
+
+const { items = [], onDark = false } = Astro.props;
+
+const surface = onDark ? 'dark' : 'muted';
+const site = Astro.site ?? new URL(Astro.url.origin);
+
+// Only linked crumbs can carry a position in the schema; the current page is
+// included so the trail is complete.
+const jsonLd =
+	items.length > 0
+		? {
+				'@context': 'https://schema.org',
+				'@type': 'BreadcrumbList',
+				itemListElement: items.map((crumb, i) => ({
+					'@type': 'ListItem',
+					position: i + 1,
+					name: crumb.label,
+					...(crumb.href ? { item: new URL(crumb.href, site).href } : {}),
+				})),
+			}
+		: null;
+---
+
+{/* A lone crumb is not a trail; render nothing rather than a bare "Home". */}
+{items.length > 1 && (
+	<Section surface={surface} spacing="none" width="wide" reveal={false} class="pt-10 md:pt-12">
+		<nav aria-label="Breadcrumb">
+			{/*
+				Deliberately plain. The dimension-line eyebrow directly beneath is the
+				one "signature" device in the header; the breadcrumb stays quiet
+				wayfinding so it does not compete with or mirror it. Monospace and
+				tracking tie it to the type system; the separator is a light chevron,
+				not a shop-drawing tick.
+			*/}
+			<ol
+				class={`flex flex-wrap items-center gap-x-2.5 gap-y-1 font-mono text-[0.6875rem] uppercase tracking-[0.12em] ${
+					onDark ? 'text-current' : 'text-body'
+				}`}
+			>
+				{items.map((crumb, i) => (
+					<li class="flex items-center gap-2.5">
+						{i > 0 && (
+							<span class="opacity-30 select-none" aria-hidden="true">
+								›
+							</span>
+						)}
+						{crumb.href ? (
+							<a
+								href={crumb.href}
+								class={`transition-opacity hover:opacity-100 ${onDark ? 'opacity-60' : 'opacity-55'}`}
+							>
+								{crumb.label}
+							</a>
+						) : (
+							<span aria-current="page" class={onDark ? 'opacity-95' : 'text-ink opacity-90'}>
+								{crumb.label}
+							</span>
+						)}
+					</li>
+				))}
+			</ol>
+		</nav>
+	</Section>
+)}
+
+{jsonLd && <script type="application/ld+json" set:html={JSON.stringify(jsonLd)}></script>}

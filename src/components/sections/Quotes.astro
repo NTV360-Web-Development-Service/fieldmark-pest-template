@@ -1,0 +1,139 @@
+---
+import type { Quotes } from './Quotes.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = Quotes;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	items = [],
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+const starColor = onDark ? 'fill-accent' : 'fill-accent-ink';
+const dimStar = 'fill-current opacity-15';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading) && (
+		<header class="mb-14 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+		</header>
+	)}
+
+	<ul class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+		{items.map((item) => (
+			<li class="group h-full">
+				{/* figure/figcaption so the attribution stays tied to the quote.
+					The hover target is the stationary <li> (`group`), not the figure --
+					if the figure drove its own hover, lifting it on hover would slide its
+					edge out from under the cursor and cause a flickering up/down loop. */}
+				<figure
+					class={`relative flex h-full flex-col overflow-hidden rounded-(--radius-media) border p-8 pt-9 transition-[transform,box-shadow,border-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:-translate-y-1.5 ${
+						onDark
+							? 'border-current/15 bg-current/[0.06] group-hover:border-accent/50'
+							: 'border-line bg-surface shadow-[0_1px_2px_rgba(20,18,15,0.04)] group-hover:border-accent-ink/30 group-hover:shadow-[0_24px_48px_-20px_rgba(20,18,15,0.28)]'
+					}`}
+				>
+					{/* Brass top edge -- a thin accent bar that gives each card an anchor
+						and a touch of colour against the plain ground. */}
+					<span
+						aria-hidden="true"
+						class={`absolute inset-x-0 top-0 h-1 origin-left scale-x-0 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-x-100 ${
+							onDark ? 'bg-accent' : 'bg-accent-ink'
+						}`}
+					>
+					</span>
+
+					{/* Oversized quotation mark as a warm background flourish, clipped by
+						the card. Sits behind the text (‑z) so it reads as texture, not a
+						character in the copy. */}
+					<span
+						aria-hidden="true"
+						class={`pointer-events-none absolute -top-8 right-2 font-display text-[9rem] leading-none select-none ${
+							onDark ? 'text-accent/[0.12]' : 'text-accent-ink/[0.08]'
+						}`}
+					>
+						&rdquo;
+					</span>
+
+					{/* Header: stars + a Google source badge. The badge signals the
+						reviews are real Google reviews -- credibility and colour at once. */}
+					<div class="relative mb-5 flex min-h-6 items-center justify-between">
+						{item.rating !== undefined ? (
+							<div class="flex gap-1" role="img" aria-label={`${item.rating} out of 5`}>
+								{Array.from({ length: 5 }, (_, i) => (
+									<svg
+										viewBox="0 0 20 20"
+										class={`h-[1.125rem] w-[1.125rem] ${i < Math.round(item.rating ?? 0) ? starColor : dimStar}`}
+										aria-hidden="true"
+									>
+										<path d="M10 1.5l2.6 5.3 5.9.9-4.2 4.1 1 5.8L10 14.9 4.7 17.6l1-5.8L1.5 7.7l5.9-.9z" />
+									</svg>
+								))}
+							</div>
+						) : (
+							<span />
+						)}
+						{/* Google 'G' -- the four-colour mark, inline so it stays self-contained. */}
+						<svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" aria-label="Posted on Google">
+							<path fill="#4285F4" d="M23.5 12.3c0-.8-.1-1.6-.2-2.3H12v4.5h6.5a5.6 5.6 0 0 1-2.4 3.6v3h3.9c2.3-2.1 3.5-5.2 3.5-8.8z" />
+							<path fill="#34A853" d="M12 24c3.2 0 6-1.1 8-2.9l-3.9-3c-1.1.7-2.5 1.2-4.1 1.2-3.1 0-5.8-2.1-6.7-5H1.3v3.1A12 12 0 0 0 12 24z" />
+							<path fill="#FBBC05" d="M5.3 14.3a7.2 7.2 0 0 1 0-4.6V6.6H1.3a12 12 0 0 0 0 10.8l4-3.1z" />
+							<path fill="#EA4335" d="M12 4.8c1.8 0 3.3.6 4.6 1.8l3.4-3.4A12 12 0 0 0 12 0 12 12 0 0 0 1.3 6.6l4 3.1c.9-2.9 3.6-4.9 6.7-4.9z" />
+						</svg>
+					</div>
+
+					{/*
+						flex-1 pushes the attribution to the card foot, so every card's name
+						row sits at the same height regardless of quote length. line-clamp
+						caps a runaway Google review at six lines without breaking the grid.
+					*/}
+					<blockquote class="relative flex-1 text-[1.0625rem] leading-[1.6] text-current/90 [display:-webkit-box] [-webkit-box-orient:vertical] [-webkit-line-clamp:6] overflow-hidden">
+						{item.quote}
+					</blockquote>
+
+					<figcaption class={`relative mt-7 flex items-center gap-3.5 border-t pt-5 ${onDark ? 'border-current/15' : 'border-line'}`}>
+						{/* Monogram avatar with a soft accent ring -- replace with the
+							reviewer's Google photo when the feed provides one; the initial is
+							the no-photo fallback. */}
+						<span
+							aria-hidden="true"
+							class={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-sm font-semibold ring-2 ring-offset-2 ${
+								onDark
+									? 'bg-accent text-accent-fg ring-accent/30 ring-offset-transparent'
+									: 'bg-brand text-brand-fg ring-brand/15 ring-offset-surface'
+							}`}
+						>
+							{item.name.trim().charAt(0)}
+						</span>
+						<span class="min-w-0">
+							<span class="block truncate text-sm font-semibold text-current">{item.name}</span>
+							{item.location && (
+								<span class="mt-0.5 block truncate font-mono text-[0.6875rem] uppercase tracking-[0.14em] opacity-60">
+									{item.location}
+								</span>
+							)}
+						</span>
+					</figcaption>
+				</figure>
+			</li>
+		))}
+	</ul>
+</Section>

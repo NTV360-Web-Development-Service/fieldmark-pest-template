@@ -1,0 +1,151 @@
+---
+import type { MediaCompare } from './MediaCompare.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = MediaCompare;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	display = 'slider',
+	items = [],
+	beforeLabel = 'Before',
+	afterLabel = 'After',
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+const isSlider = display === 'slider';
+
+const chip =
+	'pointer-events-none absolute top-4 z-10 rounded-(--radius-brand) bg-dark/75 px-3 py-1.5 font-mono text-[0.625rem] uppercase tracking-[0.14em] text-dark-fg backdrop-blur-sm';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-12 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	<ul class={`grid gap-10 ${items.length > 1 ? 'lg:grid-cols-2' : ''}`}>
+		{items.map((item, i) => (
+			<li>
+				<figure>
+					{isSlider ? (
+						<div class="relative overflow-hidden rounded-(--radius-media) select-none" data-compare>
+							<span class={`${chip} left-4`}>{beforeLabel}</span>
+							<span class={`${chip} right-4`}>{afterLabel}</span>
+
+							<img
+								src={item.before.src}
+								alt={item.before.alt}
+								loading="lazy"
+								class="aspect-4/3 w-full object-cover"
+							/>
+
+							{/*
+									The after image is clipped rather than resized, so both
+									stay aligned no matter where the handle sits.
+								*/}
+							<div
+								class="absolute inset-0 overflow-hidden"
+								data-compare-overlay
+								style="clip-path: inset(0 50% 0 0)"
+							>
+								<img
+									src={item.after.src}
+									alt={item.after.alt}
+									loading="lazy"
+									class="aspect-4/3 w-full object-cover"
+								/>
+							</div>
+
+							<div
+								class="pointer-events-none absolute inset-y-0 w-0.5 bg-surface"
+								data-compare-line
+								style="left: 50%"
+							/>
+
+							{/*
+									A range input is the control: draggable with a mouse,
+									operable with arrow keys, and announced as a slider without
+									any ARIA of its own.
+								*/}
+							<label class="absolute inset-0 flex cursor-ew-resize items-center">
+								<span class="sr-only">Reveal the {afterLabel.toLowerCase()} image</span>
+								<input
+									type="range"
+									min="0"
+									max="100"
+									value="50"
+									data-compare-input
+									class="h-full w-full cursor-ew-resize appearance-none bg-transparent focus-visible:outline-none [&::-moz-range-thumb]:h-10 [&::-moz-range-thumb]:w-10 [&::-moz-range-thumb]:cursor-ew-resize [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:border-2 [&::-moz-range-thumb]:border-surface [&::-moz-range-thumb]:bg-brand [&::-webkit-slider-thumb]:h-10 [&::-webkit-slider-thumb]:w-10 [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:cursor-ew-resize [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:border-2 [&::-webkit-slider-thumb]:border-surface [&::-webkit-slider-thumb]:bg-brand"
+								/>
+							</label>
+						</div>
+					) : (
+						<div class="grid grid-cols-2 gap-3">
+							<div class="relative">
+								<span class={`${chip} left-4`}>{beforeLabel}</span>
+								<img
+									src={item.before.src}
+									alt={item.before.alt}
+									loading="lazy"
+									class="aspect-4/3 w-full rounded-(--radius-media) object-cover"
+								/>
+							</div>
+							<div class="relative">
+								<span class={`${chip} left-4`}>{afterLabel}</span>
+								<img
+									src={item.after.src}
+									alt={item.after.alt}
+									loading="lazy"
+									class="aspect-4/3 w-full rounded-(--radius-media) object-cover"
+								/>
+							</div>
+						</div>
+					)}
+
+					{item.caption && <figcaption class="mt-4 text-sm opacity-75">{item.caption}</figcaption>}
+				</figure>
+			</li>
+		))}
+	</ul>
+</Section>
+
+<script>
+	// Without JavaScript the overlay stays clipped at 50%, which still shows
+	// both images. The slider only makes that adjustable.
+	document.querySelectorAll('[data-compare]').forEach((root) => {
+		const input = root.querySelector('[data-compare-input]');
+		const overlay = root.querySelector('[data-compare-overlay]');
+		const line = root.querySelector('[data-compare-line]');
+		if (!(input instanceof HTMLInputElement) || !(overlay instanceof HTMLElement)) return;
+
+		const apply = () => {
+			const pct = Number(input.value);
+			overlay.style.clipPath = `inset(0 ${100 - pct}% 0 0)`;
+			if (line instanceof HTMLElement) line.style.left = `${pct}%`;
+		};
+
+		input.addEventListener('input', apply);
+		apply();
+	});
+</script>

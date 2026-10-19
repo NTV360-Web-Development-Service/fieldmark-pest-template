@@ -1,0 +1,158 @@
+---
+import { getCollection } from 'astro:content';
+import type { SearchBlock } from './SearchBlock.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { site } from '../../lib/site';
+
+type Props = SearchBlock;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	label = 'Town or postcode',
+	placeholder = 'e.g. 85251 or Scottsdale',
+	emptyNote = 'We may still cover you. Call the shop and ask.',
+	anchor,
+	surface = 'muted',
+	spacing = 'md',
+	width = 'default',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+const locations = await getCollection('locations', ({ data }) =>
+	import.meta.env.PROD ? !data.draft : true
+);
+locations.sort((a, b) => a.data.order - b.data.order || a.data.city.localeCompare(b.data.city));
+
+// Everything searchable is baked into a data attribute at build time, so the
+// lookup needs no request and works offline. The list is small by nature.
+const rows = locations.map((l) => ({
+	id: l.id,
+	city: l.data.city,
+	region: l.data.region,
+	serves: l.data.serves,
+	postalCodes: l.data.postalCodes,
+	haystack: [l.data.city, l.data.region, ...l.data.serves, ...l.data.postalCodes]
+		.join(' ')
+		.toLowerCase(),
+}));
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-8 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	<div data-area-search>
+		<div class="max-w-md">
+			<label
+				for="area-search-input"
+				class="mb-2 block font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em]"
+			>
+				{label}
+			</label>
+			<input
+				type="search"
+				id="area-search-input"
+				placeholder={placeholder}
+				autocomplete="postal-code"
+				data-area-input
+				aria-describedby="area-search-status"
+				class="w-full rounded-(--radius-brand) border border-line bg-surface px-4 py-3 text-base text-ink placeholder:text-body/50 focus:border-brand focus:outline-none"
+			/>
+		</div>
+
+		{/* Announced to screen readers as results change, not on every keystroke. */}
+		<p
+			id="area-search-status"
+			role="status"
+			aria-live="polite"
+			class="mt-4 text-sm opacity-75"
+			data-area-status
+		>
+			Showing all {rows.length} service areas.
+		</p>
+
+		<ul class="mt-8 grid gap-x-8 gap-y-6 sm:grid-cols-2 lg:grid-cols-3" data-area-list>
+			{rows.map((row) => (
+				<li
+					class={`group relative border-t pt-5 ${onDark ? 'border-current/20' : 'border-line'}`}
+					data-haystack={row.haystack}
+				>
+					<a
+						href={`/locations/${row.id}`}
+						class="font-heading text-lg font-semibold transition-colors hover:text-brand"
+					>
+						<span class="absolute inset-0" aria-hidden="true" />
+						{row.city}, {row.region}
+					</a>
+					{row.serves.length > 0 && (
+						<p class="mt-2 text-sm leading-relaxed opacity-75">{row.serves.join(', ')}</p>
+					)}
+				</li>
+			))}
+		</ul>
+
+		<p class="mt-8 text-sm" hidden data-area-empty>
+			{emptyNote}{' '}
+			<a href={site.contact.phoneHref} class="font-semibold underline underline-offset-4">
+				{site.contact.phone}
+			</a>
+		</p>
+	</div>
+</Section>
+
+<script>
+	// Filtering only. With no JavaScript every area is already listed and every
+	// link works, so the input is an accelerator rather than a gate.
+	document.querySelectorAll('[data-area-search]').forEach((root) => {
+		const input = root.querySelector('[data-area-input]');
+		const status = root.querySelector('[data-area-status]');
+		const empty = root.querySelector('[data-area-empty]');
+		const items = Array.from(root.querySelectorAll('[data-haystack]'));
+		if (!(input instanceof HTMLInputElement)) return;
+
+		const total = items.length;
+
+		const apply = () => {
+			const query = input.value.trim().toLowerCase();
+			let shown = 0;
+
+			items.forEach((item) => {
+				const match = query === '' || (item as HTMLElement).dataset.haystack?.includes(query);
+				(item as HTMLElement).hidden = !match;
+				if (match) shown++;
+			});
+
+			if (empty instanceof HTMLElement) empty.hidden = shown > 0;
+			if (status instanceof HTMLElement) {
+				status.textContent =
+					query === ''
+						? `Showing all ${total} service areas.`
+						: shown === 0
+							? 'No service areas match that.'
+							: `${shown} of ${total} service areas match.`;
+			}
+		};
+
+		input.addEventListener('input', apply);
+		// A search input can be cleared with the native X, which fires `search`.
+		input.addEventListener('search', apply);
+	});
+</script>

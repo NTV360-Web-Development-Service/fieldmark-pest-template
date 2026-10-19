@@ -1,0 +1,338 @@
+{
+  "title": "Financing",
+  "permalink": "https://modern-cabinets-template.vercel.app/financing",
+  "order": 30,
+  "draft": false,
+  "seo": {
+    "title": "Flexible Financing Options",
+    "description": "Payment plans for larger cabinet shelving jobs, with terms stated up front through a third-party lender.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "layout": "full",
+      "background": {
+        "kind": "image",
+        "image": {
+          "source": "upload",
+          "src": "/media/images/kitchen-hero.avif",
+          "alt": "Fitted kitchen shelving measured to the opening"
+        }
+      },
+      "eyebrow": "Payment plans",
+      "heading": "Flexible financing options.",
+      "body": "Do not let cost stand between you and the storage you actually need. On larger jobs we offer financing through a third-party lender, with terms stated before you book.",
+      "ctas": [
+        {
+          "label": "Book a free measure",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        },
+        {
+          "label": "Call the shop",
+          "href": "tel:+15550142200",
+          "style": "ghost",
+          "newTab": false
+        }
+      ],
+      "headingLevel": "h1"
+    },
+    {
+      "type": "media_split",
+      "headingLevel": "h2",
+      "eyebrow": "Flexible financing options",
+      "heading": "A new set of cabinets without the up-front hit.",
+      "body": "Reworking a kitchen or pantry is a real investment, and not everyone wants to pay for all of it in one go. Financing lets you spread a larger job over manageable monthly payments while the work is done properly the first time.\n\nYou get the fixed price first. Financing is a separate decision you make afterwards, with no application before you know the number.",
+      "image": {
+        "source": "upload",
+        "src": "/media/images/kitchen-island.avif",
+        "alt": "Finished fitted kitchen with custom cabinetry"
+      },
+      "imageSide": "right",
+      "bullets": [
+        {
+          "text": "Manageable monthly payments",
+          "desc": "Low, manageable payments structured to fit your budget, so a bigger job does not have to land all at once."
+        },
+        {
+          "text": "Fast approval process",
+          "desc": "The lender reviews most applications quickly, often within minutes, so scheduling does not wait on paperwork."
+        },
+        {
+          "text": "Flexible terms",
+          "desc": "Repayment runs over a range of terms, from short plans to longer ones, depending on what the lender offers you."
+        },
+        {
+          "text": "No hidden charges",
+          "desc": "The representative example and full terms come from the lender before anything is signed. No surprises at the end."
+        }
+      ],
+      "ctas": [
+        {
+          "label": "Apply for financing",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "pricing_tiers",
+      "headingLevel": "h2",
+      "eyebrow": "Ways to spread it",
+      "heading": "Pick the plan that fits the job.",
+      "intro": "These are the financing bands the lender typically offers on cabinet work, sized to the job. You get the fixed total first, then choose a term. Switch below to see it as a monthly payment or the full amount.",
+      "columns": "3",
+      "toggle": {
+        "primaryLabel": "Monthly",
+        "altLabel": "Total",
+        "note": "Longer terms mean a lower monthly payment"
+      },
+      "tiers": [
+        {
+          "name": "A single run",
+          "priceLabel": "From",
+          "price": "$65",
+          "priceUnit": "/mo",
+          "priceAlt": "$1,500",
+          "priceAltUnit": "total",
+          "note": "One wall of cabinets, pull-outs, or a pantry refit",
+          "features": [
+            "Fixed quote before you apply",
+            "6 to 12 month terms",
+            "Fast lender decision, often minutes",
+            "No early repayment fee"
+          ],
+          "cta": {
+            "label": "Get a quote",
+            "href": "/contact",
+            "style": "secondary",
+            "newTab": false
+          }
+        },
+        {
+          "name": "A whole kitchen",
+          "badge": "Most chosen",
+          "featured": true,
+          "priceLabel": "From",
+          "price": "$140",
+          "priceUnit": "/mo",
+          "priceAlt": "$4,000",
+          "priceAltUnit": "total",
+          "note": "Full kitchen or a large pantry and closet job",
+          "features": [
+            "Fixed quote before you apply",
+            "12 to 24 month terms",
+            "Lower monthly on a longer plan",
+            "No early repayment fee",
+            "Combine with any current offer"
+          ],
+          "cta": {
+            "label": "Get a quote",
+            "href": "/contact",
+            "style": "primary",
+            "newTab": false
+          }
+        },
+        {
+          "name": "The full remodel",
+          "priceLabel": "From",
+          "price": "$230",
+          "priceUnit": "/mo",
+          "priceAlt": "$8,000",
+          "priceAltUnit": "total",
+          "note": "Several rooms or a whole-home cabinet program",
+          "features": [
+            "Fixed quote before you apply",
+            "Up to 36 month terms",
+            "Staged so payments track the work",
+            "No early repayment fee",
+            "Dedicated designer through the job"
+          ],
+          "cta": {
+            "label": "Get a quote",
+            "href": "/contact",
+            "style": "secondary",
+            "newTab": false
+          }
+        }
+      ],
+      "footnote": "All plans include professional cabinet work by our own crew. Representative figures only: actual monthly payment, term and rate come from the third-party lender at application and depend on the quoted total and their affordability checks. Modern Cabinets LLC is not a lender and does not provide credit advice. A representative example and full terms are provided by the lender before any agreement is signed.",
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "steps",
+      "headingLevel": "h2",
+      "eyebrow": "How it works",
+      "heading": "How financing works.",
+      "steps": [
+        {
+          "title": "Get your fixed quote",
+          "body": "A designer measures every cabinet you want changed and leaves a fixed quote for the work. No application, no credit check yet."
+        },
+        {
+          "title": "Apply through the lender",
+          "body": "If you want to spread the cost, you apply to the third-party lender online or by phone. It only takes a few minutes."
+        },
+        {
+          "title": "Get a decision",
+          "body": "The lender reviews the application and decides, often within minutes. Approval, rates and terms come from them, not from us."
+        },
+        {
+          "title": "Book the work",
+          "body": "Once approved, we schedule the job and you pay over time in manageable monthly payments."
+        }
+      ],
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "accordion",
+      "headingLevel": "h2",
+      "eyebrow": "Good to know",
+      "heading": "Financing questions, answered.",
+      "items": [
+        {
+          "question": "Who qualifies for financing?",
+          "answer": "Qualification is decided by the lender based on their own affordability and status checks. We are not a lender and do not see your credit file, so the decision is not ours to make."
+        },
+        {
+          "question": "How do I apply?",
+          "answer": "You apply directly with the lender after you have your fixed quote, either online or over the phone. We can point you to the application, but the agreement is between you and them."
+        },
+        {
+          "question": "Is there a minimum job size?",
+          "answer": "Financing is aimed at larger jobs. If a payment plan is the only way a small job makes sense, that is usually a sign the job is bigger than it needs to be, and we will say so."
+        },
+        {
+          "question": "Can I use financing with a current offer?",
+          "answer": "Yes. Any special offer is applied to the quoted total first, and financing is then arranged on the final price. Offers cannot be combined with each other unless stated."
+        },
+        {
+          "question": "How long does approval take?",
+          "answer": "The lender reviews most applications quickly, often within minutes, though a decision can take longer if they need more information from you."
+        },
+        {
+          "question": "Are there prepayment penalties?",
+          "answer": "No. You can clear the balance early whenever you like without a penalty. Full terms are always provided by the lender before you sign."
+        }
+      ],
+      "surface": "muted",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "form_block",
+      "headingLevel": "h2",
+      "eyebrow": "No obligation",
+      "heading": "Start with a free measure.",
+      "intro": "Tell us which rooms you are thinking about and we will call to arrange a time. You get the fixed quote first, then decide whether to finance it.",
+      "endpoint": "https://formspree.io/f/REPLACE_WITH_YOUR_ID",
+      "submitLabel": "Request a call",
+      "fields": [
+        {
+          "kind": "text",
+          "name": "first_name",
+          "label": "First name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "given-name"
+        },
+        {
+          "kind": "text",
+          "name": "last_name",
+          "label": "Last name",
+          "required": true,
+          "width": "half",
+          "autocomplete": "family-name"
+        },
+        {
+          "kind": "email",
+          "name": "email",
+          "label": "Email",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "tel",
+          "name": "phone",
+          "label": "Phone",
+          "required": true,
+          "width": "half"
+        },
+        {
+          "kind": "text",
+          "name": "postcode",
+          "label": "Postcode",
+          "required": true,
+          "width": "half",
+          "autocomplete": "postal-code"
+        },
+        {
+          "kind": "select",
+          "name": "rooms",
+          "label": "Which room",
+          "required": true,
+          "width": "half",
+          "choices": ["Kitchen", "Pantry", "Bathroom", "Closets", "More than one"]
+        },
+        {
+          "kind": "textarea",
+          "name": "message",
+          "label": "Anything we should know",
+          "placeholder": "Cabinet sizes, awkward corners, access notes",
+          "rows": 5,
+          "required": false
+        },
+        {
+          "kind": "checkbox",
+          "name": "consent",
+          "label": "You can text me about this enquiry. See the [privacy policy](/privacy).",
+          "required": true
+        },
+        {
+          "kind": "hidden",
+          "name": "source",
+          "value": "financing-page"
+        }
+      ],
+      "footnote": "We use your details to arrange the consultation and nothing else. No lists, no resale.",
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "contact_details",
+      "headingLevel": "h2",
+      "eyebrow": "Serving your area",
+      "heading": "Find the shop.",
+      "showPhone": true,
+      "showEmail": true,
+      "showAddress": true,
+      "showHours": true,
+      "extra": [
+        {
+          "label": "Service area",
+          "value": "Phoenix valley, within 40 miles of the shop"
+        }
+      ],
+      "media": {
+        "kind": "embed",
+        "url": "https://maps.google.com/maps?q=1420+Millwork+Ave,+Phoenix,+AZ+85004&z=15&output=embed",
+        "title": "Map showing the Modern Cabinets workshop in Phoenix",
+        "ratio": "4/3"
+      },
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

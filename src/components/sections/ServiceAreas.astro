@@ -1,0 +1,149 @@
+---
+import { getCollection } from 'astro:content';
+import type { ServiceAreas } from './ServiceAreas.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Media from '../ui/Media.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { childLevel } from '../../lib/section-base';
+
+type Props = ServiceAreas;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	columns = '3',
+	showServed = true,
+	showPostalCodes = true,
+	map,
+	footnote,
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+const locations = await getCollection('locations', ({ data }) =>
+	import.meta.env.PROD ? !data.draft : true
+);
+locations.sort((a, b) => a.data.order - b.data.order || a.data.city.localeCompare(b.data.city));
+
+// Grouped by region so a multi-state business reads correctly without any
+// extra configuration.
+const regions = [...new Set(locations.map((l) => l.data.region))];
+
+const gridCols = {
+	'2': 'sm:grid-cols-2',
+	'3': 'sm:grid-cols-2 lg:grid-cols-3',
+	'4': 'sm:grid-cols-2 lg:grid-cols-4',
+};
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro || map) && (
+		<div class={map ? 'mb-12 grid items-center gap-12 lg:grid-cols-2 lg:gap-16' : 'mb-12'}>
+			{(eyebrow || heading || intro) && (
+				<header class={map ? 'max-w-xl' : 'max-w-2xl'}>
+					{eyebrow && (
+						<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+					)}
+					{heading && (
+						<Heading level={headingLevel} size="lg">
+							{heading}
+						</Heading>
+					)}
+					{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+				</header>
+			)}
+
+			{map && <Media media={map} class="rounded-(--radius-media)" />}
+		</div>
+	)}
+
+	{locations.length === 0 ? (
+		<p class="text-sm opacity-70">No service areas published yet.</p>
+	) : (
+		regions.map((region) => (
+			<div class="mb-12 last:mb-0">
+				{regions.length > 1 && (
+					<p class="mb-6 font-mono text-[0.6875rem] uppercase tracking-[0.14em] opacity-65">
+						{region}
+					</p>
+				)}
+
+				<ul class={`grid gap-5 ${gridCols[columns]}`}>
+					{locations
+						.filter((l) => l.data.region === region)
+						.map((location) => (
+							<li
+								class={`group relative flex flex-col p-6 transition-[transform] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1`}
+							>
+								{/* Shop-drawing top rule instead of a full border -- a hairline
+									across the card head that thickens to a brass accent on hover,
+									the same top-edge device the quote cards use. */}
+								<span
+									aria-hidden="true"
+									class={`absolute inset-x-0 top-0 h-px transition-[height,background-color] duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] ${
+										onDark
+											? 'bg-current/20 group-hover:h-1 group-hover:bg-accent'
+											: 'bg-line group-hover:h-1 group-hover:bg-accent-ink'
+									}`}
+								>
+								</span>
+
+								<Heading level={childLevel(headingLevel, Boolean(heading))} size="sm">
+									<a
+										href={`/locations/${location.id}`}
+										class="flex items-center justify-between gap-2 transition-colors group-hover:text-brand"
+									>
+										<span class="absolute inset-0" aria-hidden="true" />
+										<span>{location.data.city}</span>
+										{/* Arrow in a circle -- an unambiguous 'go to page' button that's
+											visible at rest and fills with the brand colour on hover. */}
+										<span
+											aria-hidden="true"
+											class={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full transition-colors duration-300 ${
+												onDark
+													? 'bg-current/10 text-current group-hover:bg-accent group-hover:text-accent-fg'
+													: 'bg-brand/[0.07] text-brand group-hover:bg-brand group-hover:text-brand-fg'
+											}`}
+										>
+											<svg viewBox="0 0 16 16" class="h-3.5 w-3.5 transition-transform duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0.5">
+												<path
+													fill="none"
+													stroke="currentColor"
+													stroke-width="1.75"
+													stroke-linecap="round"
+													stroke-linejoin="round"
+													d="M3 8h10M9 4l4 4-4 4"
+												/>
+											</svg>
+										</span>
+									</a>
+								</Heading>
+
+								{showServed && location.data.serves.length > 0 && (
+									<p class="mt-3 text-sm leading-relaxed opacity-75">
+										{location.data.serves.join(', ')}
+									</p>
+								)}
+
+								{showPostalCodes && location.data.postalCodes.length > 0 && (
+									<p class="mt-2 font-mono text-[0.625rem] uppercase tracking-[0.12em] opacity-55">
+										{location.data.postalCodes.join(' / ')}
+									</p>
+								)}
+							</li>
+						))}
+				</ul>
+			</div>
+		))
+	)}
+
+	{footnote && <Prose html={footnote} invert={onDark} size="sm" class="mt-10 opacity-70" />}
+</Section>

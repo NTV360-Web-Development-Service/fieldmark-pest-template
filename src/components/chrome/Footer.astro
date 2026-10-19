@@ -1,0 +1,148 @@
+---
+import { site } from '../../lib/site';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+const year = new Date().getFullYear();
+const address = site.contact.address;
+---
+
+<footer class="bg-dark text-dark-fg">
+	<div class="mx-auto w-full max-w-[104rem] px-5 sm:px-8 lg:px-12">
+		{/*
+			The footer opens on the site's signature device -- a drafted dimension
+			line -- so it reads as the closing panel of the same shop drawing rather
+			than a detached slab. Muted rule spanning the measure; the brass is held
+			back for a single accent (the phone number) rather than lining the page.
+		*/}
+		<DimensionLine label={site.tagline ?? site.name} rule="full" class="py-9 text-dark-fg/40" />
+
+		<div class="grid gap-x-12 gap-y-12 pb-14 lg:grid-cols-[1.1fr_2fr]">
+			<div>
+				{site.logo ? (
+					/*
+						The horizontal logo is drawn dark (green icon, near-black wordmark)
+						for light headers. On this near-black footer that would vanish, so
+						we invert it to a light tone -- the same cream the text wordmark
+						used -- rather than shipping a second asset.
+					*/
+					<img
+						src={site.logo.src}
+						alt={site.logo.alt}
+						class="h-14 w-auto brightness-0 invert"
+					/>
+				) : (
+					<p class="font-display text-3xl font-bold uppercase tracking-tight text-dark-fg">
+						{site.name}
+					</p>
+				)}
+
+				<div class="mt-7 space-y-4 text-sm">
+					{/*
+						Contact rows are labelled like spec-sheet callouts: a mono
+						measurement-register key sitting above each value, echoing the
+						mega-menu column heads and dimension eyebrows used sitewide.
+					*/}
+					<div>
+						<span class="mono-label block text-dark-fg/45">Call</span>
+						<a
+							href={site.contact.phoneHref}
+							class="mt-1 inline-block font-display text-xl font-bold tracking-tight text-accent transition-colors hover:text-dark-fg"
+						>
+							{site.contact.phone}
+						</a>
+					</div>
+
+					{site.contact.email && (
+						<div>
+							<span class="mono-label block text-dark-fg/45">Write</span>
+							<a
+								href={`mailto:${site.contact.email}`}
+								class="mt-1 inline-block text-dark-fg/85 underline-offset-4 transition-colors hover:text-accent hover:underline"
+							>
+								{site.contact.email}
+							</a>
+						</div>
+					)}
+
+					{address && (
+						<div>
+							<span class="mono-label block text-dark-fg/45">Visit</span>
+							<address class="mt-1 not-italic leading-relaxed text-dark-fg/85">
+								{address.street}
+								<br />
+								{address.city}, {address.region} {address.postalCode}
+							</address>
+						</div>
+					)}
+
+					{site.contact.hours && (
+						<div>
+							<span class="mono-label block text-dark-fg/45">Hours</span>
+							<p class="mt-1 text-dark-fg/85">{site.contact.hours}</p>
+						</div>
+					)}
+				</div>
+
+				{site.social.length > 0 && (
+					<ul class="mt-8 flex gap-3">
+						{site.social.map((s) => (
+							<li>
+								<a
+									href={s.href}
+									class="inline-flex items-center rounded-(--radius-brand) border border-current/20 px-3.5 py-1.5 font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-dark-fg/80 transition-colors hover:border-accent hover:text-accent"
+									target="_blank"
+									rel="noopener noreferrer"
+								>
+									{s.platform}
+								</a>
+							</li>
+						))}
+					</ul>
+				)}
+			</div>
+
+			{/*
+				Link columns carry the same brass dimension-stub head as the header
+				mega-menu, and a hairline vertical rule between columns (mega-menu's
+				`before:` device) so the two menus read as one system.
+			*/}
+			<div class="grid gap-x-8 gap-y-10 sm:grid-cols-3">
+				{site.footer.columns.map((column) => (
+					<div class="relative sm:pl-8 sm:before:absolute sm:before:inset-y-1 sm:before:left-0 sm:before:w-px sm:before:bg-current/12 sm:first:pl-0 sm:first:before:hidden">
+						<p class="mono-label mb-4 text-dark-fg/45">{column.title}</p>
+						<ul class="space-y-2.5 text-sm">
+							{column.links.map((link) => (
+								<li>
+									<a
+										href={link.href}
+										class="text-dark-fg/80 underline-offset-4 transition-colors hover:text-accent hover:underline"
+									>
+										{link.label}
+									</a>
+								</li>
+							))}
+						</ul>
+					</div>
+				))}
+			</div>
+		</div>
+
+		<div class="flex flex-col gap-4 border-t border-current/12 py-8 text-xs text-dark-fg/60 sm:flex-row sm:items-center sm:justify-between">
+			<p>
+				&copy; {year} {site.legalName ?? site.name}. All rights reserved.
+			</p>
+			<ul class="flex flex-wrap gap-x-6 gap-y-2">
+				{site.footer.legal.map((link) => (
+					<li>
+						<a
+							href={link.href}
+							class="underline-offset-4 transition-colors hover:text-accent hover:underline"
+						>
+							{link.label}
+						</a>
+					</li>
+				))}
+			</ul>
+		</div>
+	</div>
+</footer>

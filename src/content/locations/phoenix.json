@@ -1,0 +1,289 @@
+{
+  "title": "Phoenix, AZ",
+  "summary": "Glide-out cabinet shelving measured and installed across Phoenix.",
+  "city": "Phoenix",
+  "region": "AZ",
+  "postalCodes": ["85004", "85006", "85008", "85012"],
+  "serves": ["Downtown", "Arcadia", "Encanto", "Maryvale"],
+  "image": {
+    "source": "upload",
+    "src": "/media/images/phoenix.avif",
+    "alt": "Kitchen cabinetry in Phoenix"
+  },
+  "order": 10,
+  "draft": false,
+  "customLayout": true,
+  "seo": {
+    "title": "Custom Cabinet Shelving in Phoenix, AZ",
+    "description": "Glide-out cabinet shelving measured on site and installed across Phoenix in one visit. Book a free in-home consultation.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "hero",
+      "headingLevel": "h1",
+      "layout": "full",
+      "background": {
+        "kind": "image",
+        "image": {
+          "source": "upload",
+          "src": "/media/images/phoenix.avif",
+          "alt": "Custom kitchen cabinetry installed in a Phoenix home"
+        }
+      },
+      "eyebrow": "Phoenix, AZ",
+      "heading": "Cabinet shelving built to fit your Phoenix home.",
+      "body": "Glide-out shelves measured on site and installed in one visit — across Downtown, Arcadia, Encanto, and Maryvale.",
+      "ctas": [
+        { "label": "Free consultation", "href": "/contact", "style": "primary", "newTab": false },
+        { "label": "Call (555) 014-2200", "href": "tel:+15550142200", "style": "secondary", "newTab": false }
+      ],
+      "rating": { "value": 4.8, "count": 2431, "label": "Phoenix reviews" },
+      "badges": ["Licensed and insured", "Measured in your home", "Installed in one visit"],
+      "spacing": "lg",
+      "width": "wide"
+    },
+    {
+      "type": "media_split",
+      "headingLevel": "h2",
+      "eyebrow": "About the area",
+      "heading": "Serving Phoenix and the surrounding valley.",
+      "body": "We cover all of Phoenix and the surrounding area, including Downtown, Arcadia, Encanto, and Maryvale. For fifteen years we have fitted glide-out shelves into valley kitchens, measuring the cabinet you already own and building to that exact opening.\n\nEvery shelf is measured in your home and cut to that opening, so an older Phoenix kitchen gets the same fit as a new build. Postcodes served include 85004, 85006, 85008, and 85012.",
+      "image": {
+        "source": "upload",
+        "src": "/media/images/phoenix.avif",
+        "alt": "Custom kitchen cabinetry installed in a Phoenix home"
+      },
+      "imageSide": "left",
+      "bullets": [
+        {
+          "icon": "user",
+          "text": "Family-owned and operated in the valley since 2011"
+        },
+        {
+          "icon": "wrench",
+          "text": "12,000+ shelves measured, built and installed"
+        },
+        {
+          "icon": "star",
+          "text": "Rated 4.8 out of 5 across 2,431 verified reviews"
+        },
+        {
+          "icon": "badge",
+          "text": "Backed by a lifetime warranty on every glide"
+        }
+      ],
+      "ctas": [
+        {
+          "label": "More about us",
+          "href": "/about",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "promo_cards",
+      "headingLevel": "h2",
+      "eyebrow": "How we help",
+      "heading": "Everything a Phoenix cabinet needs.",
+      "columns": "3",
+      "cards": [
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/shelf-detail.avif",
+            "alt": "Full-extension glide-out shelf holding ceramic dishes"
+          },
+          "icon": "wrench",
+          "badge": "Lifetime warranty",
+          "title": "Maintenance",
+          "subtitle": "For as low as",
+          "price": {
+            "label": "Tune-ups from",
+            "value": "$0",
+            "unit": "on glides, for life"
+          },
+          "body": "Tune-ups, re-alignment, and replacement glides for shelving we have already installed across Phoenix.",
+          "cta": { "label": "Maintenance plans", "href": "/maintenance", "style": "primary", "newTab": false },
+          "phone": "(555) 014-2200",
+          "phoneHref": "tel:+15550142200"
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-island.avif",
+            "alt": "Kitchen with a dark island and glide-out storage"
+          },
+          "icon": "dollar",
+          "badge": "Limited time",
+          "title": "Financing",
+          "subtitle": "Financing available",
+          "body": "Spread the cost of a full kitchen refit over fixed monthly payments with no surprises. 0% APR for the first twelve months.",
+          "cta": { "label": "See financing", "href": "/financing", "style": "primary", "newTab": false },
+          "phone": "(555) 014-2200",
+          "phoneHref": "tel:+15550142200"
+        },
+        {
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-hero.avif",
+            "alt": "White shaker kitchen with glide-out storage"
+          },
+          "icon": "badge",
+          "badge": "This month",
+          "title": "Free consultation",
+          "subtitle": "New customers",
+          "body": "Free in-home design consultation when you book a Phoenix measure before the end of the month.",
+          "cta": { "label": "Book a consultation", "href": "/contact", "style": "primary", "newTab": false },
+          "phone": "(555) 014-2200",
+          "phoneHref": "tel:+15550142200"
+        }
+      ],
+      "surface": "muted",
+      "spacing": "lg",
+      "width": "wide"
+    },
+    {
+      "type": "collection_feed",
+      "headingLevel": "h2",
+      "eyebrow": "What we fit",
+      "heading": "Services in Phoenix.",
+      "intro": "The same measured-and-built approach, in every room of your Phoenix home.",
+      "source": "services",
+      "layout": "grid",
+      "columns": "4",
+      "limit": 8,
+      "showImage": false,
+      "showSummary": true,
+      "showPrice": false,
+      "moreLabel": "All services",
+      "moreHref": "/services",
+      "moreStyle": "secondary",
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "cta_banner",
+      "headingLevel": "h2",
+      "eyebrow": "No obligation",
+      "heading": "Book a free measure in Phoenix.",
+      "body": "About an hour on site, and a fixed quote before anything is built. Call (555) 014-2200 or book online.",
+      "ctas": [
+        { "label": "Book a consultation", "href": "/contact", "style": "primary", "newTab": false }
+      ],
+      "surface": "brand",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "accordion",
+      "headingLevel": "h2",
+      "eyebrow": "Local questions",
+      "heading": "Working in Phoenix.",
+      "items": [
+        {
+          "question": "Do you charge extra to come to Phoenix?",
+          "answer": "No. Phoenix is inside our standard service area, so travel is not billed separately."
+        },
+        {
+          "question": "How quickly can you get to Phoenix?",
+          "answer": "Usually within a week for the consultation, and about two weeks from measure to installation."
+        },
+        {
+          "question": "Which parts of Phoenix do you cover?",
+          "answer": "All of it, including Downtown, Arcadia, Encanto, and Maryvale."
+        }
+      ],
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "quotes",
+      "headingLevel": "h2",
+      "eyebrow": "Reviews",
+      "heading": "What Phoenix homeowners say.",
+      "items": [
+        {
+          "quote": "The glide-outs they built for our Arcadia kitchen fit like they were always there. Clean install, no mess.",
+          "name": "Dana R.",
+          "location": "Arcadia, Phoenix",
+          "rating": 5
+        },
+        {
+          "quote": "Measured one week, installed the next. The quote never moved. Exactly what was promised.",
+          "name": "Marcus T.",
+          "location": "Encanto, Phoenix",
+          "rating": 5
+        },
+        {
+          "quote": "We finally use the deep corner cabinet we ignored for years. Worth every dollar.",
+          "name": "Priya S.",
+          "location": "Downtown Phoenix",
+          "rating": 5
+        }
+      ],
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "cta_banner",
+      "headingLevel": "h2",
+      "eyebrow": "Ready when you are",
+      "heading": "Get your fixed quote.",
+      "ctas": [
+        { "label": "Free consultation", "href": "/contact", "style": "primary", "newTab": false }
+      ],
+      "surface": "dark",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "form_block",
+      "headingLevel": "h2",
+      "eyebrow": "Get in touch",
+      "heading": "Request a Phoenix measure.",
+      "intro": "Tell us a little about the cabinets you want changed and we'll be in touch to book a visit.",
+      "endpoint": "https://formspree.io/f/your-form-id",
+      "submitLabel": "Request a measure",
+      "successNote": "Thanks — we'll be in touch within one business day.",
+      "fields": [
+        { "kind": "text", "name": "name", "label": "Full name", "required": true, "width": "half", "autocomplete": "name" },
+        { "kind": "tel", "name": "phone", "label": "Phone", "required": true, "width": "half" },
+        { "kind": "email", "name": "email", "label": "Email", "required": true, "width": "half" },
+        { "kind": "text", "name": "postcode", "label": "Postcode", "width": "half", "autocomplete": "postal-code" },
+        { "kind": "textarea", "name": "message", "label": "What would you like changed?", "rows": 5 }
+      ],
+      "footnote": "We only use your details to arrange your consultation.",
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "service_areas",
+      "headingLevel": "h2",
+      "eyebrow": "Service map",
+      "heading": "Where we work in the valley.",
+      "intro": "Phoenix is our home base. We also cover the towns nearby — same team, same fixed-quote process.",
+      "columns": "4",
+      "showServed": true,
+      "showPostalCodes": false,
+      "map": {
+        "kind": "embed",
+        "url": "https://maps.google.com/maps?q=Phoenix,AZ&z=10&output=embed",
+        "title": "Map of our Phoenix, AZ service area",
+        "ratio": "4/3"
+      },
+      "footnote": "Not sure if we reach you? Call [(555) 014-2200](tel:+15550142200) and ask.",
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

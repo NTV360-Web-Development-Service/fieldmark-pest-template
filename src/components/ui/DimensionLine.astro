@@ -1,0 +1,35 @@
+---
+/**
+ * The signature device: a drafted dimension line.
+ *
+ * Tick-terminated rule carrying a monospace measurement, lifted straight from
+ * cabinet shop drawings. Used as section eyebrow, divider, and photo
+ * annotation. It is structural, not decorative -- the measurement states the
+ * promise the business actually makes: built to your exact opening.
+ */
+interface Props {
+	/** The callout text. Real dimensions read better than invented labels. */
+	label: string;
+	/** `short` keeps the rule to a fixed stub; `full` spans remaining width. */
+	rule?: 'short' | 'full' | 'both' | 'none';
+	/** Animate the rule drawing itself out on reveal. */
+	animate?: boolean;
+	/** Switches to full-strength brass, which is the legible one on dark. */
+	onDark?: boolean;
+	class?: string;
+}
+
+const {
+	label,
+	rule = 'short',
+	animate = false,
+	onDark = false,
+	class: className = '',
+} = Astro.props;
+---
+
+<div class={`dim ${animate ? 'dim-animate' : ''} ${onDark ? 'dim-on-dark' : ''} ${className}`}>
+	{(rule === 'short' || rule === 'both') && <span class="dim-rule dim-rule-short" />}
+	<span class="whitespace-nowrap">{label}</span>
+	{(rule === 'full' || rule === 'both') && <span class="dim-rule" />}
+</div>

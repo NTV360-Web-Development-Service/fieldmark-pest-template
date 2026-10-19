@@ -1,0 +1,65 @@
+---
+import { getCollection } from 'astro:content';
+import type { NearbyAreas } from './NearbyAreas.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = NearbyAreas;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading = 'Also serving',
+	limit = 8,
+	columns = '4',
+	anchor,
+	surface = 'muted',
+	spacing = 'sm',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+const locations = await getCollection('locations', ({ data }) =>
+	import.meta.env.PROD ? !data.draft : true
+);
+
+// The current town comes from the URL, so one entry in the location template
+// works on every generated page and never links a page to itself.
+const currentId = Astro.url.pathname.replace(/\/$/, '').split('/').pop();
+
+const others = locations
+	.filter((location) => location.id !== currentId)
+	.sort((a, b) => a.data.order - b.data.order || a.data.city.localeCompare(b.data.city));
+
+const shown = limit > 0 ? others.slice(0, limit) : others;
+
+const gridCols = {
+	'2': 'sm:grid-cols-2',
+	'3': 'sm:grid-cols-2 lg:grid-cols-3',
+	'4': 'sm:grid-cols-2 lg:grid-cols-4',
+};
+---
+
+{shown.length > 0 && (
+	<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+		{eyebrow && <DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-5 max-w-xs" />}
+		<Heading level={headingLevel} size="md">
+			{heading}
+		</Heading>
+
+		<ul class={`mt-7 grid gap-x-8 gap-y-3 ${gridCols[columns]}`}>
+			{shown.map((location) => (
+				<li>
+					<a
+						href={`/locations/${location.id}`}
+						class="text-sm underline-offset-4 transition-colors hover:text-brand hover:underline"
+					>
+						{location.data.city}, {location.data.region}
+					</a>
+				</li>
+			))}
+		</ul>
+	</Section>
+)}

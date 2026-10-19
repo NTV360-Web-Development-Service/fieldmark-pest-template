@@ -1,0 +1,113 @@
+{
+  "title": "Cabinet shelving in {{city}}",
+  "summary": "Glide-out shelving measured and installed across {{city}}, usually within two weeks of the consultation.",
+  "seo": {
+    "title": "Glide-Out Cabinet Shelving in {{city}}, {{region}}",
+    "description": "Custom glide-out shelves for cabinets in {{city}}. Measured on site, built to the sixteenth, installed in one visit.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "rich_text",
+      "headingLevel": "h2",
+      "eyebrow": "{{city}}, {{region}}",
+      "heading": "Cabinet shelving in {{city}}.",
+      "body": "We cover {{city}} and the surrounding area, including {{serves}}.\n\nEvery shelf is measured in your home and cut to that opening, so an older {{city}} kitchen gets the same fit as a new build. Postcodes served include {{postalCodes}}.",
+      "align": "left",
+      "surface": "light",
+      "spacing": "md",
+      "width": "narrow"
+    },
+    {
+      "type": "feature_list",
+      "headingLevel": "h2",
+      "eyebrow": "What to expect",
+      "heading": "How a {{city}} job runs.",
+      "columns": "3",
+      "items": [
+        {
+          "title": "Measured on site",
+          "body": "A designer comes to your {{city}} address and measures every opening you want changed."
+        },
+        {
+          "title": "Built to those numbers",
+          "body": "Cut in the shop to the sixteenth of an inch, usually inside two weeks."
+        },
+        {
+          "title": "Fitted in one visit",
+          "body": "Most {{city}} installs take a morning, without removing doors or counters."
+        }
+      ],
+      "surface": "muted",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "collection_feed",
+      "headingLevel": "h2",
+      "eyebrow": "What we fit",
+      "heading": "Services in {{city}}.",
+      "source": "services",
+      "layout": "grid",
+      "columns": "4",
+      "limit": 0,
+      "showImage": false,
+      "showSummary": true,
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "accordion",
+      "headingLevel": "h2",
+      "eyebrow": "Local questions",
+      "heading": "Working in {{city}}.",
+      "items": [
+        {
+          "question": "Do you charge extra to come to {{city}}?",
+          "answer": "No. {{city}} is inside our standard service area, so travel is not billed separately."
+        },
+        {
+          "question": "How quickly can you get to {{city}}?",
+          "answer": "Usually within a week for the consultation, and about two weeks from measure to installation."
+        },
+        {
+          "question": "Which parts of {{city}} do you cover?",
+          "answer": "All of it, including {{serves}}."
+        }
+      ],
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    },
+    {
+      "type": "nearby_areas",
+      "headingLevel": "h2",
+      "eyebrow": "Nearby",
+      "heading": "We also work in",
+      "limit": 8,
+      "columns": "4",
+      "surface": "muted",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "cta_banner",
+      "headingLevel": "h2",
+      "eyebrow": "No obligation",
+      "heading": "Book a measure in {{city}}.",
+      "body": "About an hour on site, and a fixed quote before anything is built. Call {{phone}} or book online.",
+      "ctas": [
+        {
+          "label": "Book a consultation",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "surface": "brand",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

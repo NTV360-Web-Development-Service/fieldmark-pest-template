@@ -1,0 +1,48 @@
+---
+import type { StatBand } from './StatBand.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = StatBand;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	stats = [],
+	anchor,
+	surface = 'dark',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading) && (
+		<header class="mb-12 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+		</header>
+	)}
+
+	<dl class="grid gap-x-8 gap-y-10 sm:grid-cols-2 lg:grid-cols-4">
+		{stats.map((stat) => (
+			<div class={`flex flex-col border-t pt-6 ${onDark ? 'border-current/25' : 'border-line'}`}>
+				{/* Value first visually, but dt before dd keeps the pairing correct. */}
+				<dt class="order-2 mt-3 text-sm opacity-75">{stat.label}</dt>
+				<dd class="display order-1 text-[clamp(2.4rem,4.5vw,3.75rem)] leading-none text-current">
+					{stat.value}
+				</dd>
+			</div>
+		))}
+	</dl>
+</Section>

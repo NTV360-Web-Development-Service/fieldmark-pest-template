@@ -1,0 +1,34 @@
+{
+  "title": "Terms of use",
+  "permalink": "https://modern-cabinets-template.vercel.app/terms",
+  "order": 100,
+  "draft": false,
+  "seo": {
+    "title": "Terms of use",
+    "description": "The terms that apply to using this website.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "page_header",
+      "headingLevel": "h1",
+      "eyebrow": "Legal",
+      "heading": "Terms of use.",
+      "body": "The terms that apply to using this website.",
+      "surface": "muted",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "rich_text",
+      "headingLevel": "h2",
+      "eyebrow": null,
+      "heading": null,
+      "body": "## Using this site\n\nThe content here is provided for information. Prices shown are indicative and do not constitute an offer until confirmed in a written quote.\n\n## Quotes\n\nA written quote is valid for thirty days from the date issued. Quotes are based on measurements taken on site.\n\n## Warranty\n\nGlide hardware carries a lifetime warranty for the duration of original ownership. Shelves carry a five year warranty against manufacturing defects. Neither covers misuse, alteration, or water damage.\n\n## Liability\n\nNothing in these terms limits liability for death or personal injury caused by negligence.\n\n**This is sample text for a template and is not legal advice.** Replace it with terms reviewed for your jurisdiction before launch.",
+      "align": "left",
+      "surface": "light",
+      "spacing": "md",
+      "width": "default"
+    }
+  ]
+}

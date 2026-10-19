@@ -1,0 +1,62 @@
+---
+import {
+	buttonBase,
+	buttonSize,
+	buttonVariant,
+	type ButtonSize,
+	type ButtonStyle,
+} from '../../lib/button-styles';
+
+interface Props {
+	label: string;
+	href: string;
+	style?: ButtonStyle;
+	/**
+	 * Scale token. Defaults to `md` -- the site-wide size that reads heavier than
+	 * body copy. Nav chrome passes `sm`; the hero / CTA banner pass `lg`.
+	 */
+	size?: ButtonSize;
+	newTab?: boolean;
+	/** Inverts secondary/ghost styling for dark and brand surfaces. */
+	onDark?: boolean;
+	/** Force the trailing arrow on. Ghost always shows it; others opt in. */
+	arrow?: boolean;
+	class?: string;
+}
+
+const {
+	label,
+	href,
+	style = 'primary',
+	size = 'md',
+	newTab = false,
+	onDark = false,
+	arrow = false,
+	class: className = '',
+} = Astro.props;
+
+const showArrow = style === 'ghost' || arrow;
+
+// Ghost buttons are a text link with an arrow, not a box, so they drop the
+// size's horizontal padding (the variant sets px-0). Keeping the px out of the
+// class string entirely -- rather than overriding it -- avoids a cascade fight.
+const sizeClasses =
+	style === 'ghost' ? buttonSize(size).replace(/\bpx-\S+\s?/, '') : buttonSize(size);
+---
+
+<a
+	href={href}
+	class={`${buttonBase} ${sizeClasses} ${buttonVariant(style, onDark)} ${className}`}
+	{...(newTab ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+>
+	{label}
+	{showArrow && (
+		<svg
+			viewBox="0 0 16 16"
+			class="h-3 w-3 fill-current transition-transform duration-300 group-hover:translate-x-1"
+			aria-hidden="true"
+		>
+			<path d="M8.8 2.4l5 5-5 5-1.1-1.1 3.1-3.1H2v-1.6h8.8L7.7 3.5z" />
+		</svg>
+	)}
+</a>

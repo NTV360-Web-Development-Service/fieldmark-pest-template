@@ -1,0 +1,440 @@
+---
+import type { FormBlock } from './FormBlock.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { buttonBase, buttonSize, buttonVariant } from '../../lib/button-styles';
+
+type Props = FormBlock;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	endpoint,
+	submitLabel = 'Send',
+	fields = [],
+	footnote,
+	anchor,
+	surface = 'muted',
+	spacing = 'md',
+	width = 'default',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+const control =
+	'w-full rounded-(--radius-media) border border-line bg-surface px-4 py-3 text-base text-ink transition-colors placeholder:text-body/50 focus:border-brand focus:outline-none';
+const labelClass = 'mb-2 block font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em]';
+
+// `half` fields pair up on a two-column grid; textareas always span it.
+const spanFor = (field: (typeof fields)[number]) =>
+	'width' in field && field.width === 'half' ? 'sm:col-span-1' : 'sm:col-span-2';
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-10 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	<form action={endpoint} method="post" class="grid gap-x-6 gap-y-5 sm:grid-cols-2">
+		{/*
+			Honeypot. Bots fill every input they find; people never see this one.
+			Hidden from assistive tech and skipped by tabbing, so it costs a real
+			visitor nothing.
+		*/}
+		<div class="hidden" aria-hidden="true">
+			<label>
+				Leave this field empty
+				<input type="text" name="_gotcha" tabindex="-1" autocomplete="off" />
+			</label>
+		</div>
+
+		{fields.map((field) => {
+			const id = `field-${field.name}`;
+
+			if (field.kind === 'hidden') {
+				return <input type="hidden" name={field.name} value={field.value} />;
+			}
+
+			if (field.kind === 'checkbox') {
+				return (
+					<div class="sm:col-span-2">
+						<label class="flex cursor-pointer items-start gap-3 text-sm">
+							<input
+								type="checkbox"
+								id={id}
+								name={field.name}
+								required={field.required || undefined}
+								class="mt-1 h-4 w-4 shrink-0 accent-[var(--brand-primary)]"
+							/>
+							<Prose html={field.label} invert={onDark} size="sm" class="[&_p]:m-0" />
+						</label>
+					</div>
+				);
+			}
+
+			if (field.kind === 'textarea') {
+				return (
+					<div class="sm:col-span-2">
+						<label for={id} class={labelClass}>
+							{field.label}
+							{field.required && <span class="text-accent-ink"> *</span>}
+						</label>
+						<textarea
+							id={id}
+							name={field.name}
+							rows={field.rows}
+							placeholder={field.placeholder}
+							required={field.required || undefined}
+							class={control}
+						></textarea>
+					</div>
+				);
+			}
+
+			if (field.kind === 'select') {
+				return (
+					<div class={spanFor(field)}>
+						<label for={id} class={labelClass}>
+							{field.label}
+							{field.required && <span class="text-accent-ink"> *</span>}
+						</label>
+						{/*
+							A native <select> can style its closed control (we kill the OS
+							chevron with appearance-none and draw our own stroked one), but its
+							OPEN option list is drawn by the operating system -- blue highlight,
+							system font, no theming -- which clashes hard with the site's warm,
+							thin shop-drawing look. CSS cannot reach into that popup.
+
+							So the real <select> stays as the accessible, submittable source of
+							truth and simply hides once JS upgrades the field. The script then
+							layers a fully styled listbox (trigger + options panel) on top, wired
+							back to the select so the form still posts the chosen value. With no
+							JS, the styled shell never appears and the native select works as-is.
+						*/}
+						{/*
+							The native select carries the label's `for` target by default. When
+							JS upgrades the field it moves the id onto the visible trigger button
+							(and clears it here) so the label always focuses whatever control the
+							visitor actually sees -- never leaving two elements sharing one id.
+						*/}
+						<div class="cab-select relative" data-select>
+							<select
+								id={id}
+								name={field.name}
+								required={field.required || undefined}
+								data-select-native
+								class={`${control} peer cursor-pointer appearance-none pr-11`}
+							>
+								<option value="">Choose one</option>
+								{field.choices.map((choice) => (
+									<option value={choice}>{choice}</option>
+								))}
+							</select>
+							<svg
+								viewBox="0 0 16 16"
+								class="pointer-events-none absolute top-1/2 right-4 h-3.5 w-3.5 -translate-y-1/2 text-body transition-colors peer-focus:text-accent-ink"
+								fill="none"
+								stroke="currentColor"
+								stroke-width="1.75"
+								stroke-linecap="round"
+								stroke-linejoin="round"
+								aria-hidden="true"
+							>
+								<path d="M4 6l4 4 4-4" />
+							</svg>
+
+							{/*
+								Styled listbox. Hidden until the script reveals it (see the
+								[hidden] rule in the module below), so it never flashes before
+								the native select is upgraded and never shows without JS.
+							*/}
+							<div class="cab-select__ui" data-select-ui hidden>
+								<button
+									type="button"
+									data-select-trigger
+									class={`${control} flex cursor-pointer items-center justify-between gap-3 pr-11 text-left`}
+									aria-haspopup="listbox"
+									aria-expanded="false"
+								>
+									<span data-select-value class="truncate text-body/60">Choose one</span>
+								</button>
+								<svg
+									viewBox="0 0 16 16"
+									data-select-chevron
+									class="pointer-events-none absolute top-[2.9rem] right-4 h-3.5 w-3.5 -translate-y-1/2 text-body transition-transform duration-200"
+									fill="none"
+									stroke="currentColor"
+									stroke-width="1.75"
+									stroke-linecap="round"
+									stroke-linejoin="round"
+									aria-hidden="true"
+								>
+									<path d="M4 6l4 4 4-4" />
+								</svg>
+								<ul
+									data-select-list
+									role="listbox"
+									tabindex="-1"
+									aria-label={field.label}
+									class="absolute inset-x-0 top-full z-20 mt-2 max-h-64 overflow-auto rounded-(--radius-media) border border-line bg-surface py-1.5 shadow-[0_24px_48px_-20px_rgba(20,18,15,0.35)]"
+									hidden
+								>
+									<li
+										role="option"
+										data-select-option
+										data-value=""
+										class="cursor-pointer px-4 py-2.5 text-sm text-body/60 transition-colors hover:bg-muted"
+									>
+										Choose one
+									</li>
+									{field.choices.map((choice) => (
+										<li
+											role="option"
+											data-select-option
+											data-value={choice}
+											class="cursor-pointer px-4 py-2.5 text-sm text-ink transition-colors hover:bg-muted"
+										>
+											{choice}
+										</li>
+									))}
+								</ul>
+							</div>
+						</div>
+					</div>
+				);
+			}
+
+			// text, email and tel differ only by input type and autocomplete.
+			const type = field.kind;
+			const autocomplete =
+				field.kind === 'email'
+					? 'email'
+					: field.kind === 'tel'
+						? 'tel'
+						: 'autocomplete' in field
+							? field.autocomplete
+							: undefined;
+
+			return (
+				<div class={spanFor(field)}>
+					<label for={id} class={labelClass}>
+						{field.label}
+						{field.required && <span class="text-accent-ink"> *</span>}
+					</label>
+					<input
+						type={type}
+						id={id}
+						name={field.name}
+						placeholder={field.placeholder}
+						required={field.required || undefined}
+						autocomplete={autocomplete}
+						class={control}
+					/>
+				</div>
+			);
+		})}
+
+		<div class="sm:col-span-2">
+			{/*
+				A form submit must be a real <button>, so it can't be the <a>-based
+				Button component -- but it shares Button's styling via the same module
+				so the two never drift (matching radius, type, colours).
+			*/}
+			<button type="submit" class={`${buttonBase} ${buttonSize('md')} ${buttonVariant('primary', onDark)}`}>
+				{submitLabel}
+			</button>
+		</div>
+
+		{footnote && (
+			<Prose html={footnote} invert={onDark} size="sm" class="sm:col-span-2 opacity-70" />
+		)}
+	</form>
+</Section>
+
+<style>
+	/*
+		Once the script upgrades a select it sets data-enhanced on the wrapper: the
+		native control is pulled out of the layout (kept only for form submission and
+		assistive fallback) and the styled shell takes its place. The shell itself is
+		un-hidden by the script removing its `hidden` attribute -- Tailwind's Preflight
+		hides [hidden] with `display:none !important`, which no plain CSS rule here
+		could override, so the reveal has to drop the attribute rather than restyle it.
+	*/
+	.cab-select[data-enhanced] > select[data-select-native],
+	.cab-select[data-enhanced] > svg {
+		display: none;
+	}
+
+	/* Open state: flip the trigger chevron and echo the field's focus border. */
+	.cab-select[data-open] [data-select-chevron] {
+		transform: translateY(-50%) rotate(180deg);
+	}
+	.cab-select[data-open] [data-select-trigger] {
+		border-color: var(--brand-primary);
+	}
+
+	/* The active (keyboard-highlighted) option reads like a hovered one. */
+	.cab-select [data-select-option][data-active] {
+		background: var(--brand-muted);
+	}
+	/* The chosen option carries a brass tick set in the mono annotation colour. */
+	.cab-select [data-select-option][aria-selected='true'] {
+		color: var(--brand-ink);
+		font-weight: 500;
+	}
+</style>
+
+<script>
+	/*
+		Progressive enhancement for every [data-select] on the page. Each keeps its
+		real <select> as the submittable source of truth; we mirror the user's choice
+		back onto it (and fire `change`) so validation and the form endpoint behave
+		exactly as they would natively. Keyboard and ARIA support make the custom
+		listbox usable without a mouse.
+	*/
+	for (const root of document.querySelectorAll<HTMLElement>('[data-select]')) {
+		const native = root.querySelector<HTMLSelectElement>('[data-select-native]');
+		const ui = root.querySelector<HTMLElement>('[data-select-ui]');
+		const trigger = root.querySelector<HTMLButtonElement>('[data-select-trigger]');
+		const list = root.querySelector<HTMLUListElement>('[data-select-list]');
+		const valueEl = root.querySelector<HTMLElement>('[data-select-value]');
+		const options = [...root.querySelectorAll<HTMLElement>('[data-select-option]')];
+
+		if (!native || !ui || !trigger || !list || !valueEl || options.length === 0) continue;
+
+		root.setAttribute('data-enhanced', '');
+		// Reveal the styled shell. It ships with the `hidden` attribute so it never
+		// flashes before this runs (and stays gone entirely without JS); dropping the
+		// attribute is the only way past Tailwind's `[hidden]{display:none!important}`.
+		ui.hidden = false;
+
+		// Hand the label's target from the now-hidden native select to the visible
+		// trigger, so clicking the label focuses the control the visitor can see and
+		// no two elements ever share the id.
+		const nativeId = native.id;
+		if (nativeId) {
+			native.removeAttribute('id');
+			trigger.id = nativeId;
+		}
+
+		// Reflect a value everywhere: the native select (for submission), the trigger
+		// label, and aria-selected on the matching option.
+		const select = (value: string, fireChange = true) => {
+			native.value = value;
+			const chosen = options.find((o) => o.dataset.value === value) ?? options[0];
+			valueEl.textContent = chosen.textContent;
+			// The placeholder ("Choose one") stays muted; a real pick reads as ink.
+			valueEl.classList.toggle('text-body/60', value === '');
+			valueEl.classList.toggle('text-ink', value !== '');
+			for (const o of options) o.setAttribute('aria-selected', String(o === chosen));
+			if (fireChange) native.dispatchEvent(new Event('change', { bubbles: true }));
+		};
+
+		let activeIndex = 0;
+		const setActive = (index: number) => {
+			activeIndex = (index + options.length) % options.length;
+			for (const [i, o] of options.entries())
+				o.toggleAttribute('data-active', i === activeIndex);
+			options[activeIndex].scrollIntoView({ block: 'nearest' });
+		};
+
+		const isOpen = () => root.hasAttribute('data-open');
+
+		const open = () => {
+			root.setAttribute('data-open', '');
+			trigger.setAttribute('aria-expanded', 'true');
+			list.hidden = false;
+			// Start the highlight on the current selection so arrow keys move from it.
+			const current = options.findIndex((o) => o.dataset.value === native.value);
+			setActive(current < 0 ? 0 : current);
+			list.focus();
+		};
+
+		const close = (refocus = true) => {
+			root.removeAttribute('data-open');
+			trigger.setAttribute('aria-expanded', 'false');
+			list.hidden = true;
+			if (refocus) trigger.focus();
+		};
+
+		trigger.addEventListener('click', () => (isOpen() ? close() : open()));
+
+		for (const [i, option] of options.entries()) {
+			option.addEventListener('click', () => {
+				select(option.dataset.value ?? '');
+				close();
+			});
+			option.addEventListener('mousemove', () => setActive(i));
+		}
+
+		// Keyboard model mirrors a native listbox: arrows move the highlight, Enter
+		// commits it, Escape closes, Home/End jump, and typing a letter jumps to the
+		// next option starting with it.
+		list.addEventListener('keydown', (event) => {
+			switch (event.key) {
+				case 'ArrowDown':
+					event.preventDefault();
+					setActive(activeIndex + 1);
+					break;
+				case 'ArrowUp':
+					event.preventDefault();
+					setActive(activeIndex - 1);
+					break;
+				case 'Home':
+					event.preventDefault();
+					setActive(0);
+					break;
+				case 'End':
+					event.preventDefault();
+					setActive(options.length - 1);
+					break;
+				case 'Enter':
+				case ' ':
+					event.preventDefault();
+					select(options[activeIndex].dataset.value ?? '');
+					close();
+					break;
+				case 'Escape':
+					event.preventDefault();
+					close();
+					break;
+				case 'Tab':
+					close(false);
+					break;
+				default:
+					if (event.key.length === 1) {
+						const from = activeIndex + 1;
+						const match = options.findIndex(
+							(o, i) =>
+								i >= from &&
+								o.textContent?.trim().toLowerCase().startsWith(event.key.toLowerCase()),
+						);
+						if (match >= 0) setActive(match);
+					}
+			}
+		});
+
+		// A click anywhere outside an open field closes it.
+		document.addEventListener('click', (event) => {
+			if (isOpen() && !root.contains(event.target as Node)) close(false);
+		});
+
+		// Honour any value the select already carries (e.g. a browser-restored form)
+		// without firing an initial change event.
+		if (native.value) select(native.value, false);
+	}
+</script>

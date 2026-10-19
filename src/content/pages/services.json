@@ -1,0 +1,212 @@
+{
+  "title": "Services",
+  "permalink": "https://modern-cabinets-template.vercel.app/services",
+  "order": 10,
+  "draft": false,
+  "seo": {
+    "title": "Services",
+    "description": "Glide-out shelving for kitchens, pantries, bathrooms and closets across the Phoenix valley.",
+    "noindex": false
+  },
+  "sections": [
+    {
+      "type": "page_header",
+      "variant": "feature",
+      "headingLevel": "h1",
+      "eyebrow": "Every room",
+      "heading": "What we fit.",
+      "body": "Every shelf is measured in your home and cut to that opening. The room changes; the method does not.",
+      "image": {
+        "source": "upload",
+        "src": "/media/images/kitchen-hero.avif",
+        "alt": "Fitted kitchen shelving measured to the opening"
+      },
+      "mediaNote": "Built to your exact opening",
+      "surface": "muted",
+      "spacing": "sm",
+      "width": "wide"
+    },
+    {
+      "type": "service_menu",
+      "headingLevel": "h2",
+      "eyebrow": "Explore",
+      "heading": "Browse by room.",
+      "intro": "Pick a room to see a few of the jobs we do there. Every shelf is measured on site and cut to your opening.",
+      "nowViewingLabel": "Now viewing",
+      "columns": "4",
+      "tabs": [
+        {
+          "label": "Kitchen",
+          "bannerTitle": "Kitchen shelves",
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-hero.avif",
+            "alt": "Kitchen with white shaker cabinets"
+          },
+          "cards": [
+            {
+              "title": "Pots & Pans",
+              "body": "Full-extension pull-outs for the deep base cabinet that swallows your pots, pans and the lids that never match.",
+              "link": { "label": "View service", "href": "/services/kitchen/pots-and-pans", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Corner Cabinet",
+              "body": "The dead corner turned into shelving that swings or slides all the way out.",
+              "link": { "label": "View service", "href": "/services/kitchen/corner-cabinet", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Under the Sink",
+              "body": "Shelves cut around the trap and disposal, so the space under the sink is finally usable.",
+              "link": { "label": "View service", "href": "/services/kitchen/under-the-sink", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Spice Racks",
+              "body": "Slim pull-outs and tiered inserts that keep every jar labelled-side-out and in reach.",
+              "link": { "label": "View service", "href": "/services/kitchen/spice-racks", "style": "ghost", "newTab": false }
+            }
+          ]
+        },
+        {
+          "label": "Pantry",
+          "bannerTitle": "Pantry storage",
+          "image": {
+            "source": "upload",
+            "src": "/media/images/shelf-detail.avif",
+            "alt": "Dishes on a glide-out shelf"
+          },
+          "cards": [
+            {
+              "title": "Walk-In Pantry",
+              "body": "Full-depth glide-outs down both walls, sized to what you actually store.",
+              "link": { "label": "View service", "href": "/services/pantry/walk-in-pantry", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Cabinet Pantry",
+              "body": "Two usable rows become four, so nothing expires behind something else.",
+              "link": { "label": "View service", "href": "/services/pantry/cabinet-pantry", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Corner Pantry",
+              "body": "Reaches the awkward back corner every fixed shelf gives up on.",
+              "link": { "label": "View service", "href": "/services/pantry/corner-pantry", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Custom Pantry Designs",
+              "body": "Built around odd heights, angled ceilings and the door you cannot move.",
+              "link": { "label": "View service", "href": "/services/pantry/custom-pantry-designs", "style": "ghost", "newTab": false }
+            }
+          ]
+        },
+        {
+          "label": "Bathroom",
+          "bannerTitle": "Bathroom vanities",
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-island.avif",
+            "alt": "Wooden bathroom cabinetry"
+          },
+          "cards": [
+            {
+              "title": "Under the Sink",
+              "body": "Shelves that clear the trap, so the vanity holds more than a spare roll.",
+              "link": { "label": "View service", "href": "/services/bathroom/under-the-sink", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Vanity Cabinets",
+              "body": "Full-extension pull-outs for towels, bottles and the hairdryer cord.",
+              "link": { "label": "View service", "href": "/services/bathroom/cabinets", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Cabinet Organizers",
+              "body": "Dividers and tiered inserts that stop the cabinet becoming a drawer of chaos.",
+              "link": { "label": "View service", "href": "/services/bathroom/cabinet-organizers", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Pull-Out Organizers",
+              "body": "Custom-cut inserts that keep bottles, tools and spares each in their lane.",
+              "link": { "label": "View service", "href": "/services/bathroom/pull-out-organizers-and-dividers", "style": "ghost", "newTab": false }
+            }
+          ]
+        },
+        {
+          "label": "Closets",
+          "bannerTitle": "Closet systems",
+          "image": {
+            "source": "upload",
+            "src": "/media/images/cabinet-wood.avif",
+            "alt": "Wooden cabinetry with open shelving"
+          },
+          "cards": [
+            {
+              "title": "Closets & Wardrobes",
+              "body": "Shoes, linens and the vacuum you wrestle out every week, all within reach.",
+              "link": { "label": "View service", "href": "/services/closets/closets-and-wardrobes", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Garage & Storage",
+              "body": "Heavy-duty glides rated for tools, bulk goods and the gear you stack too high.",
+              "link": { "label": "View service", "href": "/services/closets/garage-and-storage", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Laundry & Mud Room",
+              "body": "Pull-outs for detergent, baskets and the things that pile by the door.",
+              "link": { "label": "View service", "href": "/services/closets/laundry-and-mud-room", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Office, Crafts & Entertainment",
+              "body": "Shallow pull-outs that keep supplies, media and gear sorted and in view.",
+              "link": { "label": "View service", "href": "/services/closets/office-crafts-and-entertainment-rooms", "style": "ghost", "newTab": false }
+            }
+          ]
+        },
+        {
+          "label": "Creative Spaces",
+          "bannerTitle": "Creative spaces",
+          "image": {
+            "source": "upload",
+            "src": "/media/images/kitchen-island.avif",
+            "alt": "Open shelving for glassware and bottles"
+          },
+          "cards": [
+            {
+              "title": "Office & Crafts",
+              "body": "Shallow tiered pull-outs that keep supplies visible and sorted.",
+              "link": { "label": "View service", "href": "/services/creative-spaces/office-and-crafts", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Spirits & Wine",
+              "body": "Bottle-safe racks and glide-outs sized for stemware and decanters.",
+              "link": { "label": "View service", "href": "/services/creative-spaces/spirits-and-wine", "style": "ghost", "newTab": false }
+            },
+            {
+              "title": "Custom Layouts",
+              "body": "For the room that does not fit a category — we measure and build to it.",
+              "link": { "label": "View service", "href": "/services/creative-spaces/custom-layouts", "style": "ghost", "newTab": false }
+            }
+          ]
+        }
+      ],
+      "surface": "light",
+      "spacing": "md",
+      "width": "wide"
+    },
+    {
+      "type": "cta_banner",
+      "headingLevel": "h2",
+      "eyebrow": "No obligation",
+      "heading": "Book a free measure.",
+      "body": "An hour on site, a fixed quote, no pressure to book on the day.",
+      "ctas": [
+        {
+          "label": "Book a consultation",
+          "href": "/contact",
+          "style": "primary",
+          "newTab": false
+        }
+      ],
+      "surface": "brand",
+      "spacing": "md",
+      "width": "wide"
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import { getSection } from '../lib/sections';
+import { pageTrail } from '../lib/breadcrumbs';
+import { site } from '../lib/site';
+import { organisationSchema, faqSchema } from '../lib/schema-org';
+
+/**
+ * Renders every hand-authored page from its JSON file.
+ *
+ * The file's path under `src/content/pages` is the URL: `_home.json` is the
+ * site root, `services/kitchen.json` is `/services/kitchen`. Adding a page means
+ * adding a JSON file -- no route work, which is what lets the CMS create pages
+ * without a developer.
+ *
+ * The home page file is named `_home.json` (not `home.json`) only so it sorts to
+ * the top of the CMS Pages list, which orders by file name. The leading
+ * underscore is a sort hack, not a route -- the `'_home'` id maps to the site
+ * root here, and everywhere else a page id is turned into a URL.
+ *
+ * `getStaticPaths` runs in its own scope, so the id is inlined rather than
+ * shared from a module-level const (which that scope cannot see).
+ */
+export async function getStaticPaths() {
+	const pages = await getCollection('pages', ({ data }) =>
+		import.meta.env.PROD ? !data.draft : true
+	);
+
+	return pages.map((page) => ({
+		params: { slug: page.data.slug ?? (page.id === '_home' ? undefined : page.id) },
+		props: { page },
+	}));
+}
+
+const { page } = Astro.props;
+const { title, seo, sections } = page.data;
+
+const base = Astro.site ?? new URL(Astro.url.origin);
+const isHome = page.id === '_home';
+
+// A page that opens with a page_header sits one level under the root, so it
+// gets a Home / Title trail as its own band above the body. A page that opens
+// with a hero (the home page, any future landing page) owns its top and gets
+// no trail. The trail is derived, never authored -- see lib/breadcrumbs.ts.
+const breadcrumbs = sections[0]?.type === 'page_header' ? pageTrail(title) : [];
+
+// The business is described once, on the home page. Every other schema refers
+// back to it by @id rather than repeating the organisation.
+const schemas = [isHome ? organisationSchema(base) : null, faqSchema(sections as any)].filter(
+	Boolean
+);
+
+// An unregistered section type means the CMS and the code have drifted apart.
+// Fail loudly in dev where it can be fixed; skip it in prod rather than taking
+// the whole page down over one bad block.
+const renderable = sections.flatMap((section) => {
+	const Component = getSection(section.type);
+	if (Component) return [{ section, Component }];
+
+	if (import.meta.env.DEV) {
+		throw new Error(
+			`Unknown section type "${section.type}" in ${page.id}. ` +
+				`Register it in src/lib/sections.ts and src/lib/section-schemas.ts.`
+		);
+	}
+	console.warn(`[sections] skipping unknown type "${section.type}" in ${page.id}`);
+	return [];
+});
+---
+
+<BaseLayout
+	title={seo.title ?? title}
+	description={seo.description ?? site.tagline}
+	ogImage={seo.ogImage}
+	noindex={seo.noindex}
+	popupLauncher={isHome}
+>
+	<Breadcrumbs items={breadcrumbs} />
+
+	{renderable.map(({ section, Component }) => (
+		<Component {...section} />
+	))}
+
+	{schemas.map((schema) => (
+		<script type="application/ld+json" set:html={JSON.stringify(schema)}></script>
+	))}
+</BaseLayout>

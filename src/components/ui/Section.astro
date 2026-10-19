@@ -1,0 +1,69 @@
+---
+import type { Spacing, Surface, Width } from '../../lib/section-base';
+
+interface Props {
+	anchor?: string;
+	surface?: Surface;
+	spacing?: Spacing;
+	width?: Width;
+	/** Set to false when the section manages its own container (full-bleed media). */
+	contained?: boolean;
+	/** Opt out of the scroll reveal, e.g. for above-the-fold content. */
+	reveal?: boolean;
+	class?: string;
+}
+
+const {
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'default',
+	contained = true,
+	reveal = true,
+	class: className = '',
+} = Astro.props;
+
+// Text and heading colours are the auto-contrast variables computed from each
+// background's luminance in themeVars(), not fixed tokens. That way a CMS
+// background change pulls its own readable foreground with it: set a dark page
+// background and body copy flips light, with no hand-editing.
+const surfaces: Record<Surface, string> = {
+	light:
+		'bg-surface text-[var(--surface-light-fg)] [&_:is(h1,h2,h3,h4)]:text-[var(--surface-light-heading)]',
+	muted:
+		'bg-muted text-[var(--surface-muted-fg)] [&_:is(h1,h2,h3,h4)]:text-[var(--surface-muted-heading)]',
+	dark: 'bg-dark text-[var(--surface-dark-fg)] [&_:is(h1,h2,h3,h4)]:text-[var(--surface-dark-heading)]',
+	brand:
+		'bg-brand text-[var(--surface-brand-fg)] [&_:is(h1,h2,h3,h4)]:text-[var(--surface-brand-heading)]',
+};
+
+const spacings: Record<Spacing, string> = {
+	none: '',
+	sm: 'py-14 md:py-20',
+	md: 'py-20 md:py-28',
+	lg: 'py-24 md:py-36',
+};
+
+// Measured in rem so the scale stays tied to type, not to Tailwind breakpoints.
+// `narrow` is a reading measure; `wide` is the standard full-bleed band.
+const widths: Record<Width, string> = {
+	narrow: 'max-w-[44rem]',
+	default: 'max-w-[76rem]',
+	wide: 'max-w-[104rem]',
+	full: 'max-w-none',
+};
+
+const inner = `${reveal ? 'reveal' : ''}`;
+---
+
+<section id={anchor} class={`${surfaces[surface]} ${spacings[spacing]} ${className}`}>
+	{contained ? (
+		<div class={`mx-auto w-full px-5 sm:px-8 lg:px-12 ${widths[width]} ${inner}`}>
+			<slot />
+		</div>
+	) : (
+		<div class={inner}>
+			<slot />
+		</div>
+	)}
+</section>

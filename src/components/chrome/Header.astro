@@ -1,0 +1,374 @@
+---
+import { site } from '../../lib/site';
+import Button from '../ui/Button.astro';
+import AnnouncementBar from './AnnouncementBar.astro';
+---
+
+<AnnouncementBar />
+
+<header class="sticky top-0 z-40 border-b border-line bg-surface/90 backdrop-blur-md [--mm-gap:0.5rem]">
+	<div class="mx-auto flex w-full max-w-[104rem] items-center gap-6 px-5 py-4 sm:px-8 lg:grid lg:grid-cols-[1fr_auto_1fr] lg:px-12">
+		<a href="/" class="flex shrink-0 items-center gap-2.5">
+			{site.logo ? (
+				<img src={site.logo.src} alt={site.logo.alt} class="h-14 w-auto" />
+			) : (
+				<span class="font-display text-2xl font-bold uppercase tracking-tight text-ink">
+					{site.name}
+				</span>
+			)}
+		</a>
+
+		<nav class="hidden lg:block" aria-label="Main">
+			<ul class="flex items-center gap-1">
+				{site.nav.map((item) => (
+					<li class="group relative">
+						{/*
+							A parent with children but no href is a dropdown label only, not a
+							destination -- rendered as a button so it stays keyboard-focusable
+							(the panel opens on focus-within) without pointing at a page that
+							does not exist. Everything else stays an <a>.
+						*/}
+						{item.href ? (
+							<a
+								href={item.href}
+								class="flex items-center gap-1.5 px-3.5 py-2 font-mono text-[0.75rem] font-medium uppercase tracking-[0.12em] text-ink transition-colors hover:text-brand"
+							>
+								{item.label}
+								{item.children && (
+									<svg
+										viewBox="0 0 12 12"
+										class="h-2.5 w-2.5 fill-current opacity-50 transition-transform group-hover:rotate-180"
+										aria-hidden="true"
+									>
+										<path d="M6 8.5L1.5 4h9z" />
+									</svg>
+								)}
+							</a>
+						) : (
+							<button
+								type="button"
+								aria-haspopup="true"
+								class="flex cursor-default items-center gap-1.5 px-3.5 py-2 font-mono text-[0.75rem] font-medium uppercase tracking-[0.12em] text-ink transition-colors hover:text-brand"
+							>
+								{item.label}
+								{item.children && (
+									<svg
+										viewBox="0 0 12 12"
+										class="h-2.5 w-2.5 fill-current opacity-50 transition-transform group-hover:rotate-180"
+										aria-hidden="true"
+									>
+										<path d="M6 8.5L1.5 4h9z" />
+									</svg>
+								)}
+							</button>
+						)}
+
+						{item.children &&
+							(() => {
+								// A mega-menu (columns of grouped links) is only warranted when the
+								// children themselves have children. A flat service list still gets
+								// the original single-column dropdown.
+								const hasGroups = item.children.some((child) => child.children?.length);
+								return hasGroups ? (
+									<div
+										data-megamenu
+										class="invisible absolute left-1/2 top-full z-50 w-max max-w-[calc(100vw-2rem)] translate-x-[calc(-50%+var(--mm-shift,0px))] pt-[var(--mm-gap)] opacity-0 transition-[opacity,transform] duration-200 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100"
+									>
+										{/*
+											`top-full` pins the panel to the trigger's bottom edge with
+											pure CSS -- no JS measurement that can lag a frame and read as
+											a floating gap. The `pt-[--mm-gap]` padding is itself part of
+											the hover target, so it doubles as a bridge: the pointer
+											travels from trigger into panel without crossing a dead zone
+											that would drop :hover. A script nudge (below) shifts the
+											panel horizontally so a wide menu never clips the viewport.
+										*/}
+										<div class="flex flex-wrap overflow-hidden rounded-(--radius-brand) border border-line bg-surface shadow-[0_28px_60px_-28px_rgba(20,18,15,0.55)]">
+											{item.children.map((group) => (
+												<div class="relative flex w-56 flex-col px-6 py-7 before:absolute before:top-7 before:bottom-7 before:left-0 before:w-px before:bg-line first:before:hidden">
+													{/*
+														Column head reads as a section eyebrow: a mono measurement
+														label sitting above the shop-drawing dimension stub (brass
+														tick rule), the site's signature device -- not a UI glyph.
+														The label link is dropped when a group is unlabelled (an
+														ungrouped column then shows just the rule above its links).
+													*/}
+													{group.label && (
+														<a
+															href={group.href}
+															class="flex min-h-[2rem] items-center justify-start text-left font-mono text-[0.75rem] font-medium uppercase leading-tight tracking-[0.14em] text-ink transition-colors hover:text-brand"
+														>
+															{group.label}
+														</a>
+													)}
+													<span class="dim mb-4 mt-2" aria-hidden="true">
+														<span class="dim-rule"></span>
+													</span>
+													{group.children && (
+														<ul class="-mx-2 flex flex-col">
+															{group.children.map((leaf) => (
+																<li>
+																	<a
+																		href={leaf.href}
+																		class="block rounded-(--radius-brand) px-2 py-1.5 text-[0.8125rem] leading-snug text-body transition-colors hover:bg-muted hover:text-ink"
+																	>
+																		{leaf.label}
+																	</a>
+																</li>
+															))}
+														</ul>
+													)}
+												</div>
+											))}
+										</div>
+									</div>
+								) : (
+									<div class="invisible absolute left-0 top-full z-50 w-60 opacity-0 transition-all duration-200 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
+										<div class="rounded-(--radius-brand) border border-line bg-surface px-2 pb-2 pt-4 shadow-[0_18px_40px_-20px_rgba(20,18,15,0.45)]">
+											{/*
+												Shop-drawing tick rule as the panel's top accent -- the same
+												brass dimension stub the mega-menu columns use, so a flat
+												location dropdown reads as part of the same system.
+											*/}
+											<span class="dim mb-2 px-1.5" aria-hidden="true">
+												<span class="dim-rule"></span>
+											</span>
+											<ul>
+												{item.children.map((child) => (
+													<li>
+														<a
+															href={child.href}
+															class="block rounded-(--radius-brand) px-3 py-2.5 text-sm text-body transition-colors hover:bg-muted hover:text-ink"
+														>
+															{child.label}
+														</a>
+													</li>
+												))}
+											</ul>
+										</div>
+									</div>
+								);
+							})()}
+					</li>
+				))}
+			</ul>
+		</nav>
+
+		<div class="ml-auto flex items-center gap-4 lg:ml-0 lg:justify-self-end">
+			<a
+				href={site.contact.phoneHref}
+				class="hidden whitespace-nowrap font-mono text-[0.75rem] font-medium uppercase tracking-[0.12em] text-ink transition-colors hover:text-brand md:block"
+			>
+				{site.contact.phone}
+			</a>
+			{/*
+				Responsive hiding lives on a wrapper, not on Button. Button sets its
+				own `inline-flex`, and Tailwind emits `hidden` earlier in the sheet,
+				so a `hidden` passed straight to Button would silently lose.
+			*/}
+			{site.primaryCta && (
+				<span class="hidden sm:block">
+					{/*
+						The nav CTA stays compact (`sm`) -- it is persistent chrome sitting
+						beside 11-12px nav links, not a body CTA competing with description
+						copy, so it keeps the smaller drafting-annotation size.
+					*/}
+					<Button {...site.primaryCta} size="sm" />
+				</span>
+			)}
+
+			<button
+				type="button"
+				id="menu-toggle"
+				class="-mr-2 rounded p-2 text-ink lg:hidden"
+				aria-label="Open menu"
+				aria-expanded="false"
+				aria-controls="mobile-menu"
+			>
+				<svg viewBox="0 0 20 20" class="h-6 w-6 fill-current" aria-hidden="true">
+					<path d="M2 4.5h16v1.6H2zm0 4.7h16v1.6H2zm0 4.7h16v1.6H2z" />
+				</svg>
+			</button>
+		</div>
+	</div>
+</header>
+
+{/*
+	Off-canvas drawer + backdrop live OUTSIDE <header> on purpose. The header
+	uses `backdrop-blur`, which creates a stacking + containing context that
+	traps any `fixed` child and caps its z-index -- a drawer nested inside it
+	renders behind page content and composites against the blur (the earlier
+	"see-through" bug). Rendered here at the top level, the overlay sits above
+	everything. `data-menu-open` on <html> (set by the script) drives the
+	slide + fade; `invisible` keeps a closed drawer out of the tab order.
+*/}
+<div
+	id="menu-backdrop"
+	class="invisible fixed inset-0 z-[90] bg-dark/50 opacity-0 backdrop-blur-sm transition-opacity duration-300 in-data-[menu-open]:visible in-data-[menu-open]:opacity-100 lg:hidden"
+	aria-hidden="true"
+>
+</div>
+
+{/*
+	Two shapes by breakpoint. Phones: a full-width panel pinned to the top that
+	slides DOWN from under the header (-translate-y-full -> 0), capped at 85dvh so
+	it never becomes a whole-page takeover and its body scrolls. sm+ tablets: a
+	right-hand off-canvas sidebar that slides IN from the edge (translate-x-full
+	-> 0). Each breakpoint resets the other's inset + transform so they don't fight.
+*/}
+<div
+	id="mobile-menu"
+	class="invisible fixed inset-x-0 top-0 z-[100] flex max-h-[85dvh] w-full -translate-y-full flex-col bg-surface shadow-[0_24px_60px_-15px_rgba(20,18,15,0.45)] transition-[transform,visibility] duration-350 ease-[cubic-bezier(0.16,1,0.3,1)] in-data-[menu-open]:visible in-data-[menu-open]:translate-y-0 sm:inset-x-auto sm:inset-y-0 sm:right-0 sm:max-h-none sm:w-[26rem] sm:translate-x-full sm:translate-y-0 sm:shadow-[-24px_0_60px_-15px_rgba(20,18,15,0.45)] sm:in-data-[menu-open]:translate-x-0 md:w-[30rem] lg:hidden"
+	role="dialog"
+	aria-modal="true"
+	aria-label="Menu"
+>
+	<div class="flex items-center justify-between border-b border-line px-5 py-4">
+		<span class="font-mono text-[0.6875rem] font-medium uppercase tracking-[0.14em] text-body">
+			Menu
+		</span>
+		<button
+			type="button"
+			id="menu-close"
+			class="-mr-2 rounded p-2 text-ink transition-colors hover:text-brand"
+			aria-label="Close menu"
+		>
+			<svg viewBox="0 0 20 20" class="h-5 w-5 fill-current" aria-hidden="true">
+				<path d="M4.6 3.4L10 8.9l5.4-5.5 1.2 1.2L11.1 10l5.5 5.4-1.2 1.2L10 11.1l-5.4 5.5-1.2-1.2L8.9 10 3.4 4.6z" />
+			</svg>
+		</button>
+	</div>
+
+	<nav class="flex-1 overflow-y-auto overscroll-contain px-5 py-5" aria-label="Mobile">
+		<ul class="flex flex-col gap-1">
+			{site.nav.map((item) => (
+				<li>
+					{item.href ? (
+						<a
+							href={item.href}
+							class="block py-2 font-display text-lg font-bold uppercase leading-tight text-ink"
+						>
+							{item.label}
+						</a>
+					) : (
+						<span class="block py-2 font-display text-lg font-bold uppercase leading-tight text-ink">
+							{item.label}
+						</span>
+					)}
+					{item.children && (
+						<ul class="mb-3 ml-1 border-l border-line pl-4">
+							{item.children.map((child) => (
+								<li>
+									{child.label && (
+										<a
+											href={child.href}
+											class="block py-2 font-mono text-[0.6875rem] font-semibold uppercase tracking-[0.12em] text-ink"
+										>
+											{child.label}
+										</a>
+									)}
+									{child.children && (
+										/*
+											The drawer widens to 30rem at md, so leaf lists flow into
+											two columns there -- a long group (Kitchen Shelves) fits in
+											half the vertical space. Stays single-column on phones where
+											the panel is narrow. `break-inside-avoid` keeps a link whole.
+										*/
+										<ul class="mb-2 ml-1 gap-x-6 border-l border-line pl-4 md:columns-2">
+											{child.children.map((leaf) => (
+												<li class="break-inside-avoid">
+													<a href={leaf.href} class="block py-1.5 text-sm text-body">
+														{leaf.label}
+													</a>
+												</li>
+											))}
+										</ul>
+									)}
+								</li>
+							))}
+						</ul>
+					)}
+				</li>
+			))}
+		</ul>
+	</nav>
+
+	<div class="border-t border-line px-5 py-5">
+		{site.primaryCta && (
+			<span class="block">
+				<Button {...site.primaryCta} class="w-full" />
+			</span>
+		)}
+		<a
+			href={site.contact.phoneHref}
+			class="mt-4 block text-center font-mono text-[0.6875rem] font-medium uppercase tracking-[0.12em] text-ink"
+		>
+			{site.contact.phone}
+		</a>
+	</div>
+</div>
+
+<script>
+	const root = document.documentElement;
+	const toggle = document.getElementById('menu-toggle');
+	const closeBtn = document.getElementById('menu-close');
+	const backdrop = document.getElementById('menu-backdrop');
+
+	// The drawer + backdrop are top-level fixed overlays; `data-menu-open` on
+	// <html> drives the CSS slide + fade (see the markup note on why they live
+	// outside the blurred header). Opening locks body scroll so the page behind
+	// the dimmed backdrop can't scroll under the panel.
+	function setMenu(open: boolean) {
+		if (!toggle) return;
+		if (open) root.setAttribute('data-menu-open', '');
+		else root.removeAttribute('data-menu-open');
+		toggle.setAttribute('aria-expanded', String(open));
+		document.body.style.overflow = open ? 'hidden' : '';
+	}
+
+	toggle?.addEventListener('click', () => setMenu(!root.hasAttribute('data-menu-open')));
+	closeBtn?.addEventListener('click', () => setMenu(false));
+	backdrop?.addEventListener('click', () => setMenu(false));
+	document.addEventListener('keydown', (e) => {
+		if (e.key === 'Escape' && root.hasAttribute('data-menu-open')) setMenu(false);
+	});
+
+	/*
+		The panel is anchored vertically in CSS (`absolute top-full`) so it sits
+		flush beneath the bar with no JS timing gap. Horizontally it starts
+		centred on its trigger (the -50% translate); this script adds --mm-shift
+		to slide that centre to the *viewport* centre instead, so a wide panel
+		reads as balanced on the page regardless of which nav item opened it --
+		then clamps the shift so neither edge crosses a 16px viewport gutter.
+	*/
+	const GUTTER = 16;
+	const panels = document.querySelectorAll<HTMLElement>('[data-megamenu]');
+
+	function place(panel: HTMLElement) {
+		// Measure from the trigger-centred baseline (prior shift removed).
+		panel.style.setProperty('--mm-shift', '0px');
+		const rect = panel.getBoundingClientRect();
+
+		// Ideal shift: move the panel's centre onto the viewport centre.
+		const ideal = window.innerWidth / 2 - (rect.left + rect.width / 2);
+
+		// Bounds on the shift. Keeping the left edge inside the gutter sets the
+		// lower bound (shift >= GUTTER - left); keeping the right edge inside it
+		// sets the upper bound (shift <= innerWidth - GUTTER - right). When the
+		// panel is wider than the available width the bounds cross; clamping to
+		// the lower bound last then left-aligns it.
+		const lower = GUTTER - rect.left; // left edge -> left gutter
+		const upper = window.innerWidth - GUTTER - rect.right; // right edge -> right gutter
+		const shift = Math.max(lower, Math.min(ideal, upper));
+
+		panel.style.setProperty('--mm-shift', `${Math.round(shift)}px`);
+	}
+
+	panels.forEach((panel) => {
+		const trigger = panel.closest('li');
+		trigger?.addEventListener('pointerenter', () => place(panel));
+		trigger?.addEventListener('focusin', () => place(panel));
+	});
+
+	window.addEventListener('resize', () => panels.forEach(place));
+</script>

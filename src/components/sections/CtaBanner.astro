@@ -1,0 +1,69 @@
+---
+import type { CtaBanner } from './CtaBanner.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Button from '../ui/Button.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+
+type Props = CtaBanner;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	body,
+	ctas = [],
+	anchor,
+	surface = 'brand',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+// The lead CTA is the whole point of this band, so it gets the brass `accent`
+// treatment by default. Crucially we also promote an explicit `primary` to it on
+// dark/brand surfaces: a primary button is brand-green, which disappears against
+// the green banner, leaving the CTA reading as plain text. Authored `secondary`
+// or `ghost` styles are still honoured.
+const leadStyle = (cta: (typeof ctas)[number]) =>
+	!cta.style || (cta.style === 'primary' && onDark) ? 'accent' : cta.style;
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	<div class="flex flex-col gap-8 lg:flex-row lg:items-center lg:justify-between lg:gap-16">
+		<div class="max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-5 max-w-xs" />
+			)}
+			<Heading level={headingLevel} size="lg" display>
+				{heading}
+			</Heading>
+			{body && <Prose html={body} invert={onDark} class="mt-4" />}
+		</div>
+
+		{ctas.length > 0 && (
+			<div
+				class={`flex shrink-0 flex-wrap items-center gap-4 lg:flex-col lg:items-stretch lg:gap-3 lg:border-l lg:pl-10 ${
+					onDark ? 'lg:border-current/20' : 'lg:border-line'
+				}`}
+			>
+				{/*
+					The lead CTA is the whole point of this band, so it takes the `lg`
+					scale (same as the hero); the rest keep the default size.
+				*/}
+				{ctas.map((cta, i) => (
+					<Button
+						{...cta}
+						style={i === 0 ? leadStyle(cta) : (cta.style ?? 'secondary')}
+						size={i === 0 ? 'lg' : 'md'}
+						onDark={onDark}
+						arrow={i === 0}
+						class="lg:justify-center"
+					/>
+				))}
+			</div>
+		)}
+	</div>
+</Section>

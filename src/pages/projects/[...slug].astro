@@ -1,0 +1,23 @@
+---
+import { getCollection } from 'astro:content';
+import CollectionEntry from '../../layouts/CollectionEntry.astro';
+
+/**
+ * One page per projects file. Adding `src/content/projects/anything.json`
+ * creates `/projects/anything` with no route work.
+ */
+export async function getStaticPaths() {
+	const entries = await getCollection('projects', ({ data }) =>
+		import.meta.env.PROD ? !data.draft : true
+	);
+
+	return entries.map((entry) => ({
+		params: { slug: entry.id },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+---
+
+<CollectionEntry entry={entry} collection="projects" indexLabel="Projects" indexHref="/#our-work" />

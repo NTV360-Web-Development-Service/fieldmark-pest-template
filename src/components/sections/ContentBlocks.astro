@@ -1,0 +1,116 @@
+---
+import type { ContentBlocks } from './ContentBlocks.schema';
+import Section from '../ui/Section.astro';
+import Heading from '../ui/Heading.astro';
+import Prose from '../ui/Prose.astro';
+import Media from '../ui/Media.astro';
+import Button from '../ui/Button.astro';
+import DimensionLine from '../ui/DimensionLine.astro';
+import { childLevel, levelNumber } from '../../lib/section-base';
+
+type Props = ContentBlocks;
+
+const {
+	headingLevel = 'h2',
+	eyebrow,
+	heading,
+	intro,
+	columns = '2',
+	align = 'start',
+	blocks = [],
+	anchor,
+	surface = 'light',
+	spacing = 'md',
+	width = 'wide',
+} = Astro.props;
+
+const onDark = surface === 'dark' || surface === 'brand';
+
+const gridCols = {
+	'1': '',
+	'2': 'md:grid-cols-2',
+	'3': 'md:grid-cols-2 lg:grid-cols-3',
+};
+
+const ratios: Record<string, string> = {
+	auto: 'aspect-auto',
+	'16/9': 'aspect-video',
+	'4/3': 'aspect-4/3',
+	'1/1': 'aspect-square',
+};
+
+const spacers = { sm: 'h-4', md: 'h-10', lg: 'h-20' };
+
+// A block marked `full` spans the grid. Dividers and spacers always do, since
+// a rule confined to one column reads as a mistake.
+const spanClass = (block: (typeof blocks)[number]) => {
+	if (block.kind === 'divider' || block.kind === 'spacer') return 'md:col-span-full';
+	return 'full' in block && block.full ? 'md:col-span-full' : '';
+};
+---
+
+<Section anchor={anchor} surface={surface} spacing={spacing} width={width}>
+	{(eyebrow || heading || intro) && (
+		<header class="mb-12 max-w-2xl">
+			{eyebrow && (
+				<DimensionLine label={eyebrow} rule="both" onDark={onDark} class="mb-6 max-w-xs" />
+			)}
+			{heading && (
+				<Heading level={headingLevel} size="lg">
+					{heading}
+				</Heading>
+			)}
+			{intro && <Prose html={intro} invert={onDark} class="mt-6" />}
+		</header>
+	)}
+
+	<div
+		class={`grid gap-x-10 gap-y-8 ${gridCols[columns]} ${align === 'center' ? 'items-center' : 'items-start'}`}
+	>
+		{blocks.map((block) => (
+			<div class={spanClass(block)}>
+				{block.kind === 'text' && (
+					<Prose
+						html={block.body}
+						invert={onDark}
+						class={block.align === 'center' ? 'mx-auto text-center' : ''}
+					/>
+				)}
+
+				{block.kind === 'media' && (
+					<figure>
+						<Media
+							media={block.media}
+							aspect={ratios[block.ratio] ?? 'aspect-4/3'}
+							class="rounded-(--radius-media)"
+						/>
+						{block.caption && (
+							<figcaption class="mt-3 font-mono text-[0.6875rem] uppercase tracking-[0.12em] opacity-65">
+								{block.caption}
+							</figcaption>
+						)}
+					</figure>
+				)}
+
+				{block.kind === 'buttons' && (
+					<div
+						class={`flex flex-wrap items-center gap-3 ${block.align === 'center' ? 'justify-center' : ''}`}
+					>
+						{block.items.map((item) => (
+							<Button {...item} onDark={onDark} />
+						))}
+					</div>
+				)}
+
+				{block.kind === 'divider' &&
+					(block.label ? (
+						<DimensionLine label={block.label} rule="both" onDark={onDark} />
+					) : (
+						<hr class={onDark ? 'border-current/20' : 'border-line'} />
+					))}
+
+				{block.kind === 'spacer' && <div class={spacers[block.size]} aria-hidden="true" />}
+			</div>
+		))}
+	</div>
+</Section>
