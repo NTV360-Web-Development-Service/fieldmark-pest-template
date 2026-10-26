@@ -20,6 +20,8 @@ const popupSchema = z.object({
 	body: z.string().optional(),
 	/** Optional side image. When set, the dialog becomes a two-panel card. */
 	image: z.object({ src: z.string(), alt: z.string().default('') }).optional(),
+	/** With an image: `split` sets it beside the text, `overlay` sets the text over it. */
+	layout: z.enum(['split', 'overlay']).default('split'),
 	cta: linkSchema.optional(),
 	dismissLabel: z.string().default('No thanks'),
 });
