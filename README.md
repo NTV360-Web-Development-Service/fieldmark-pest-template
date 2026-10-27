@@ -5,6 +5,10 @@ A reusable Astro template for a contractor or service business, edited through
 shapes that render it live in `src/components/`. The build validates that the two
 stay in sync.
 
+**This repo is the single source of truth for site copy.** The Valley Shield
+template pulls its text from here with `npm run sync:content`, keeping its own
+design and brand. Edit copy here, never there.
+
 ## Quick start
 
 ```sh

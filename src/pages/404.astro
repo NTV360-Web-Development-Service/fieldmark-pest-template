@@ -50,7 +50,7 @@ services.sort((a, b) => a.data.order - b.data.order);
 			{[
 				...services.map((s) => ({ label: s.data.title, href: `/services/${entrySlug(s.id)}` })),
 				{ label: 'Recent projects', href: '/#our-work' },
-				{ label: 'Book a measure', href: '/contact' },
+				{ label: 'Book an inspection', href: '/contact' },
 				{ label: 'Questions', href: '/faq' },
 			].map((link) => (
 				<li class="group relative border-t border-line pt-5">
