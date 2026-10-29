@@ -16,14 +16,14 @@
         "kind": "image",
         "image": {
           "source": "upload",
-          "src": "/media/images/cockroach.avif",
-          "alt": "American cockroach specimen on white"
+          "src": "/media/images/tech-inspection.avif",
+          "alt": "Technician inspecting a crawlspace vent beside a home"
         }
       },
       "eyebrow": "Free, about 45 minutes",
       "heading": "Book a free inspection.",
       "body": "A licensed technician walks the property inside and out, maps where pests are getting in, and leaves a written plan with a fixed price. No cost, and no contract.",
-      "mediaNote": "American cockroach — last seen under the sink",
+      "mediaNote": "Inside and out, in about 45 minutes",
       "ctas": [
         {
           "label": "Call the office",

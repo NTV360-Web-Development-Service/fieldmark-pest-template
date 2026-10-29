@@ -4,8 +4,8 @@
   "summary": "Ants, roaches, spiders and crickets, treated at the source and sealed out for good. A full inspection, an interior and perimeter treatment, and a written field report on every visit.",
   "image": {
     "source": "upload",
-    "src": "/media/images/ant.avif",
-    "alt": "Macro photo of an ant specimen on black"
+    "src": "/media/images/tech-interior.avif",
+    "alt": "Technician in a protective suit treating a home office"
   },
   "order": 10,
   "priceNote": "From $49 per visit",
@@ -97,8 +97,8 @@
       "body": "A spray-and-go visit treats what you can see. The colony that sent it is usually in a wall void, under a slab crack or behind the dishwasher, and it simply sends more.\n\nSo every visit starts with an inspection: entry points, moisture, harbourage and activity, marked on a plan of your home. We treat at the source with targeted baits and a perimeter barrier, seal what we can on the spot, and leave a written field report with photos of what we found.",
       "image": {
         "source": "upload",
-        "src": "/media/images/ant.avif",
-        "alt": "Macro photo of an ant specimen"
+        "src": "/media/images/tech-interior.avif",
+        "alt": "Technician in a protective suit treating a home office"
       },
       "imageSide": "left",
       "bullets": [
@@ -147,7 +147,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/ant.avif",
-            "alt": "Macro photo of an ant specimen on black"
+            "alt": "Odorous house ant, close up"
           },
           "cards": [
             {
@@ -202,7 +202,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion.avif",
-            "alt": "Arizona bark scorpion specimen on black"
+            "alt": "Arizona bark scorpion on concrete"
           },
           "cards": [
             {
@@ -246,7 +246,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Macro photo of a winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "cards": [
             {
@@ -301,7 +301,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/mouse.avif",
-            "alt": "Close-up of a mouse specimen on black"
+            "alt": "House mouse eating a crumb"
           },
           "cards": [
             {
@@ -356,7 +356,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/wasp.avif",
-            "alt": "Paper wasp specimen photographed on black"
+            "alt": "Paper wasps on their nest"
           },
           "cards": [
             {
@@ -421,7 +421,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion-rock.avif",
-            "alt": "Bark scorpion on a rock"
+            "alt": "Arizona bark scorpion on gravel"
           },
           "icon": "shield",
           "badge": "Free re-treats",
@@ -445,7 +445,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "icon": "dollar",
           "badge": "Limited time",
@@ -465,7 +465,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/spider.avif",
-            "alt": "Jumping spider, macro"
+            "alt": "Common house spider on a wall"
           },
           "icon": "badge",
           "badge": "Save now",

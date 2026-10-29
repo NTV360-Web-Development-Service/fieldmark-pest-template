@@ -18,10 +18,10 @@
       "body": "Every job starts with an inspection and ends with a field report. The pest changes; the method does not.",
       "image": {
         "source": "upload",
-        "src": "/media/images/scorpion.avif",
-        "alt": "Bark scorpion specimen"
+        "src": "/media/images/tech-sprayer.avif",
+        "alt": "Gloved technician applying treatment with a hand sprayer"
       },
-      "mediaNote": "Bark scorpion — last seen on the block wall",
+      "mediaNote": "Every treatment logged in a field report",
       "surface": "muted",
       "spacing": "sm",
       "width": "wide"
@@ -40,7 +40,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/ant.avif",
-            "alt": "Macro photo of an ant specimen on black"
+            "alt": "Odorous house ant, close up"
           },
           "cards": [
             {
@@ -95,7 +95,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion.avif",
-            "alt": "Arizona bark scorpion specimen on black"
+            "alt": "Arizona bark scorpion on concrete"
           },
           "cards": [
             {
@@ -139,7 +139,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Macro photo of a winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "cards": [
             {
@@ -194,7 +194,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/mouse.avif",
-            "alt": "Close-up of a mouse specimen on black"
+            "alt": "House mouse eating a crumb"
           },
           "cards": [
             {
@@ -249,7 +249,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/wasp.avif",
-            "alt": "Paper wasp specimen photographed on black"
+            "alt": "Paper wasps on their nest"
           },
           "cards": [
             {

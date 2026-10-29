@@ -4,7 +4,7 @@
   "image": {
     "source": "upload",
     "src": "/media/images/spider.avif",
-    "alt": "Jumping spider face, macro"
+    "alt": "Common house spider on a wall"
   },
   "order": 13,
   "parent": {
@@ -69,7 +69,7 @@
       "image": {
         "source": "upload",
         "src": "/media/images/spider.avif",
-        "alt": "Jumping spider face, macro"
+        "alt": "Common house spider on a wall"
       },
       "imageSide": "left",
       "bullets": [
@@ -112,7 +112,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion-rock.avif",
-            "alt": "Bark scorpion on a rock"
+            "alt": "Arizona bark scorpion on gravel"
           },
           "icon": "shield",
           "badge": "Free re-treats",
@@ -136,7 +136,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "icon": "dollar",
           "badge": "Limited time",
@@ -156,7 +156,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/spider.avif",
-            "alt": "Jumping spider, macro"
+            "alt": "Common house spider on a wall"
           },
           "icon": "badge",
           "badge": "Save now",

@@ -3,8 +3,8 @@
   "summary": "Removal of droppings, nesting and contaminated insulation after a rodent problem.",
   "image": {
     "source": "upload",
-    "src": "/media/images/attic-rodent.avif",
-    "alt": "Rodent damage in attic insulation"
+    "src": "/media/images/attic-insulation.avif",
+    "alt": "Technician fitting fresh insulation between wall studs"
   },
   "order": 44,
   "parent": {
@@ -68,8 +68,8 @@
       "body": "Droppings, urine and nesting material carry odours and disease. We remove the contamination, sanitise the attic, and replace damaged insulation so the space is clean and efficient again.\n\nEvery visit ends with a written field report: what we found, where we treated, and what to watch for next. If the problem comes back between visits, so do we, free.",
       "image": {
         "source": "upload",
-        "src": "/media/images/attic-rodent.avif",
-        "alt": "Rodent damage in attic insulation"
+        "src": "/media/images/attic-insulation.avif",
+        "alt": "Technician fitting fresh insulation between wall studs"
       },
       "imageSide": "left",
       "bullets": [
@@ -112,7 +112,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion-rock.avif",
-            "alt": "Bark scorpion on a rock"
+            "alt": "Arizona bark scorpion on gravel"
           },
           "icon": "shield",
           "badge": "Free re-treats",
@@ -136,7 +136,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "icon": "dollar",
           "badge": "Limited time",
@@ -156,7 +156,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/spider.avif",
-            "alt": "Jumping spider, macro"
+            "alt": "Common house spider on a wall"
           },
           "icon": "badge",
           "badge": "Save now",

@@ -5,7 +5,7 @@
   "image": {
     "source": "upload",
     "src": "/media/images/scorpion.avif",
-    "alt": "Arizona bark scorpion specimen on black"
+    "alt": "Arizona bark scorpion on concrete"
   },
   "order": 20,
   "priceNote": "From $89 per visit",
@@ -98,7 +98,7 @@
       "image": {
         "source": "upload",
         "src": "/media/images/scorpion.avif",
-        "alt": "Arizona bark scorpion specimen"
+        "alt": "Arizona bark scorpion on concrete"
       },
       "imageSide": "left",
       "bullets": [
@@ -147,7 +147,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/ant.avif",
-            "alt": "Macro photo of an ant specimen on black"
+            "alt": "Odorous house ant, close up"
           },
           "cards": [
             {
@@ -202,7 +202,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion.avif",
-            "alt": "Arizona bark scorpion specimen on black"
+            "alt": "Arizona bark scorpion on concrete"
           },
           "cards": [
             {
@@ -246,7 +246,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Macro photo of a winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "cards": [
             {
@@ -301,7 +301,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/mouse.avif",
-            "alt": "Close-up of a mouse specimen on black"
+            "alt": "House mouse eating a crumb"
           },
           "cards": [
             {
@@ -356,7 +356,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/wasp.avif",
-            "alt": "Paper wasp specimen photographed on black"
+            "alt": "Paper wasps on their nest"
           },
           "cards": [
             {
@@ -421,7 +421,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion-rock.avif",
-            "alt": "Bark scorpion on a rock"
+            "alt": "Arizona bark scorpion on gravel"
           },
           "icon": "shield",
           "badge": "Free re-treats",
@@ -445,7 +445,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "icon": "dollar",
           "badge": "Limited time",
@@ -465,7 +465,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/spider.avif",
-            "alt": "Jumping spider, macro"
+            "alt": "Common house spider on a wall"
           },
           "icon": "badge",
           "badge": "Save now",

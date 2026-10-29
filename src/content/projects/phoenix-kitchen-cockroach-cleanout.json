@@ -1,18 +1,18 @@
 {
-  "title": "Scottsdale scorpion sweep, 63 found",
-  "summary": "A desert-edge home with weekly indoor sightings. One UV hunt, a full weep-screed seal, and monthly treatment.",
+  "title": "Phoenix kitchen roach cleanout, 3 visits",
+  "summary": "German cockroaches in the kitchen cabinets and behind the fridge. Gel bait, a growth regulator and sealed gaps, cleared in three visits.",
   "image": {
     "source": "upload",
-    "src": "/media/images/scorpion-uv.avif",
-    "alt": "Bark scorpion glowing under UV light"
+    "src": "/media/images/job-kitchen-cockroach.avif",
+    "alt": "German cockroach feeding on spilled sugar in a kitchen"
   },
   "order": 10,
-  "location": "Scottsdale, AZ",
+  "location": "Phoenix, AZ",
   "completed": "2026-06-14",
-  "services": ["scorpions"],
+  "services": ["general-pest"],
   "draft": false,
   "seo": {
-    "description": "A desert-edge home with weekly indoor sightings. One UV hunt, a full weep-screed seal, and monthly treatment.",
+    "description": "German cockroaches in the kitchen cabinets and behind the fridge. Gel bait, a growth regulator and sealed gaps, cleared in three visits.",
     "noindex": false
   },
   "sections": [
@@ -20,28 +20,28 @@
       "type": "media_split",
       "eyebrow": "Field report",
       "heading": "What we found. What we did.",
-      "body": "A desert-edge home with weekly indoor sightings. One UV hunt, a full weep-screed seal, and monthly treatment.",
+      "body": "German cockroaches in the kitchen cabinets and behind the fridge. Gel bait, a growth regulator and sealed gaps, cleared in three visits.",
       "image": {
         "source": "upload",
-        "src": "/media/images/scorpion-uv.avif",
-        "alt": "Bark scorpion glowing under UV light"
+        "src": "/media/images/job-kitchen-cockroach.avif",
+        "alt": "German cockroach feeding on spilled sugar in a kitchen"
       },
       "imageSide": "left",
       "bullets": [
         {
           "icon": "star",
           "text": "Found",
-          "desc": "63 bark scorpions on block walls, eaves and the garage on a single UV night hunt."
+          "desc": "German cockroaches nesting in 6 kitchen cabinets, behind the fridge and under the dishwasher."
         },
         {
           "icon": "wrench",
           "text": "Treated",
-          "desc": "Weep screed sealed around the full perimeter, 4 door sweeps fitted, monthly perimeter treatment."
+          "desc": "Gel bait in cabinet hinges and cracks, an insect growth regulator, and plumbing gaps under the sink sealed."
         },
         {
           "icon": "check",
           "text": "Result",
-          "desc": "Zero indoor sightings reported in the 90 days since the seal."
+          "desc": "No live roaches at the 30-day follow-up, and the sticky monitors stayed clean."
         }
       ],
       "ctas": [],

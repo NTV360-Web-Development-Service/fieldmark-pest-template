@@ -17,8 +17,8 @@
         "kind": "image",
         "image": {
           "source": "upload",
-          "src": "/media/images/wasp-face.avif",
-          "alt": "Wasp face, macro specimen"
+          "src": "/media/images/tech-fogging.avif",
+          "alt": "Pest control technician in a protective suit and respirator"
         }
       },
       "eyebrow": "About us",
@@ -106,7 +106,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/ant.avif",
-            "alt": "Ant specimen, macro"
+            "alt": "Odorous house ant, close up"
           },
           "title": "General pests",
           "body": "Ants, roaches, spiders and crickets. Baited at the source, sealed out at the door.",
@@ -121,7 +121,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion.avif",
-            "alt": "Bark scorpion specimen"
+            "alt": "Arizona bark scorpion on concrete"
           },
           "title": "Scorpions",
           "body": "UV night hunts, exclusion sealing and a perimeter they will not cross.",
@@ -136,7 +136,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "title": "Termites",
           "body": "Licensed inspections, liquid barriers and bait systems with a renewable warranty.",
@@ -151,7 +151,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/mouse.avif",
-            "alt": "Mouse specimen close up"
+            "alt": "House mouse eating a crumb"
           },
           "title": "Rodents",
           "body": "Roof rats and mice trapped out and sealed out with steel. Guaranteed.",
@@ -166,7 +166,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/wasp.avif",
-            "alt": "Paper wasp specimen"
+            "alt": "Paper wasps on their nest"
           },
           "title": "Biters & stingers",
           "body": "Mosquitoes, wasps, fleas, ticks and bed bugs. Fast removal, safe yard.",

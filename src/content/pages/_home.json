@@ -16,8 +16,8 @@
         "kind": "image",
         "image": {
           "source": "upload",
-          "src": "/media/images/scorpion.avif",
-          "alt": "Arizona bark scorpion, photographed close up"
+          "src": "/media/images/tech-treatment.avif",
+          "alt": "Technician in a protective suit treating a living room"
         }
       },
       "eyebrow": "Licensed pest control · Phoenix valley",
@@ -51,7 +51,7 @@
       "surface": "light",
       "spacing": "lg",
       "width": "wide",
-      "mediaNote": "Arizona bark scorpion: the valley's most common call-out."
+      "mediaNote": "Treated at the source, room by room."
     },
     {
       "type": "badge_strip",
@@ -134,8 +134,8 @@
       "body": "For fifteen years we have kept pests out of homes across the valley, and in that time we have run more than 60,000 service visits. One promise, kept every time: we find where the problem starts, treat it there, and show you the proof.\n\nEvery technician is our own employee, licensed by the state and trained in-house. No subcontractors, no mystery sprays, no \"we'll see how it goes.\" If pests come back between visits, the same technician comes back and sorts it, free.",
       "image": {
         "source": "upload",
-        "src": "/media/images/spider.avif",
-        "alt": "Jumping spider, macro portrait"
+        "src": "/media/images/tech-inspection.avif",
+        "alt": "Technician inspecting a crawlspace vent beside a home"
       },
       "imageSide": "left",
       "bullets": [
@@ -181,7 +181,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/ant.avif",
-            "alt": "Ant specimen, macro"
+            "alt": "Odorous house ant, close up"
           },
           "title": "General pests",
           "body": "Ants, roaches, spiders and crickets. Baited at the source, sealed out at the door.",
@@ -196,7 +196,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion.avif",
-            "alt": "Bark scorpion specimen"
+            "alt": "Arizona bark scorpion on concrete"
           },
           "title": "Scorpions",
           "body": "UV night hunts, exclusion sealing and a perimeter they will not cross.",
@@ -211,7 +211,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "title": "Termites",
           "body": "Licensed inspections, liquid barriers and bait systems with a renewable warranty.",
@@ -226,7 +226,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/mouse.avif",
-            "alt": "Mouse specimen close up"
+            "alt": "House mouse eating a crumb"
           },
           "title": "Rodents",
           "body": "Roof rats and mice trapped out and sealed out with steel. Guaranteed.",
@@ -241,7 +241,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/wasp.avif",
-            "alt": "Paper wasp specimen"
+            "alt": "Paper wasps on their nest"
           },
           "title": "Biters & stingers",
           "body": "Mosquitoes, wasps, fleas, ticks and bed bugs. Fast removal, safe yard.",
@@ -265,8 +265,8 @@
       "body": "Pests do not book appointments, and a single spray wears off. A protection plan keeps a fresh barrier around your home all year, with scheduled visits timed to the valley's seasons and free re-treats whenever something gets through.",
       "image": {
         "source": "upload",
-        "src": "/media/images/scorpion-rock.avif",
-        "alt": "Bark scorpion on a rock"
+        "src": "/media/images/tech-exterior.avif",
+        "alt": "Technician spraying an exterior barrier treatment with a backpack sprayer"
       },
       "imageSide": "right",
       "bullets": [
@@ -306,8 +306,8 @@
       "body": "A termite treatment or whole-home rodent exclusion does not have to be a single bill. Approved customers can spread the cost with low monthly payments and 0% APR for the first twelve months.",
       "image": {
         "source": "upload",
-        "src": "/media/images/termite.avif",
-        "alt": "Winged termite specimen, macro"
+        "src": "/media/images/tech-living-room.avif",
+        "alt": "Technician in protective gear treating a rug and baseboards"
       },
       "imageSide": "left",
       "bullets": [

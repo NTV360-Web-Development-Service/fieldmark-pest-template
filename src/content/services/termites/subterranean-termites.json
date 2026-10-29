@@ -3,8 +3,8 @@
   "summary": "Liquid barrier and bait treatments for desert subterranean termites.",
   "image": {
     "source": "upload",
-    "src": "/media/images/termite.avif",
-    "alt": "Winged termite specimen, macro"
+    "src": "/media/images/termite-mud-tubes.avif",
+    "alt": "Subterranean termite mud tubes across painted wood siding"
   },
   "order": 31,
   "parent": {
@@ -68,8 +68,8 @@
       "body": "Subterranean termites live in the soil and travel up through slab cracks and expansion joints. We trench and treat the perimeter with a non-repellent liquid that termites carry back to the colony, and install bait monitoring where it makes sense.\n\nEvery visit ends with a written field report: what we found, where we treated, and what to watch for next. If the problem comes back between visits, so do we, free.",
       "image": {
         "source": "upload",
-        "src": "/media/images/termite.avif",
-        "alt": "Winged termite specimen, macro"
+        "src": "/media/images/termite-mud-tubes.avif",
+        "alt": "Subterranean termite mud tubes across painted wood siding"
       },
       "imageSide": "left",
       "bullets": [
@@ -112,7 +112,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/scorpion-rock.avif",
-            "alt": "Bark scorpion on a rock"
+            "alt": "Arizona bark scorpion on gravel"
           },
           "icon": "shield",
           "badge": "Free re-treats",
@@ -136,7 +136,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/termite.avif",
-            "alt": "Winged termite specimen"
+            "alt": "Subterranean termites in damaged wood"
           },
           "icon": "dollar",
           "badge": "Limited time",
@@ -156,7 +156,7 @@
           "image": {
             "source": "upload",
             "src": "/media/images/spider.avif",
-            "alt": "Jumping spider, macro"
+            "alt": "Common house spider on a wall"
           },
           "icon": "badge",
           "badge": "Save now",

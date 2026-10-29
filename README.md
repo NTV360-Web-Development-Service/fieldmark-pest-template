@@ -55,9 +55,35 @@ build fails if they drift apart.
 
 ## Image credits
 
-The specimen macro photos in `public/media/images/` (scorpions, ant, spider,
-cricket, termite, tick, wasps, mouse, mosquito, cockroach, black widow, bed bug,
-attic rodent damage) are public-domain or CC0 images sourced via
-[Openverse](https://openverse.org/), mostly from the USGS Bee Inventory and
-Monitoring Lab and the Insects Unlocked project. No attribution is required, but
-swap them for the client's own job photos before launch.
+The pest photos below come from Wikimedia Commons under Creative Commons
+licences that require credit, so keep these lines (or an equivalent credits
+page) while the photos are in use. They were resized and converted to AVIF.
+
+- `ant.avif` — JJ Harrison, CC BY-SA 3.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Tapinoma_sessile.jpg)
+- `bark-scorpion-wall.avif` — Andrew Meeds, CC BY 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Centruroides_sculpturatus_192296090.jpg)
+- `bed-bug.avif` — Gilles San Martin, CC BY-SA 2.0, via [Wikimedia Commons](<https://commons.wikimedia.org/wiki/File:Cimex_lectularius_(bed_bug)_(5975912718).jpg>)
+- `black-widow.avif` — Marshal Hedin, CC BY 2.0, via [Wikimedia Commons](<https://commons.wikimedia.org/wiki/File:Latrodectus_hesperus_(F_Theridiidae).jpg>)
+- `cockroach.avif` — Lmbuga, CC BY-SA 3.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Blattodea._Cascuda._Santiago_de_Compostela_1.jpg)
+- `cricket.avif` — Aiwok, CC BY-SA 3.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Acheta_domesticus_1.JPG)
+- `drywood-termite.avif` — Whitney Cranshaw, Colorado State University, CC BY 3.0 US, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Incisitermes_minor.jpg)
+- `job-outlet-termites.avif` — Control Pest Management Brisbane, CC BY-SA 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Termite_Mudding_Power_Outlet.jpg)
+- `job-rodent-exclusion.avif` — NY State IPM Program at Cornell University, CC BY 2.0, via [Wikimedia Commons](<https://commons.wikimedia.org/wiki/File:Rodent_Exclusion_(10069529336).jpg>)
+- `mouse-droppings.avif` — NY State IPM Program at Cornell University, CC BY 2.0, via [Wikimedia Commons](<https://commons.wikimedia.org/wiki/File:House_Mouse_Droppings_(10069590893).jpg>)
+- `roof-rat.avif` — Alex O'Neal, CC BY-SA 2.0, via [Wikimedia Commons](<https://commons.wikimedia.org/wiki/File:Long-tailed_black_rat_(Rattus_rattus).jpg>)
+- `scorpion.avif` — Andrew Meeds, CC BY 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Centruroides_sculpturatus_186847118.jpg)
+- `scorpion-rock.avif` — Andrew Meeds, CC BY 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Centruroides_sculpturatus_193477484.jpg)
+- `scorpion-uv.avif` — Therringshaw, CC BY 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Arizona_Bark_Scorpion_under_blacklight.jpg)
+- `spider.avif` — Holger Krisp, CC BY 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Gew%C3%A4chshausspinne_Parasteatoda_tepidariorum_2.jpg)
+- `termite-mud-tubes.avif` — Balves85, CC BY-SA 3.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Termite_droppings.png)
+- `termite.avif` — Judy Gallagher, CC BY 2.0, via [Wikimedia Commons](<https://commons.wikimedia.org/wiki/File:Eastern_Subterranean_Termite_-_Reticulitermes_flavipes_and_Rove_Beetle_(Aleocharinae_subfamily),_Robert_W._Duncan_Wildlife_Management_Area,_Ruther_Glen,_Virginia,_May_18,_2023_(53531674791).jpg>)
+- `tick.avif` — dineshphotography7797, CC BY 4.0, via [Wikimedia Commons](https://commons.wikimedia.org/wiki/File:Rhipicephalus_sanguineus_228608115.jpg)
+
+`mosquito.avif`, `mouse.avif`, `wasp.avif`, `wasp-face.avif`,
+`slab-pretreat.avif`, `attic-insulation.avif`, `job-kitchen-cockroach.avif` and the technician photos
+(`tech-*.avif`) come from [Pexels](https://www.pexels.com/) under the Pexels License
+(free for commercial use, no attribution required).
+
+`attic-rodent.avif` is a public-domain image sourced via
+[Openverse](https://openverse.org/).
+
+Swap all of these for the client's own job and crew photos before launch.
